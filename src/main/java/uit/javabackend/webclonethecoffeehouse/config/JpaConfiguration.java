@@ -19,7 +19,6 @@ public class JpaConfiguration {
    static class AuditorAwareImpl implements AuditorAware<String>{
 
        @Override
-       
        public Optional<String> getCurrentAuditor() {
            return Optional.of("Anonymus");
        }
