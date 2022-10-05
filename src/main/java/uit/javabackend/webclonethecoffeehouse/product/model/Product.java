@@ -29,14 +29,15 @@ public class Product extends BaseEntity {
     private Integer price;
 
     @Column(name = ProductEntity.Product.PRODUCT_CURRENCY)
-    private String currency;
+    private String currencyId;
 
     @Column(name = ProductEntity.Product.PRODUCT_IMG_URL)
     private String imgUrl;
 
     @Column(name = ProductEntity.Product.PRODUCT_COLLECTION)
-    private String collectionName;
+    private String collectionId;
 
     @Column(name = ProductEntity.Product.PRODUCT_DESCRIPTION)
+    @Length(min = 5  , max = 100 ,message = "Product description must have length between {min} and {max}")
     private String description;
 }

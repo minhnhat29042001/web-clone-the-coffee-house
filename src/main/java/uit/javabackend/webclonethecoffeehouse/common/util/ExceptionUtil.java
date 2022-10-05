@@ -1,6 +1,8 @@
 package uit.javabackend.webclonethecoffeehouse.common.util;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -16,5 +18,12 @@ public class ExceptionUtil {
 
     public static List<String> getErrors(RuntimeException exception) {
         return List.of(DEFAULT_UNEXPECTED_MESSAGE);
+    }
+
+    public static List<String> getErrors(MethodArgumentNotValidException exception) {
+        return exception.getAllErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
     }
 }
