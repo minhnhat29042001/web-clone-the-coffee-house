@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.util.Optional;
 
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableJpaAuditing(auditorAwareRef = "auditorAware") // kích hoạt tự động khởi tạo cho BaseEntity
 public class JpaConfiguration {
     @Bean
     public AuditorAware <String> auditorAware(){
