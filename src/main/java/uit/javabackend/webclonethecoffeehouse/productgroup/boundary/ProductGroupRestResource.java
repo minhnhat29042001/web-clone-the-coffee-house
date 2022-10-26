@@ -2,14 +2,9 @@ package uit.javabackend.webclonethecoffeehouse.productgroup.boundary;
 
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
-import uit.javabackend.webclonethecoffeehouse.currency.model.Currency;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
 import uit.javabackend.webclonethecoffeehouse.productgroup.service.ProductGroupService;

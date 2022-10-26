@@ -2,13 +2,11 @@ package uit.javabackend.webclonethecoffeehouse.product.boundary;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductWithCurrencyDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
 
@@ -42,7 +40,7 @@ public class ProductRestResource {
 
     @GetMapping("/{product-id}/GetProductWithProductGroup")
     public Object findProductWithProductGroupDTO(@PathVariable ("product-id") UUID productID){
-        return ResponseUtil.get(productService.getProductWithProdcutGroupDTO(productID),HttpStatus.OK);
+        return ResponseUtil.get(productService.getProductWithProductGroupDTO(productID),HttpStatus.OK);
     }
 
     @GetMapping("/GetAllProductsWithProductGroup")
@@ -77,7 +75,7 @@ public class ProductRestResource {
 
     @DeleteMapping("/DeleteProduct")
     public Object delete(@RequestParam("name")  String name){
-        productService.deletebyName(name);
+        productService.deleteByName(name);
         return HttpStatus.OK;
     }
 }

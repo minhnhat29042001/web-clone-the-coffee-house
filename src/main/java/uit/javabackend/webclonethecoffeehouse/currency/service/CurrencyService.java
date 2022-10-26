@@ -10,7 +10,6 @@ import uit.javabackend.webclonethecoffeehouse.currency.dto.CurrencyDTO;
 import uit.javabackend.webclonethecoffeehouse.currency.dto.CurrencyWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.currency.model.Currency;
 import uit.javabackend.webclonethecoffeehouse.currency.repository.CurrencyRepository;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductWithCurrencyDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
 
@@ -20,7 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CurrencyService  extends GenericService<Currency, CurrencyDTO, UUID> {
+    @Override
     List<Currency> findAll();
+
+    @Override
     Currency update (Currency currency);
     CurrencyDTO save (CurrencyDTO currencyDTO);
     void deleteByName (String name);
@@ -28,7 +30,7 @@ public interface CurrencyService  extends GenericService<Currency, CurrencyDTO, 
     CurrencyWithProductsDTO addProduct(List<UUID> ids,UUID currencyId);
     CurrencyWithProductsDTO removeProduct(List<UUID> ids,UUID currencyId);
     CurrencyWithProductsDTO getCurrencyWithProductDTO (UUID currencyId);
-    List<CurrencyWithProductsDTO> getAllCunrrencyWithProductDTO ();
+    List<CurrencyWithProductsDTO> getAllCurrencyWithProductDTO();
 }
 
 @Service
@@ -37,6 +39,7 @@ class CurrencyServiceImpl implements  CurrencyService{
     private final CurrencyRepository repository;
     private final TCHMapper mapper;
     private final ProductService productService;
+    private final ValidationException currencyIsNotExisted = new ValidationException("Product is not existed.");
 
     CurrencyServiceImpl(CurrencyRepository repository, TCHMapper mapper, ProductService productService) {
         this.repository = repository;
@@ -83,7 +86,7 @@ class CurrencyServiceImpl implements  CurrencyService{
     @Override
     public CurrencyWithProductsDTO addProduct(List<UUID> ids,UUID currencyId) {
         Currency currency = repository.findById(currencyId).orElseThrow( () ->
-                new ValidationException("Currency is not existed.")
+                currencyIsNotExisted
         );
         List<Product> products = productService.findByIds(ids);
         products.forEach(currency::addProduct);
@@ -93,7 +96,7 @@ class CurrencyServiceImpl implements  CurrencyService{
     @Override
     public CurrencyWithProductsDTO removeProduct(List<UUID> ids, UUID currencyId) {
         Currency currency = repository.findById(currencyId).orElseThrow(()->
-                new ValidationException("Currency is not existed") );
+                currencyIsNotExisted );
         List<Product> products = productService.findByIds(ids);
         products.forEach(currency::removeProduct);
         return mapper.map(currency,CurrencyWithProductsDTO.class);
@@ -102,17 +105,17 @@ class CurrencyServiceImpl implements  CurrencyService{
     @Override
     public CurrencyWithProductsDTO getCurrencyWithProductDTO(UUID currencyId) {
         Currency currency = repository.findById(currencyId).orElseThrow( () ->
-                new ValidationException("Currency is not existed.")
+                currencyIsNotExisted
         );
-        CurrencyWithProductsDTO currencyWithProductsDTO = mapper.map(currency,CurrencyWithProductsDTO.class);
-        return currencyWithProductsDTO;
+        return mapper.map(currency,CurrencyWithProductsDTO.class);
     }
 
     @Override
-    public List<CurrencyWithProductsDTO> getAllCunrrencyWithProductDTO() {
+    public List<CurrencyWithProductsDTO> getAllCurrencyWithProductDTO() {
         List<Currency> currencyList = repository.findAll();
         List<CurrencyWithProductsDTO> currencyWithProductsDTOList = new ArrayList<>();
-        currencyList.forEach((currency) -> {
+        currencyList.forEach(
+                currency -> {
             CurrencyWithProductsDTO currencyWithProductsDTO = mapper.map(currency,CurrencyWithProductsDTO.class);
             currencyWithProductsDTOList.add(currencyWithProductsDTO);
         });

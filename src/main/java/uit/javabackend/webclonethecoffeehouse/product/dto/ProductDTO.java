@@ -1,14 +1,9 @@
 package uit.javabackend.webclonethecoffeehouse.product.dto;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
-import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
 import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductName;
-
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
