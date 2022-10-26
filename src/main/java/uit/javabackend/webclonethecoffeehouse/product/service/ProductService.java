@@ -21,13 +21,16 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductService  extends GenericService<Product, ProductDTO, UUID> {
+    @Override
     List<Product> findAll();
+
+    @Override
     Product update (Product product);
-    void deletebyName(String name);
+    void deleteByName(String name);
     ProductDTO save (ProductDTO productDTO);
     ProductWithCurrencyDTO getProductWithCurrencyDTO(UUID productID);
     List<ProductWithCurrencyDTO> getAllProductWithCurrenCyDTO();
-    ProductWithProductGroupDTO getProductWithProdcutGroupDTO(UUID productID);
+    ProductWithProductGroupDTO getProductWithProductGroupDTO(UUID productID);
     List<ProductWithProductGroupDTO> getAllProductWithProductGroupDTO();
     ProductDTO saveProductImg(String productName,MultipartFile file,String baseUrl);
 
@@ -39,6 +42,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     private final ProductRepository repository;
     private final TCHMapper mapper;
     private final FileService fileService;
+    private final ValidationException productIsNotExisted = new ValidationException("Product is not existed.");
 
     ProductServiceImpl(ProductRepository repository, TCHMapper mapper, FileService fileService) {
         this.repository = repository;
@@ -65,7 +69,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
      }
 
     @Override
-    public void deletebyName(String name) {
+    public void deleteByName(String name) {
         repository.deleteByName(name);
     }
 
@@ -81,10 +85,9 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     @Override
     public ProductWithCurrencyDTO getProductWithCurrencyDTO(UUID productID) {
         Product product = repository.findById(productID).orElseThrow(()->
-                new ValidationException("Product is not existed")
+                        productIsNotExisted
                 );
-        ProductWithCurrencyDTO productWithCurrencyDTO = mapper.map(product,ProductWithCurrencyDTO.class);
-        return productWithCurrencyDTO;
+        return mapper.map(product,ProductWithCurrencyDTO.class);
     }
 
     @Override
@@ -92,7 +95,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
         List<Product> productList = repository.findAll();
         List<ProductWithCurrencyDTO> productWithCurrencyDTOList = new ArrayList<>();
         productList.forEach(
-                (product) ->{
+                product ->{
                     ProductWithCurrencyDTO productWithCurrencyDTO = mapper.map(product,ProductWithCurrencyDTO.class);
                     productWithCurrencyDTOList.add(productWithCurrencyDTO);
                 }
@@ -101,12 +104,11 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     }
 
     @Override
-    public ProductWithProductGroupDTO getProductWithProdcutGroupDTO(UUID productID) {
+    public ProductWithProductGroupDTO getProductWithProductGroupDTO(UUID productID) {
         Product product = repository.findById(productID).orElseThrow(()->
-                new ValidationException("Product is not existed")
+                productIsNotExisted
         );
-        ProductWithProductGroupDTO productWithProductGroupDTO = mapper.map(product,ProductWithProductGroupDTO.class);
-        return productWithProductGroupDTO;
+        return mapper.map(product,ProductWithProductGroupDTO.class);
     }
 
     @Override
@@ -114,7 +116,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
         List<Product> productList = repository.findAll();
         List<ProductWithProductGroupDTO> productWithProductGroupDTOList = new ArrayList<>();
         productList.forEach(
-                (product) ->{
+                product ->{
                     ProductWithProductGroupDTO productWithProductGroupDTO = mapper.map(product,ProductWithProductGroupDTO.class);
                     productWithProductGroupDTOList.add(productWithProductGroupDTO);
                 }

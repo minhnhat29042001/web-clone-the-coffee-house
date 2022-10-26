@@ -33,7 +33,7 @@ public class CurrencyRestResource {
 
     @GetMapping("/GetAllCurrenciesWithProduct")
     public Object findAllCurrencyWithProductDTO(){
-        return ResponseUtil.get(currencyService.getAllCunrrencyWithProductDTO(),HttpStatus.OK);
+        return ResponseUtil.get(currencyService.getAllCurrencyWithProductDTO(),HttpStatus.OK);
     }
 
     @PostMapping("/AddCurrency")

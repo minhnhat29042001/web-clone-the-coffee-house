@@ -4,8 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uit.javabackend.webclonethecoffeehouse.currency.dto.CurrencyWithProductsDTO;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductWithCurrencyDTO;
 import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
@@ -21,7 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductGroupService extends GenericService<ProductGroup, ProductGroupDTO, UUID> {
+    @Override
     List<ProductGroup> findAll();
+
+    @Override
     ProductGroup update (ProductGroup currency);
     ProductGroupDTO save (ProductGroupDTO productGroupDTO);
     void deleteByName (String name);
@@ -36,6 +37,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
     private final ProductGroupRepository repository;
     private final TCHMapper mapper;
     private final ProductService productService;
+    private final ValidationException productGroupIsNotExisted = new ValidationException("Product is not existed.");
 
     ProductGroupServiceImpl(ProductGroupRepository repository, TCHMapper mapper, ProductService productService) {
         this.repository = repository;
@@ -61,7 +63,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
     @Override
     public ProductGroup update(ProductGroup productGroup) {
         ProductGroup curProductGroup = repository.findByName(productGroup.getName())
-                .orElseThrow(() -> new RuntimeException("ProductGroup is not existed."));
+                .orElseThrow(() ->productGroupIsNotExisted);
         curProductGroup.setName(productGroup.getName());
         return repository.save(curProductGroup);
     }
@@ -81,7 +83,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
     @Override
     public ProductGroupWithProductsDTO addProduct(List<UUID> ids, UUID collectionId) {
         ProductGroup productGroup = repository.findById(collectionId).orElseThrow( () ->
-                new ValidationException("ProductGroup is not existed.")
+                productGroupIsNotExisted
         );
         List<Product> products = productService.findByIds(ids);
         products.forEach(productGroup::addProduct);
@@ -91,7 +93,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
     @Override
     public ProductGroupWithProductsDTO removeProduct(List<UUID> ids, UUID collectionId) {
         ProductGroup productGroup = repository.findById(collectionId).orElseThrow( () ->
-                new ValidationException("ProductGroup is not existed.")
+                productGroupIsNotExisted
         );
         List<Product> products = productService.findByIds(ids);
         products.forEach(productGroup::removeProduct);
@@ -103,8 +105,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
         ProductGroup productGroup = repository.findById(productGroupId).orElseThrow(()->
                 new ValidationException("ProductGroup is not existed")
         );
-        ProductGroupWithProductsDTO productGroupWithProductsDTO = mapper.map(productGroup,ProductGroupWithProductsDTO.class);
-        return productGroupWithProductsDTO;
+        return mapper.map(productGroup,ProductGroupWithProductsDTO.class);
 
     }
 
@@ -113,7 +114,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
         List<ProductGroup> productGroupList = repository.findAll();
         List<ProductGroupWithProductsDTO> productGroupWithProductsDTOList = new ArrayList<>();
         productGroupList.forEach(
-                (productGroup) ->{
+                productGroup ->{
                     ProductGroupWithProductsDTO productGroupWithProductsDTO = mapper.map(productGroup,ProductGroupWithProductsDTO.class);
                     productGroupWithProductsDTOList.add(productGroupWithProductsDTO);
                 }
