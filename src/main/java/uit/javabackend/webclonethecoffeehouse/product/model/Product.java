@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
+import uit.javabackend.webclonethecoffeehouse.currency.model.Currency;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Setter
 @Getter
@@ -22,20 +22,23 @@ public class Product extends BaseEntity {
     @Length(min = 5  , max = 100 ,message = "Product name must have length between {min} and {max}")
     private String name;
 
-    @Column(name = ProductEntity.Product.PRODUCT_URL)
-    private String productUrl;
 
     @Column(name = ProductEntity.Product.PRODUCT_PRICE)
     private Integer price;
 
-    @Column(name = ProductEntity.Product.PRODUCT_CURRENCY)
-    private String currencyId;
+    @ManyToOne // map id currency
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
+
+    @ManyToOne
+    @JoinColumn(name = "productgroup_id")
+    private ProductGroup productGroup;
 
     @Column(name = ProductEntity.Product.PRODUCT_IMG_URL)
     private String imgUrl;
 
-    @Column(name = ProductEntity.Product.PRODUCT_COLLECTION)
-    private String collectionId;
+
+
 
     @Column(name = ProductEntity.Product.PRODUCT_DESCRIPTION)
     @Length(min = 5  , max = 100 ,message = "Product description must have length between {min} and {max}")

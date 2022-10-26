@@ -2,11 +2,13 @@ package uit.javabackend.webclonethecoffeehouse.product.dto;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
 import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductName;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
@@ -24,20 +26,11 @@ public class ProductDTO {
         @UniqueProductName(message = "product.name.existed")
         private String name;
 
-        @NotBlank
-        private String productUrl;
 
-        @NotBlank
-        private Integer price;
-
-        @NotBlank
-        private String currencyId;
-
-        @NotBlank
         private String imgUrl;
 
-        @NotBlank
-        private String collectionId;
+        @Range(min = 1, message= "product.price.null")
+        private Integer price;
 
         @NotBlank(message = "product.description.blank")
         @Size(min = 5 , max = 100,message = "Product description must have length between {min} and {max}")

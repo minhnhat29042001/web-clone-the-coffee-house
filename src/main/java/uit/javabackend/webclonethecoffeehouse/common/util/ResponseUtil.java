@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import uit.javabackend.webclonethecoffeehouse.common.model.ResponseDTO;
 
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.Collections;
 
 @UtilityClass
@@ -43,6 +44,19 @@ public class ResponseUtil {
                         .content(null)
                         .hasErrors(true)
                         .errors(ExceptionUtil.getErrors(exception))
+                        .timestamp(DateTimeUtils.now())
+                        .status(status.value())
+                        .build()
+                , status
+        );
+    }
+
+    public static ResponseEntity<ResponseDTO> errorSaveFile(IOException exception, HttpStatus status){
+        return new ResponseEntity<>(
+                ResponseDTO.builder()
+                        .content(null)
+                        .hasErrors(true)
+                        .errors(ExceptionUtil.getIOErrors(exception))
                         .timestamp(DateTimeUtils.now())
                         .status(status.value())
                         .build()

@@ -5,6 +5,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,9 @@ public class ExceptionUtil {
     }
 
     public static List<String> getErrors(RuntimeException exception) {
+        return List.of(DEFAULT_UNEXPECTED_MESSAGE);
+    }
+    public static List<String> getIOErrors(IOException exception) {
         return List.of(DEFAULT_UNEXPECTED_MESSAGE);
     }
 
