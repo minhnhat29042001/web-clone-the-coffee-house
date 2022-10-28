@@ -7,13 +7,13 @@ public class ProductEntity {
     @UtilityClass
     public static class Product{
         public static final String TABLE_NAME ="TCH_PRODUCT";
-        public static final String PRODUCT_NAME ="P_NAME";
-        public static final String PRODUCT_URL ="P_URL";
-        public static final String PRODUCT_PRICE ="P_PRICE";
-        public static final String PRODUCT_CURRENCY ="P_CURRENCY";
-        public static final String PRODUCT_IMG_URL ="P_IMG";
-        public static final String PRODUCT_COLLECTION ="P_COLLECTION_ID";
-        public static final String PRODUCT_DESCRIPTION ="P_DESCRIPTION";
+        public static final String NAME ="P_NAME";
+        public static final String PRICE ="P_PRICE";
+        public static final String CURRENCY ="P_CURRENCY_ID";
+        public static final String IMG_URL ="P_IMG";
+        public static final String PRODUCTGROUP ="P_PRODUCTGROUP_ID";
+        public static final String ORDERPRODUCT ="P_PRODUCTGROUP_ID";
+        public static final String DESCRIPTION ="P_DESCRIPTION";
     }
 
     @UtilityClass
@@ -25,4 +25,10 @@ public class ProductEntity {
     public static class ProductMappedCollection{
         public static final String PRODUCTGROUP_MAPPED_PRODUCT ="productGroup";
     }
+
+    @UtilityClass
+    public static class ProductMappedOrderProduct{
+        public static final String PRODUCT_MAPPED_ODERPRODUCT ="product";
+    }
 }
+
