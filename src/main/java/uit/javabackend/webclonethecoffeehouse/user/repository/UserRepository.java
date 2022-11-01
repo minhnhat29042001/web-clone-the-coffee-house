@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("select (count(u) > 0) from User u where u.email = ?1")
     boolean existsByEmail(String email);
 
-    void deleteByName(String name);
+    void deleteByUsername(String name);
 
-    Optional<User> findByName(String name);
+    Optional<User> findByUsername(String name);
 }
