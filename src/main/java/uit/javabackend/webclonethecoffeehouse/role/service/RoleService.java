@@ -162,7 +162,6 @@ class RoleServiceImpl implements RoleService {
     public RoleDTO update(RoleDTO roleDTO) {
         Role role = mapper.map(roleDTO, Role.class);
         return mapper.map(repository.save(role), RoleDTO.class);
-
     }
 
     @Override
