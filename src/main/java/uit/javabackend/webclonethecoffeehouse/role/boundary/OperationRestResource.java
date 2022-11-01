@@ -33,7 +33,7 @@ public class OperationRestResource {
     }
 
     @PutMapping("/UpdateOperation")
-    public Object update(@RequestBody Operation operation) {
+    public Object update(@RequestBody OperationDTO operation) {
         return ResponseUtil.get(operationService.update(operation), HttpStatus.OK);
     }
 

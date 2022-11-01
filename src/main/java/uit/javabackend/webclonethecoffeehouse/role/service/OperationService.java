@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
+import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.OperationDTO;
 import uit.javabackend.webclonethecoffeehouse.role.model.Operation;
 import uit.javabackend.webclonethecoffeehouse.role.repository.OperationRepository;
@@ -19,17 +20,19 @@ public interface OperationService extends GenericService<Operation, OperationDTO
 
 
     List<Operation> findByRoleId(UUID roleId);
+
+    OperationDTO update(OperationDTO operationDTO);
 }
 
 @org.springframework.stereotype.Service
 @Transactional
 class OperationServiceImpl implements OperationService {
     private final OperationRepository operationRepository;
-    private final ModelMapper modelMapper;
+    private final TCHMapper mapper;
 
-    OperationServiceImpl(OperationRepository operationRepository, ModelMapper modelMapper) {
+    OperationServiceImpl(OperationRepository operationRepository, TCHMapper mapper) {
         this.operationRepository = operationRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -39,7 +42,7 @@ class OperationServiceImpl implements OperationService {
 
     @Override
     public ModelMapper getMapper() {
-        return modelMapper;
+        return mapper;
     }
 
     @Override
@@ -56,6 +59,12 @@ class OperationServiceImpl implements OperationService {
     @Override
     public List<Operation> findByRoleId(UUID roleId) {
         return operationRepository.findByRoleId(roleId);
+    }
+
+    @Override
+    public OperationDTO update(OperationDTO operationDTO) {
+        Operation operation = mapper.map(operationDTO, Operation.class);
+        return mapper.map(operation, OperationDTO.class);
     }
 
 }
