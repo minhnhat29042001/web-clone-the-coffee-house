@@ -29,7 +29,11 @@ public interface GenericService <T extends BaseEntity, D, I> {
                 .collect(Collectors.toList());
     }
 
-
+    default List<D> findAllDto(Pageable page, Class<D> clazz){
+        return getRepository().findAll(page).stream()
+                .map(model -> getMapper().map(model, clazz))
+                .collect(Collectors.toList());
+    }
 
     default List<T> findByIds(List<I> ids){
         return getRepository().findAllById(ids);
