@@ -136,9 +136,6 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
         return mapper.map(product,ProductDTO.class);
     }
 
-
-
-
     @Override
     public JpaRepository<Product, UUID> getRepository() {
         return this.repository;
