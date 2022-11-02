@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.transaction.model;
+package uit.javabackend.webclonethecoffeehouse.payment.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +18,7 @@ import java.util.List;
 @Getter
 public class Payment extends BaseEntity {
 
-    @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_PAYMENT)
-    List<Transaction> transactions = new ArrayList<>();
+
     @Column(name = TransactionEntity.Payment.NAME)
     @Length(min = 5, max = 15, message = "")
     private String name;
@@ -40,6 +39,9 @@ public class Payment extends BaseEntity {
     private String privateKey;
     @Column(name = TransactionEntity.Payment.PUBLIC_KEY)
     private String publicKey;
+
+    @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_PAYMENT)
+    List<Transaction> transactions = new ArrayList<>();
 
     // Best practices
     public void addTransaction(Transaction transaction) {

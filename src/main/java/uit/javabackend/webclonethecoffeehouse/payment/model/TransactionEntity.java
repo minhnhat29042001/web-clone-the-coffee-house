@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.transaction.model;
+package uit.javabackend.webclonethecoffeehouse.payment.model;
 
 import lombok.experimental.UtilityClass;
 

@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.transaction.model;
+package uit.javabackend.webclonethecoffeehouse.payment.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +32,10 @@ public class Transaction extends BaseEntity {
     @Column(name = TransactionEntity.Transaction.PAYMENT_ID)
     private Payment payment;
 
-    @ManyToOne
-    @Column(name = TransactionEntity.Transaction.STATUS_ID)
-    private TransactionStatus status;
+
+    private Status status;
+
+    public enum Status {
+        NEW, CANCELLED, FAILED, PENDING, DECLINED, REJECTED, SUCCESS
+    }
 }
