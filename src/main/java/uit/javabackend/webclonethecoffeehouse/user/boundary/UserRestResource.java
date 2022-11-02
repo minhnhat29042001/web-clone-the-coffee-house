@@ -27,6 +27,16 @@ public class UserRestResource {
         );
     }
 
+
+    @GetMapping("/GetAllUserGroupUsername")
+    public ResponseEntity<?> findAllUserGroupUsername(@RequestParam("username") String username) {
+        return ResponseUtil.get(
+                userService.findAllUserGroupUsername(username)
+                , HttpStatus.OK
+        );
+    }
+
+
     @PostMapping("/SaveUser")
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserDTO userDTO) {
         return ResponseUtil.get(
@@ -41,8 +51,8 @@ public class UserRestResource {
     }
 
     @DeleteMapping("/DeleteUser")
-    public Object delete(@RequestParam("name") String name) {
-        userService.deleteByName(name);
+    public Object delete(@RequestParam("username") String username) {
+        userService.deleteByUserName(username);
         return HttpStatus.OK;
     }
 }
