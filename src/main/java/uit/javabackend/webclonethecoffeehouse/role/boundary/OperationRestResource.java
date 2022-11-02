@@ -24,7 +24,7 @@ public class OperationRestResource {
         return ResponseUtil.get(operationService.findAllDto(OperationDTO.class), HttpStatus.OK);
     }
 
-    @PostMapping("/AddOperation")
+    @PostMapping("/SaveOperation")
     public ResponseEntity<?> save(@RequestBody @Valid OperationDTO dto) {
         return ResponseUtil.get(
                 operationService.save(dto, Operation.class, OperationDTO.class)

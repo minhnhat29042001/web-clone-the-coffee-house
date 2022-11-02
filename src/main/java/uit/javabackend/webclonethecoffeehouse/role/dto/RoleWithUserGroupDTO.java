@@ -3,7 +3,6 @@ package uit.javabackend.webclonethecoffeehouse.role.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.validation.annotation.UniqueRoleName;
 
 import javax.validation.constraints.NotBlank;
@@ -16,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RoleWithUserGroupDTO {
     private UUID id;
-
     @Size(min = 5, max = 100, message = "{role.name.size}")
     @NotBlank
     @UniqueRoleName
@@ -27,5 +25,5 @@ public class RoleWithUserGroupDTO {
     @NotBlank(message = "{role.description.blank}")
     private String description;
 
-    private Set<UserGroup> userGroups;
+    private Set<UserGroupDTO> userGroups;
 }
