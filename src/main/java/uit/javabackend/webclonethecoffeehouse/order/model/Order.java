@@ -5,14 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.payment.model.Transaction;
 import uit.javabackend.webclonethecoffeehouse.payment.model.TransactionEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +39,12 @@ public class Order extends BaseEntity {
     @Column(name = OrderEntity.Order.TOTAL_PRICE)
     private Integer totalPrice;
 
+    // ManyToOne
+    @ManyToOne
+    private Discount discount;
+
+
+    // OneToMany
     // relationship Bidirectional
     @OneToMany(mappedBy = OrderEntity.OrderMappedOrderProduct.ORDER_MAPPED_ORDERPRODUCT)
     private List<OrderProduct> orderProducts = new ArrayList<>();
@@ -56,8 +60,9 @@ public class Order extends BaseEntity {
         orderProduct.setOrder(null);
     }
 
+
     // relationship Bidirectional
-    @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_PAYMENT)
+    @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_ODER)
     List<Transaction> transactions = new ArrayList<>();
 
     // Best practices
