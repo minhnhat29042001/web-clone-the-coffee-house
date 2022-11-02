@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.model;
+package uit.javabackend.webclonethecoffeehouse.order.model;
 
 import lombok.experimental.UtilityClass;
 

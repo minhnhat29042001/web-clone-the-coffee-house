@@ -1,8 +1,8 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.validation.validator;
+package uit.javabackend.webclonethecoffeehouse.product.validation.validator;
 
-import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
-import uit.javabackend.webclonethecoffeehouse.productgroup.repository.ProductGroupRepository;
-import uit.javabackend.webclonethecoffeehouse.productgroup.validation.annotation.UniqueProductGroupName;
+import uit.javabackend.webclonethecoffeehouse.product.model.ProductGroup;
+import uit.javabackend.webclonethecoffeehouse.product.repository.ProductGroupRepository;
+import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductGroupName;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

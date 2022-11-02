@@ -1,21 +1,19 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.dto;
+package uit.javabackend.webclonethecoffeehouse.order.dto;
 
 import lombok.*;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 
 import java.util.UUID;
-
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProductDTO {
-
+public class OrderProductWithProductDTO {
     private UUID id;
     private String name;
     private int totalPrice;
     private int quantity;
-
+    private ProductDTO productDTO;
 }

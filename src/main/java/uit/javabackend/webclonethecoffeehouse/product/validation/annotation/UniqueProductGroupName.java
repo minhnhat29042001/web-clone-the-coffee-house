@@ -1,6 +1,6 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.validation.annotation;
+package uit.javabackend.webclonethecoffeehouse.product.validation.annotation;
 
-import uit.javabackend.webclonethecoffeehouse.productgroup.validation.validator.UniqueProductGroupNameValidator;
+import uit.javabackend.webclonethecoffeehouse.product.validation.validator.UniqueProductGroupNameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

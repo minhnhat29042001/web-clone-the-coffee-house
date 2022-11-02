@@ -1,7 +1,7 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.dto;
+package uit.javabackend.webclonethecoffeehouse.product.dto;
 
 import lombok.*;
-import uit.javabackend.webclonethecoffeehouse.productgroup.validation.annotation.UniqueProductGroupName;
+import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductGroupName;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

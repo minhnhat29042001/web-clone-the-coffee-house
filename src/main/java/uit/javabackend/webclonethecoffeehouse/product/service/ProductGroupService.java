@@ -1,17 +1,16 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.service;
+package uit.javabackend.webclonethecoffeehouse.product.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupDTO;
-import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupWithProductsDTO;
-import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
-import uit.javabackend.webclonethecoffeehouse.productgroup.repository.ProductGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupDTO;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
-import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
+import uit.javabackend.webclonethecoffeehouse.product.model.ProductGroup;
+import uit.javabackend.webclonethecoffeehouse.product.repository.ProductGroupRepository;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;

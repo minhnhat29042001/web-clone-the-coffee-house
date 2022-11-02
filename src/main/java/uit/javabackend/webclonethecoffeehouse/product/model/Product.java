@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.model.OrderProduct;
-import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.currency.model.Currency;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,13 +20,21 @@ import java.util.Set;
 @Entity
 @Table(name = ProductEntity.Product.TABLE_NAME)
 public class Product extends BaseEntity {
-    @Column(name = ProductEntity.Product.NAME,unique = true)
-    @Length(min = 5  , max = 100 ,message = "Product name must have length between {min} and {max}")
-    private String name;
 
+    @Column(name = ProductEntity.Product.NAME, unique = true)
+    @Length(min = 5, max = 100, message = "Product name must have length between {min} and {max}")
+    private String name;
 
     @Column(name = ProductEntity.Product.PRICE)
     private Integer price;
+
+    @Column(name = ProductEntity.Product.IMG_URL)
+    private String imgUrl;
+
+    @Column(name = ProductEntity.Product.DESCRIPTION)
+    @Length(min = 5, max = 100, message = "Product description must have length between {min} and {max}")
+    private String description;
+
 
     @ManyToOne // map id currency
     @JoinColumn(name = ProductEntity.Product.CURRENCY)
@@ -36,13 +44,19 @@ public class Product extends BaseEntity {
     @JoinColumn(name = ProductEntity.Product.PRODUCTGROUP)
     private ProductGroup productGroup;
 
+    // relationship - bidirectional
     @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT)
-    private Set<OrderProduct> orderProducts;
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    @Column(name = ProductEntity.Product.IMG_URL)
-    private String imgUrl;
+    public Product addOrderProduct(OrderProduct orderProduct) {
+        this.orderProducts.add(orderProduct);
+        orderProduct.setProduct(this);
+        return this;
+    }
 
-    @Column(name = ProductEntity.Product.DESCRIPTION)
-    @Length(min = 5  , max = 100 ,message = "Product description must have length between {min} and {max}")
-    private String description;
+    public void removeOrderProduct(OrderProduct orderProduct) {
+        this.orderProducts.remove(orderProduct);
+        orderProduct.setProduct(null);
+    }
+
 }

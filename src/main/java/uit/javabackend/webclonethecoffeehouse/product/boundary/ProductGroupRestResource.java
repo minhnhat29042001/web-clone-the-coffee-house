@@ -1,13 +1,13 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.boundary;
+package uit.javabackend.webclonethecoffeehouse.product.boundary;
 
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
-import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupDTO;
-import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroup;
-import uit.javabackend.webclonethecoffeehouse.productgroup.service.ProductGroupService;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupDTO;
+import uit.javabackend.webclonethecoffeehouse.product.model.ProductGroup;
+import uit.javabackend.webclonethecoffeehouse.product.service.ProductGroupService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,8 +36,6 @@ public class ProductGroupRestResource {
     public Object findAllProductGroupWithProductDTO(){
         return ResponseUtil.get(productGroupService.getAllProductGroupWithProductDTO(),HttpStatus.OK);
     }
-
-
 
 
 

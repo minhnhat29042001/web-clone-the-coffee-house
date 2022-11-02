@@ -1,7 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.product.dto;
 
 import lombok.*;
-import uit.javabackend.webclonethecoffeehouse.productgroup.dto.ProductGroupDTO;
+
 import java.util.UUID;
 
 @Getter

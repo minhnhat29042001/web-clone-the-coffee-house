@@ -30,7 +30,6 @@ public interface GenericService <T extends BaseEntity, D, I> {
     }
 
 
-
     default List<T> findByIds(List<I> ids){
         return getRepository().findAllById(ids);
     }
@@ -43,17 +42,24 @@ public interface GenericService <T extends BaseEntity, D, I> {
         return getRepository().save(entity);
     }
 
+
     default D save(D dto, Class<T> modelClass, Class<D> dtoClass) {
         T model = getMapper().map(dto, modelClass);
         T savedModel = getRepository().save(model);
         return getMapper().map(savedModel, dtoClass);
     }
 
-    default void deleteById(I id){
+    default D save(T entity, Class<T> modelClass, Class<D> dtoClass) {
+        T savedModel = getRepository().save(entity);
+        return getMapper().map(savedModel, dtoClass);
+    }
+
+    default void deleteById(I id) {
         getRepository().deleteById(id);
     }
 
-    default T update(T entity){
+    default T update(T entity) {
         return getRepository().save(entity);
     }
+
 }

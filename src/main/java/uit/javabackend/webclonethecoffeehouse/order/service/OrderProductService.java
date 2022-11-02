@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.service;
+package uit.javabackend.webclonethecoffeehouse.order.service;
 
 
 import org.modelmapper.ModelMapper;
@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.dto.OrderProductDTO;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.dto.OrderProductWithOrderDTO;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.dto.OrderProductWithProductDTO;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.model.OrderProduct;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.repository.OrderProductRepository;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithOrderDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
+import uit.javabackend.webclonethecoffeehouse.order.repository.OrderProductRepository;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
