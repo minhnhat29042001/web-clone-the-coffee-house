@@ -33,10 +33,13 @@ public class UserGroup extends BaseEntity {
     @NotBlank
     private String description;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "g_group_users",
-            joinColumns = @JoinColumn(name = "user_group_id"),
-            inverseJoinColumns = @JoinColumn(name = "users_id"))
+    @JoinTable(name = RoleEntity.UserGroupMappedUser.JOIN_TABLE,
+            joinColumns = @JoinColumn(name = RoleEntity.UserGroupMappedUser.JOIN_TABLE_USER_GROUP_ID),
+            inverseJoinColumns = @JoinColumn(name = RoleEntity.UserGroupMappedUser.JOIN_TABLE_USER_ID))
     private Set<User> users = new LinkedHashSet<>();
+
+    @ManyToMany(mappedBy = RoleEntity.RoleMappedUserGroup.USER_GROUP_MAPPED_ROLE)
+    private Set<Role> roles = new LinkedHashSet<>();
 
     public void addUser(User user) {
         this.users.add(user);

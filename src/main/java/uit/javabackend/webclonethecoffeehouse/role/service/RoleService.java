@@ -13,8 +13,6 @@ import uit.javabackend.webclonethecoffeehouse.role.model.Operation;
 import uit.javabackend.webclonethecoffeehouse.role.model.Role;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.RoleRepository;
-import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
-import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -110,7 +108,7 @@ class RoleServiceImpl implements RoleService {
     public List<RoleWithOperationsDTO> getOperationsWithRoleId(UUID roleId) {
         List<RoleWithOperationsDTO> operationsDTOs = new ArrayList<>();
         if (!repository.existsById(roleId))
-            throw new ValidationException("Role is not existed.");
+            throw new ValidationException(roleNotExistMessage);
         List<Operation> operations = operationService.findByRoleId(roleId);
         operations.forEach(
                 operation -> operationsDTOs.add(mapper.map(operation, RoleWithOperationsDTO.class))

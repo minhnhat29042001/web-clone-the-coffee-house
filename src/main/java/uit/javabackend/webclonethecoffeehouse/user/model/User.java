@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
+import uit.javabackend.webclonethecoffeehouse.role.model.RoleEntity;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 
 import javax.persistence.*;
@@ -56,7 +57,7 @@ public class User extends BaseEntity {
     private Gender gender;
 
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
     private Set<UserGroup> userGroups = new LinkedHashSet<>();
 
     public enum Gender {

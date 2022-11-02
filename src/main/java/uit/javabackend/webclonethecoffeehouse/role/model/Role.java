@@ -42,9 +42,9 @@ public class Role extends BaseEntity {
     private Set<Operation> operations = new LinkedHashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "g_role_user_groups",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_groups_id"))
+    @JoinTable(name = RoleEntity.RoleMappedUserGroup.JOIN_TABLE,
+            joinColumns = @JoinColumn(name = RoleEntity.RoleMappedUserGroup.JOIN_TABLE_ROLE_ID),
+            inverseJoinColumns = @JoinColumn(name = RoleEntity.RoleMappedUserGroup.JOIN_TABLE_USER_GROUP_ID))
     private Set<UserGroup> userGroups = new LinkedHashSet<>();
 
     public void removeOperation(Operation operation) {
@@ -60,11 +60,13 @@ public class Role extends BaseEntity {
 
     public Role addUserGroup(UserGroup userGroup) {
         this.userGroups.add(userGroup);
+        userGroup.getRoles().add(this);
         return this;
     }
 
     public void removeUserGroup(UserGroup userGroup) {
         this.userGroups.remove(userGroup);
+        userGroup.getRoles().remove(this);
     }
 
     @Override
