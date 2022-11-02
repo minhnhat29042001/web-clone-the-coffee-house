@@ -9,9 +9,12 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.common.util.DateTimeUtils;
+import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * them chu thich properties vao day hoac them tai lieu
@@ -54,6 +57,39 @@ public class Discount extends BaseEntity {
     @Column(name = BusinessEntity.Discount.AMOUNT_TYPE)
     @Enumerated(value = EnumType.STRING)
     private AmountType amountType;
+
+
+    //OneToMany
+    //relationship - bidirectional
+
+    @OneToMany(mappedBy = BusinessEntity.DiscountMapped.DISCOUNT_MAPPED_USERDISCOUNT)
+    List<Order> orders = new ArrayList<>();
+
+    public Discount addOrder(Order order) {
+        orders.add(order);
+        order.setDiscount(this);
+        return this;
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
+        order.setDiscount(null);
+    }
+
+
+    @OneToMany(mappedBy = BusinessEntity.DiscountMapped.DISCOUNT_MAPPED_USERDISCOUNT)
+    List<UserDiscount> userDiscounts = new ArrayList<>();
+
+    public Discount addUserDiscount(UserDiscount userDiscount) {
+        userDiscounts.add(userDiscount);
+        userDiscount.setDiscount(this);
+        return this;
+    }
+
+    public void removeUserDiscount(UserDiscount userDiscount) {
+        userDiscounts.remove(userDiscount);
+        userDiscount.setDiscount(null);
+    }
 
     public enum AmountType {
         AMOUNT_OFF, PERCENTAGE

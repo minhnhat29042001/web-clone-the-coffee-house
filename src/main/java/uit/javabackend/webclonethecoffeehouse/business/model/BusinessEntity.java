@@ -33,4 +33,21 @@ public class BusinessEntity {
         public static final String AMOUNT_TYPE = "AMOUNT_TYPE";
 
     }
+
+    @UtilityClass
+    public static class DiscountMapped {
+        public static final String DISCOUNT_MAPPED_USERDISCOUNT = "discount";
+
+    }
+
+    @UtilityClass
+    public static class UserDiscount {
+        public static final String TABLE_NAME = "TCH_DISCOUNT";
+        public static final String DESCRIPTION = "DESCRIPTION";
+        public static final String USED_COUNT = "USED_COUNT";
+        public static final String USER_ID = "USER_ID";
+        public static final String DISCOUNT_ID = "DISCOUNT_ID";
+
+
+    }
 }
