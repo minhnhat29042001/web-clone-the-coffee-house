@@ -5,11 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
-import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -56,8 +53,8 @@ public class User extends BaseEntity {
     private Gender gender;
 
 
-    @ManyToMany(mappedBy = "users")
-    private Set<UserGroup> userGroups = new LinkedHashSet<>();
+    //@ManyToMany(mappedBy = "users")
+    //private Set<UserGroup> userGroups = new LinkedHashSet<>();
 
     public enum Gender {
         MALE,

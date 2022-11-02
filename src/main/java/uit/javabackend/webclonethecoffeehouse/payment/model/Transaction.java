@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
+import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,9 +21,9 @@ import javax.persistence.Table;
 @Table(name = TransactionEntity.Transaction.TABLE_NAME)
 public class Transaction extends BaseEntity {
 
-    //@ManyToOne
-    //@Column(name = TransactionEntity.Transaction.USER_ID)
-    ///private User user;
+    @ManyToOne
+    @Column(name = TransactionEntity.Transaction.USER_ID)
+    private User user;
 
     @ManyToOne
     @Column(name = TransactionEntity.Transaction.ORDER_ID)
@@ -32,7 +33,7 @@ public class Transaction extends BaseEntity {
     @Column(name = TransactionEntity.Transaction.PAYMENT_ID)
     private Payment payment;
 
-
+    @Column(name = TransactionEntity.Transaction.STATUS)
     private Status status;
 
     public enum Status {

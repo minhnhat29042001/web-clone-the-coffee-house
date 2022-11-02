@@ -9,9 +9,11 @@ import uit.javabackend.webclonethecoffeehouse.payment.dto.TransactionDTO;
 import uit.javabackend.webclonethecoffeehouse.payment.model.Transaction;
 import uit.javabackend.webclonethecoffeehouse.payment.repository.TransactionRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface TransactionServices extends GenericService<Transaction, TransactionDTO, UUID> {
+    List<Transaction> findAll(List<UUID> transactionIds);
 
 }
 
@@ -35,5 +37,10 @@ class TransactionServicesImp implements TransactionServices {
     @Override
     public ModelMapper getMapper() {
         return mapper;
+    }
+
+    @Override
+    public List<Transaction> findAll(List<UUID> transactionIds) {
+        return repository.findAllById(transactionIds);
     }
 }
