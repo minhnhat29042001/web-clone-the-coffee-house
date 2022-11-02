@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.productgroup.model;
+package uit.javabackend.webclonethecoffeehouse.product.model;
 
 
 import lombok.AllArgsConstructor;
@@ -9,12 +9,11 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
-import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,8 +27,8 @@ public class ProductGroup extends BaseEntity {
         @Length(min = 3,max = 100,message = "ProductGroup name must have lenght between {min} and {max}")
         private String name;
 
-        @OneToMany(mappedBy = ProductEntity.ProductMappedCollection.PRODUCTGROUP_MAPPED_PRODUCT, cascade = CascadeType.ALL)
-        private Set<Product> products;
+    @OneToMany(mappedBy = ProductEntity.ProductMappedCollection.PRODUCTGROUP_MAPPED_PRODUCT, cascade = CascadeType.ALL)
+    private List<Product> products = new ArrayList<>();
 
         public void removeProduct(Product product){
                 products.remove(product);

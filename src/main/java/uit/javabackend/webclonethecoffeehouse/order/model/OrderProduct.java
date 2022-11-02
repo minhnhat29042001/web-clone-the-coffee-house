@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.model;
+package uit.javabackend.webclonethecoffeehouse.order.model;
 
 
 import lombok.Getter;
@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
-import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
-import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
-import uit.javabackend.webclonethecoffeehouse.productgroup.model.ProductGroupEntity;
 
 import javax.persistence.*;
 

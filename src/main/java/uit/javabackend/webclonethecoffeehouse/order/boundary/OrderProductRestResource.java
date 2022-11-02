@@ -1,18 +1,12 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.boundary;
+package uit.javabackend.webclonethecoffeehouse.order.boundary;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.dto.OrderProductDTO;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.model.OrderProduct;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.service.OrderProductService;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
+import uit.javabackend.webclonethecoffeehouse.order.service.OrderProductService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.UUID;
 

@@ -1,9 +1,8 @@
-package uit.javabackend.webclonethecoffeehouse.orderproduct.repository;
+package uit.javabackend.webclonethecoffeehouse.order.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.model.OrderProduct;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 
 import java.util.Optional;
 import java.util.UUID;
