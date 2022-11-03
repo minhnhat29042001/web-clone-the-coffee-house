@@ -49,6 +49,7 @@ class RoleServiceImpl implements RoleService {
     private final OperationService operationService;
     private final UserGroupService userGroupService;
     private final String roleNotExistMessage = "Role is not existed.";
+
     public RoleServiceImpl(RoleRepository repository, TCHMapper mapper, OperationService operationService, UserGroupService userGroupService) {
         this.repository = repository;
         this.mapper = mapper;

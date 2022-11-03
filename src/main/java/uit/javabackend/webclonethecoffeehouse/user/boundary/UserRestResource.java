@@ -27,6 +27,7 @@ public class UserRestResource {
         );
     }
 
+
     @GetMapping("/GetAllUserGroupUsername")
     public ResponseEntity<?> findAllUserGroupUsername(@RequestParam("username") String username) {
         return ResponseUtil.get(
@@ -34,6 +35,7 @@ public class UserRestResource {
                 , HttpStatus.OK
         );
     }
+
 
     @PostMapping("/SaveUser")
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserDTO userDTO) {

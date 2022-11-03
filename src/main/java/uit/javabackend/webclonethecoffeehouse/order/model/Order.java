@@ -5,12 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
-import uit.javabackend.webclonethecoffeehouse.orderproduct.model.OrderProduct;
-import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
+import uit.javabackend.webclonethecoffeehouse.payment.model.Transaction;
+import uit.javabackend.webclonethecoffeehouse.payment.model.TransactionEntity;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -37,7 +39,41 @@ public class Order extends BaseEntity {
     @Column(name = OrderEntity.Order.TOTAL_PRICE)
     private Integer totalPrice;
 
-    // relationship
+    // ManyToOne
+    @ManyToOne
+    private Discount discount;
+
+
+    // OneToMany
+    // relationship Bidirectional
     @OneToMany(mappedBy = OrderEntity.OrderMappedOrderProduct.ORDER_MAPPED_ORDERPRODUCT)
-    private Set<OrderProduct> orderProducts;
+    private List<OrderProduct> orderProducts = new ArrayList<>();
+
+    public Order addOrderProduct(OrderProduct orderProduct) {
+        this.orderProducts.add(orderProduct);
+        orderProduct.setOrder(this);
+        return this;
+    }
+
+    public void removeOrderProduct(OrderProduct orderProduct) {
+        this.orderProducts.remove(orderProduct);
+        orderProduct.setOrder(null);
+    }
+
+
+    // relationship Bidirectional
+    @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_ODER)
+    List<Transaction> transactions = new ArrayList<>();
+
+    // Best practices
+    public Order addTransaction(Transaction transaction) {
+        this.transactions.add(transaction);
+        transaction.setOrder(this);
+        return this;
+    }
+
+    public void removeTransaction(Transaction transaction) {
+        this.transactions.remove(transaction);
+        transaction.setOrder(null);
+    }
 }

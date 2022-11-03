@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.product.dto;
 
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -9,11 +10,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductWithProductGroupDTO {
+public class ProductGroupWithProductsDTO {
     private UUID id;
     private String name;
-    private String imgUrl;
-    private Integer price;
-    private String description;
-    private ProductGroupDTO productGroupDTO;
+    private Set<ProductDTO> products;
 }

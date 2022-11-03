@@ -78,6 +78,7 @@ class UserGroupServiceImpl implements UserGroupService {
         UserGroup userGroup = tchMapper.map(userGroupDTO, UserGroup.class);
         return tchMapper.map(repository.save(userGroup), UserGroupDTO.class);
     }
+
     @Override
     public List<UserGroup> findByRoleId(UUID roleId) {
         return repository.findByRoleId(roleId);
