@@ -16,7 +16,6 @@ public class UserDiscountWithUserDTO implements Serializable {
 
     private UUID id;
 
-    @Length(min = 5, max = 50, message = "")
     private String description;
 
     private Integer usedCount;

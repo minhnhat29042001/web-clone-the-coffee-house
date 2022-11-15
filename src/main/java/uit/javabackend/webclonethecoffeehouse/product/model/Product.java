@@ -11,7 +11,9 @@ import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -46,7 +48,7 @@ public class Product extends BaseEntity {
 
     // relationship - bidirectional
     @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT)
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    private Set<OrderProduct> orderProducts = new LinkedHashSet<>();
 
     public Product addOrderProduct(OrderProduct orderProduct) {
         this.orderProducts.add(orderProduct);

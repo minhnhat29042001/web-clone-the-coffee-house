@@ -11,9 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -28,7 +26,7 @@ public class ProductGroup extends BaseEntity {
         private String name;
 
     @OneToMany(mappedBy = ProductEntity.ProductMappedCollection.PRODUCTGROUP_MAPPED_PRODUCT, cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+    private Set<Product> products = new LinkedHashSet<>();
 
         public void removeProduct(Product product){
                 products.remove(product);

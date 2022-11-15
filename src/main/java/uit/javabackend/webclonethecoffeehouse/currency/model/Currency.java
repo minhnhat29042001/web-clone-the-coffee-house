@@ -11,6 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.model.ProductEntity;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Currency extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = CurrencyEntity.CurrencyMappedProduct.PRODUCT_MAPPED_CURRENCY,cascade = CascadeType.ALL)
-    private Set<Product> products;
+    private Set<Product> products = new LinkedHashSet<>();
 
     public void removeProduct(Product product){
         products.remove(product);
