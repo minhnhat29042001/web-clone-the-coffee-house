@@ -41,6 +41,7 @@ public class Order extends BaseEntity {
 
     // ManyToOne
     @ManyToOne
+    @JoinColumn()
     private Discount discount;
 
 

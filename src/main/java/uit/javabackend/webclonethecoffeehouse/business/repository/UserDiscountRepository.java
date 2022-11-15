@@ -14,4 +14,6 @@ public interface UserDiscountRepository extends JpaRepository<UserDiscount, UUID
 
     Optional<UserDiscount> findByDiscount_Code(String code);
 
+    Optional<UserDiscount> findByDescription(String description);
+
 }

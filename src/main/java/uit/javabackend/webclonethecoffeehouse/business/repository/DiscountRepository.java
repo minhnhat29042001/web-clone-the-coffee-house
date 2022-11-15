@@ -11,4 +11,8 @@ import java.util.UUID;
 public interface DiscountRepository extends JpaRepository<Discount, UUID> {
 
     Optional<Discount> findByCode(String name);
+
+    Optional<Discount> findByDescription(String description);
+
+    void deleteByCode(String code);
 }

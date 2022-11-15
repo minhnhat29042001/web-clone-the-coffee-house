@@ -15,7 +15,7 @@ public class UniqueCurrencyNameValidator implements ConstraintValidator<UniqueCu
 
 
     private String message;
-    private CurrencyRepository repository;
+    private final CurrencyRepository repository;
     public UniqueCurrencyNameValidator(CurrencyRepository currencyRepository){
         this.repository=currencyRepository;
     }

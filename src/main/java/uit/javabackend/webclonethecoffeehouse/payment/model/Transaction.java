@@ -8,10 +8,7 @@ import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Setter
 @Getter
@@ -22,15 +19,15 @@ import javax.persistence.Table;
 public class Transaction extends BaseEntity {
 
     @ManyToOne
-    @Column(name = TransactionEntity.Transaction.USER_ID)
+    @JoinColumn(name = TransactionEntity.Transaction.USER_ID)
     private User user;
 
     @ManyToOne
-    @Column(name = TransactionEntity.Transaction.ORDER_ID)
+    @JoinColumn(name = TransactionEntity.Transaction.ORDER_ID)
     private Order order;
 
     @ManyToOne
-    @Column(name = TransactionEntity.Transaction.PAYMENT_ID)
+    @JoinColumn (name = TransactionEntity.Transaction.PAYMENT_ID)
     private Payment payment;
 
     @Column(name = TransactionEntity.Transaction.STATUS)

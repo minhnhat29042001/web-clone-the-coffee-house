@@ -44,7 +44,7 @@ public class CurrencyRestResource {
 
 
     @PutMapping("/UpdateCurrency")
-    public Object updateCurrency(@RequestBody Currency currency){
+    public Object updateCurrency(@RequestBody CurrencyDTO currency){
         return ResponseUtil.get(currencyService.update(currency),HttpStatus.OK);
     }
 

@@ -69,7 +69,7 @@ public class ProductRestResource {
 
 
     @PutMapping("/UpdateProduct")
-    public Object update(@RequestBody Product product){
+    public Object update(@RequestBody ProductDTO product){
         return ResponseUtil.get(productService.update(product),HttpStatus.OK);
     }
 

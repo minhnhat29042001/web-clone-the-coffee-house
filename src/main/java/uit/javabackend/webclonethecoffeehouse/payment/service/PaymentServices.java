@@ -3,6 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.payment.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.payment.dto.PaymentDTO;
@@ -12,7 +13,7 @@ import uit.javabackend.webclonethecoffeehouse.payment.repository.PaymentReposito
 import javax.validation.ValidationException;
 import java.util.UUID;
 
-@Service
+
 public interface PaymentServices extends GenericService<Payment, PaymentDTO, UUID> {
 
     PaymentDTO update(PaymentDTO paymentDTO);
@@ -21,6 +22,8 @@ public interface PaymentServices extends GenericService<Payment, PaymentDTO, UUI
 
 }
 
+@Service
+@Transactional
 class PaymentServicesImp implements PaymentServices {
 
     private final PaymentRepository repository;

@@ -1,7 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.business.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,32 +11,16 @@ import uit.javabackend.webclonethecoffeehouse.common.util.DateTimeUtils;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class DiscountDTO implements Serializable {
+public class DiscountWithUserDiscountDTO {
 
     private UUID id;
-
-    @Length(min = 5, max = 50, message = "Discount code must have length between {min} and {max}")
-    @UniqueCode
     private String code;
-
-    @Length(min = 5, max = 50, message = "Discount description must have length between {min} and {max}")
-    @UniqueDescription
     private String description;
-
-    @Range(min = 5,max = 50,message= "Numbers of users must have range between {min} and {max}")
     private Integer  numbersOfUsers;
-
-
-    @Range(min = 5,max = 50,message= "Usage numbers must have range between {min} and {max}")
     private Integer limitAmountOnUser;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeUtils.DATETIME_FORMAT)
@@ -50,4 +33,6 @@ public class DiscountDTO implements Serializable {
 
     @Enumerated(value = EnumType.STRING)
     private Discount.AmountType amountType;
+
+    private Set<UserDiscountDTO> userDiscounts;
 }

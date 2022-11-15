@@ -8,10 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @SuperBuilder
@@ -22,17 +19,17 @@ import javax.persistence.Table;
 public class UserDiscount extends BaseEntity {
 
     @Column(name = BusinessEntity.UserDiscount.DESCRIPTION)
-    @Length(min = 5, max = 50, message = "")
+    @Length(min = 5, max = 50, message = "UserDiscount description must have length between {min} and {max}")
     private String description;
 
     @Column(name = BusinessEntity.UserDiscount.USED_COUNT)
     private Integer usedCount;
 
     @ManyToOne
-    @Column(name = BusinessEntity.UserDiscount.USER_ID)
+    @JoinColumn(name = BusinessEntity.UserDiscount.USER_ID)
     private User user;
 
     @ManyToOne
-    @Column(name = BusinessEntity.UserDiscount.DISCOUNT_ID)
+    @JoinColumn(name = BusinessEntity.UserDiscount.DISCOUNT_ID)
     private Discount discount;
 }

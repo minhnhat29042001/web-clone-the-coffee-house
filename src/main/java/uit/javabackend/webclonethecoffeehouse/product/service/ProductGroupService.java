@@ -21,8 +21,8 @@ public interface ProductGroupService extends GenericService<ProductGroup, Produc
     @Override
     List<ProductGroup> findAll();
 
-    @Override
-    ProductGroup update (ProductGroup currency);
+
+    ProductGroup update (ProductGroupDTO productGroupDTO);
     ProductGroupDTO save (ProductGroupDTO productGroupDTO);
     void deleteByName (String name);
     ProductGroupWithProductsDTO addProduct(List<UUID> ids, UUID productGroupId);
@@ -60,10 +60,10 @@ class ProductGroupServiceImpl implements ProductGroupService {
     }
 
     @Override
-    public ProductGroup update(ProductGroup productGroup) {
-        ProductGroup curProductGroup = repository.findByName(productGroup.getName())
+    public ProductGroup update(ProductGroupDTO productGroupDTO) {
+        ProductGroup curProductGroup = repository.findByName(productGroupDTO.getName())
                 .orElseThrow(() ->productGroupIsNotExisted);
-        curProductGroup.setName(productGroup.getName());
+        curProductGroup.setName(productGroupDTO.getName());
         return repository.save(curProductGroup);
     }
 
@@ -80,8 +80,8 @@ class ProductGroupServiceImpl implements ProductGroupService {
     }
 
     @Override
-    public ProductGroupWithProductsDTO addProduct(List<UUID> ids, UUID collectionId) {
-        ProductGroup productGroup = repository.findById(collectionId).orElseThrow( () ->
+    public ProductGroupWithProductsDTO addProduct(List<UUID> ids, UUID productGroupId) {
+        ProductGroup productGroup = repository.findById(productGroupId).orElseThrow( () ->
                 productGroupIsNotExisted
         );
         List<Product> products = productService.findByIds(ids);
@@ -90,8 +90,8 @@ class ProductGroupServiceImpl implements ProductGroupService {
     }
 
     @Override
-    public ProductGroupWithProductsDTO removeProduct(List<UUID> ids, UUID collectionId) {
-        ProductGroup productGroup = repository.findById(collectionId).orElseThrow( () ->
+    public ProductGroupWithProductsDTO removeProduct(List<UUID> ids, UUID productGroupId) {
+        ProductGroup productGroup = repository.findById(productGroupId).orElseThrow( () ->
                 productGroupIsNotExisted
         );
         List<Product> products = productService.findByIds(ids);
@@ -102,7 +102,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
     @Override
     public ProductGroupWithProductsDTO getProductGroupWithProductDTO(UUID productGroupId) {
         ProductGroup productGroup = repository.findById(productGroupId).orElseThrow(()->
-                new ValidationException("ProductGroup is not existed")
+                productGroupIsNotExisted
         );
         return mapper.map(productGroup,ProductGroupWithProductsDTO.class);
 
