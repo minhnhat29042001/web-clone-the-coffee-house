@@ -12,7 +12,6 @@ import uit.javabackend.webclonethecoffeehouse.payment.repository.PaymentReposito
 import javax.validation.ValidationException;
 import java.util.UUID;
 
-@Service
 public interface PaymentServices extends GenericService<Payment, PaymentDTO, UUID> {
 
     PaymentDTO update(PaymentDTO paymentDTO);
@@ -21,6 +20,7 @@ public interface PaymentServices extends GenericService<Payment, PaymentDTO, UUI
 
 }
 
+@Service
 class PaymentServicesImp implements PaymentServices {
 
     private final PaymentRepository repository;

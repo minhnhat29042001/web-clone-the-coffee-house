@@ -31,6 +31,7 @@ public class TransactionEntity {
         public static final String TRANSACTION_MAPPED_USER = "user";
         public static final String TRANSACTION_MAPPED_ODER = "order";
         public static final String TRANSACTION_MAPPED_PAYMENT = "payment";
-        public static final String TRANSACTION_MAPPED_STATUS = "status";
     }
+
+
 }
