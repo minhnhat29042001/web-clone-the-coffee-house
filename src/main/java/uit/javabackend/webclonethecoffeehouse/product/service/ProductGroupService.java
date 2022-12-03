@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductGroupService extends GenericService<ProductGroup, ProductGroupDTO, UUID> {
-    @Override
-    List<ProductGroup> findAll();
+//    @Override
+//    List<ProductGroup> findAll();
 
     @Override
     ProductGroup update (ProductGroup currency);
@@ -54,10 +54,10 @@ class ProductGroupServiceImpl implements ProductGroupService {
         return this.mapper;
     }
 
-    @Override
-    public List<ProductGroup> findAll() {
-        return repository.findAll();
-    }
+//    @Override
+//    public List<ProductGroup> findAll() {
+//        return repository.findAll();
+//    }
 
     @Override
     public ProductGroup update(ProductGroup productGroup) {

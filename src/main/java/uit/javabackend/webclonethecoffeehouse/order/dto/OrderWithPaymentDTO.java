@@ -1,9 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.order.dto;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
-import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductName;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,7 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
+public class OrderWithPaymentDTO {
 
         private UUID id;
 

@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.product.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,7 +46,7 @@ public class Product extends BaseEntity {
     private ProductGroup productGroup;
 
     // relationship - bidirectional
-    @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT)
+    @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     public Product addOrderProduct(OrderProduct orderProduct) {

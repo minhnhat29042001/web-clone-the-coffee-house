@@ -19,6 +19,7 @@ public class BusinessRestResource {
         this.services = services;
     }
 
+
     @GetMapping("/get-all")
     public Object findAll() {
         return ResponseUtil.get(services.findAllDto(BusinessDTO.class), HttpStatus.OK);

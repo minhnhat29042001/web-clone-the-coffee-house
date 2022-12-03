@@ -12,12 +12,12 @@ import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import javax.validation.ValidationException;
 import java.util.UUID;
 
-@Service
 public interface BusinessService extends GenericService<Business, BusinessDTO, UUID> {
 
     BusinessDTO update(BusinessDTO businessDTO);
 }
 
+@Service
 class BusinessServiceImp implements BusinessService {
     private final BusinessRepository repository;
     private final TCHMapper mapper;

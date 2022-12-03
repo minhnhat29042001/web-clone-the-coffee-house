@@ -8,10 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @SuperBuilder
@@ -29,10 +26,10 @@ public class UserDiscount extends BaseEntity {
     private Integer usedCount;
 
     @ManyToOne
-    @Column(name = BusinessEntity.UserDiscount.USER_ID)
+    @JoinColumn(name = BusinessEntity.UserDiscount.USER_ID)
     private User user;
 
     @ManyToOne
-    @Column(name = BusinessEntity.UserDiscount.DISCOUNT_ID)
+    @JoinColumn(name = BusinessEntity.UserDiscount.DISCOUNT_ID)
     private Discount discount;
 }

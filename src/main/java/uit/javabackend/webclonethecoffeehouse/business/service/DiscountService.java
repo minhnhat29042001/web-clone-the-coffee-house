@@ -12,12 +12,12 @@ import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import javax.validation.ValidationException;
 import java.util.UUID;
 
-@Service
 public interface DiscountService extends GenericService<Discount, DiscountDTO, UUID> {
 
     DiscountDTO update(DiscountDTO discountDTO);
 }
 
+@Service
 class DiscountServiceImp implements DiscountService {
 
     private final DiscountRepository repository;

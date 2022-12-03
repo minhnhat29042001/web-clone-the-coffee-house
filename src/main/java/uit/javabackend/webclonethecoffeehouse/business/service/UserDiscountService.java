@@ -13,14 +13,13 @@ import javax.validation.ValidationException;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 public interface UserDiscountService extends GenericService<UserDiscount, UserDiscountDTO, UUID> {
 
     List<UserDiscount> findAll(List<UUID> userDiscountIds);
 
 }
 
-
+@Service
 class UserDiscountServiceImp implements UserDiscountService {
 
     private final UserDiscountRepository repository;
