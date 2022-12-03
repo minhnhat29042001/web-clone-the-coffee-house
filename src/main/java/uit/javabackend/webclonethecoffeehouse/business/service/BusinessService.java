@@ -3,6 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.business.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.business.dto.BusinessDTO;
 import uit.javabackend.webclonethecoffeehouse.business.model.Business;
 import uit.javabackend.webclonethecoffeehouse.business.repository.BusinessRepository;
@@ -18,6 +19,7 @@ public interface BusinessService extends GenericService<Business, BusinessDTO, U
 }
 
 @Service
+@Transactional
 class BusinessServiceImp implements BusinessService {
     private final BusinessRepository repository;
     private final TCHMapper mapper;

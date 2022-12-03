@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
 import uit.javabackend.webclonethecoffeehouse.common.util.DateTimeUtils;
@@ -14,7 +15,9 @@ import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * them chu thich properties vao day hoac them tai lieu
@@ -29,19 +32,19 @@ import java.util.List;
 public class Discount extends BaseEntity {
 
     @Column(name = BusinessEntity.Discount.CODE)
-    @Length(min = 5, max = 50, message = "")
+    @Length(min = 5, max = 50, message = "Discount code must have length between {min} and {max}")
     private String code;
 
     @Column(name = BusinessEntity.Discount.DESCRIPTION)
-    @Length(min = 5, max = 50, message = "")
+    @Length(min = 5, max = 50, message = "Discount description must have length between {min} and {max}")
     private String description;
 
     @Column(name = BusinessEntity.Discount.ALLOWED_USERS)
-    @Length(min = 5, max = 50, message = "")
-    private Integer allowedUsers;
+    @Range(min = 5,max = 50,message= "Numbers of users must have range between {min} and {max}")
+    private Integer numbersOfUsers;
 
     @Column(name = BusinessEntity.Discount.LIMIT_AMOUNT_ON_USERS)
-    @Length(min = 5, max = 50, message = "")
+    @Range(min = 5,max = 50,message= "Usage numbers must have range between {min} and {max}")
     private Integer limitAmountOnUser;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeUtils.DATETIME_FORMAT)
@@ -58,12 +61,16 @@ public class Discount extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private AmountType amountType;
 
+    @Column(name = BusinessEntity.Discount.DISCOUNT_AMOUNT)
+    @Range(min = 1, message= "Discount amount must have lowest range which is {min}")
+    private Integer discountAmount;
+
 
     //OneToMany
     //relationship - bidirectional
 
     @OneToMany(mappedBy = BusinessEntity.DiscountMapped.DISCOUNT_MAPPED_USERDISCOUNT)
-    List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     public Discount addOrder(Order order) {
         orders.add(order);
@@ -78,20 +85,20 @@ public class Discount extends BaseEntity {
 
 
     @OneToMany(mappedBy = BusinessEntity.DiscountMapped.DISCOUNT_MAPPED_USERDISCOUNT)
-    List<UserDiscount> userDiscounts = new ArrayList<>();
+    private Set<UserDiscount> userDiscounts = new LinkedHashSet<>();
 
     public Discount addUserDiscount(UserDiscount userDiscount) {
-        userDiscounts.add(userDiscount);
+        this.userDiscounts.add(userDiscount);
         userDiscount.setDiscount(this);
         return this;
     }
 
     public void removeUserDiscount(UserDiscount userDiscount) {
-        userDiscounts.remove(userDiscount);
+        this.userDiscounts.remove(userDiscount);
         userDiscount.setDiscount(null);
     }
 
     public enum AmountType {
-        AMOUNT_OFF, PERCENTAGE
+        MONEY, PERCENTAGE
     }
 }

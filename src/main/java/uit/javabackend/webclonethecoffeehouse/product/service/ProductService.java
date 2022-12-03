@@ -24,8 +24,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     @Override
     List<Product> findAll();
 
-    @Override
-    Product update (Product product);
+    Product update (ProductDTO product);
     void deleteByName(String name);
     ProductDTO save (ProductDTO productDTO);
     ProductWithCurrencyDTO getProductWithCurrencyDTO(UUID productID);
@@ -58,7 +57,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
 
 
      @Override
-     public Product update(Product product) {
+     public Product update(ProductDTO product) {
          Product curProduct = repository.findById(product.getId())
                  .orElseThrow(() -> new RuntimeException("Product is not existed."));
          curProduct.setName(product.getName());

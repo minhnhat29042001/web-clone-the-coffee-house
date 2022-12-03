@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class UserDiscount extends BaseEntity {
 
     @Column(name = BusinessEntity.UserDiscount.DESCRIPTION)
-    @Length(min = 5, max = 50, message = "")
+    @Length(min = 5, max = 50, message = "UserDiscount description must have length between {min} and {max}")
     private String description;
 
     @Column(name = BusinessEntity.UserDiscount.USED_COUNT)

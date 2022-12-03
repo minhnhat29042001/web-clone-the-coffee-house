@@ -31,6 +31,7 @@ public class BusinessEntity {
         public static final String EFFECTIVE_DAY = "EFFECTIVE_DAY";
         public static final String EXPIRATION_DAY = "EXPIRATION_DAY";
         public static final String AMOUNT_TYPE = "AMOUNT_TYPE";
+        public static final String DISCOUNT_AMOUNT ="DISCOUNT_AMOUNT";
 
     }
 
@@ -42,7 +43,8 @@ public class BusinessEntity {
 
     @UtilityClass
     public static class UserDiscount {
-        public static final String TABLE_NAME = "TCH_DISCOUNT";
+        public static final String TABLE_NAME = "TCH_USERDISCOUNT";
+
         public static final String DESCRIPTION = "DESCRIPTION";
         public static final String USED_COUNT = "USED_COUNT";
         public static final String USER_ID = "USER_ID";
