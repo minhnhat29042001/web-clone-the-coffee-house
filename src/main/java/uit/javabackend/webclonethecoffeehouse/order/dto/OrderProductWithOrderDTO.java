@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OrderProductWithOrderDTO {
     private UUID id;
-    private String name;
+    private String note;
     private int totalPrice;
     private int quantity;
     private OrderDTO orderDTO;

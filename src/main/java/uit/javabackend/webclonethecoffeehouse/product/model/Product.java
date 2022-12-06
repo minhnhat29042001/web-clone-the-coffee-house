@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.product.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +12,7 @@ import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -47,8 +46,8 @@ public class Product extends BaseEntity {
     private ProductGroup productGroup;
 
     // relationship - bidirectional
-    @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT)
-    private Set<OrderProduct> orderProducts = new LinkedHashSet<>();
+    @OneToMany(mappedBy = ProductEntity.ProductMappedOrderProduct.PRODUCT_MAPPED_ODERPRODUCT, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
     public Product addOrderProduct(OrderProduct orderProduct) {
         this.orderProducts.add(orderProduct);

@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
+import uit.javabackend.webclonethecoffeehouse.order.model.Order;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class Payment extends BaseEntity {
     @Column(name = TransactionEntity.Payment.PUBLIC_KEY)
     private String publicKey;
 
+    // relationship OneToMany
+
     @OneToMany(mappedBy = TransactionEntity.TransactionMapped.TRANSACTION_MAPPED_PAYMENT)
     List<Transaction> transactions = new ArrayList<>();
 
@@ -61,6 +65,23 @@ public class Payment extends BaseEntity {
         this.transactions.remove(transaction);
         transaction.setPayment(null);
     }
+
+//    @OneToMany(mappedBy = OrderEntity.OrderMapped.ORDER_MAPPED_PAYMENT)
+//    List<Order> orders = new ArrayList<>();
+//
+//    // Best practices
+//    public Payment addOrder(Order order) {
+//        this.orders.add(order);
+//        order.setPayment(this);
+//        return this;
+//    }
+//
+//    public void removeOrder(Order order) {
+//        this.orders.remove(order);
+//        order.setPayment(null);
+//    }
+
+
 
     public enum MethodPayment {
         COD, ONLINE

@@ -18,7 +18,7 @@ public class ExceptionUtil {
     }
 
     public static List<String> getErrors(RuntimeException exception) {
-        return List.of(DEFAULT_UNEXPECTED_MESSAGE);
+        return List.of(exception.getMessage());
     }
     public static List<String> getIOErrors(IOException exception) {
         return List.of(DEFAULT_UNEXPECTED_MESSAGE);

@@ -1,6 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.order.dto;
 
 import lombok.*;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class OrderProductDTO {
 
     private UUID id;
-    private String name;
+    private String note;
     private int totalPrice;
     private int quantity;
 

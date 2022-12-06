@@ -15,4 +15,9 @@ public class UserEntity {
         public static final String AVATAR = "TCH_AVATAR";
         public static final String BIRTH = "TCH_BIRTH";
     }
+
+    @UtilityClass
+    public class UserMapped {
+        public static final String USER_MAPPED_ORDER = "user";
+    }
 }
