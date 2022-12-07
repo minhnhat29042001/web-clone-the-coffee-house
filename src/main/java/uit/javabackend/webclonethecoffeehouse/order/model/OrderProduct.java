@@ -1,7 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.order.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +18,8 @@ import javax.persistence.*;
 @Table(name = OrderProductEntity.OrderProduct.TABLE_NAME)
 public class OrderProduct extends BaseEntity {
 
-    @Column(name = OrderProductEntity.OrderProduct.NOTE)
-    private String note;
+    @Column(name = OrderProductEntity.OrderProduct.NAME)
+    private String name;
 
     @Column(name = OrderProductEntity.OrderProduct.TOTALPRICE)
     private int totalPrice;
@@ -29,12 +28,12 @@ public class OrderProduct extends BaseEntity {
     private int quantity;
 
     // relationship
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = OrderProductEntity.OrderProduct.PRODUCT_ID )
+    @ManyToOne
+    @JoinColumn(name = OrderProductEntity.OrderProduct.PRODUCT )
     private Product product;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = OrderProductEntity.OrderProduct.ORDER_ID )
+    @ManyToOne
+    @JoinColumn(name = OrderProductEntity.OrderProduct.ORDER )
     private Order order;
 
 }
