@@ -1,8 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
-
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.UniqueUsername;
 
@@ -23,13 +22,15 @@ public class UserDTO {
     @UniqueUsername(message = "{user.username.existed}")
     private String username;
     @NotBlank(message = "{user.password.blank}")
+    @JsonIgnore
     private String password;
     @NotBlank(message = "{user.email.blank}")
     private String email;
     private String birth;
     private String avatar;
     @NotBlank(message = "{user.phone.blank}")
-
     private String phone;
     private User.Gender gender;
+    private String token;
+    private User.Provider provider;
 }

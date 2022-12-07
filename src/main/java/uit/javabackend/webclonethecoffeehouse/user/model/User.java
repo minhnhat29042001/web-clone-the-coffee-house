@@ -40,10 +40,7 @@ public class User extends BaseEntity {
     )
     private String email;
 
-    @Column(name = UserEntity.User.PHONE
-            , nullable = false
-            , length = 11
-    )
+    @Column(name = UserEntity.User.PHONE)
     private String phone;
 
     @Column(name = UserEntity.User.BIRTH)
@@ -56,13 +53,21 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-
     @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
     private Set<UserGroup> userGroups = new LinkedHashSet<>();
+
+    @Transient
+    private String token;
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     public enum Gender {
         MALE,
         FEMALE,
         OTHER
+    }
+
+    public enum Provider {
+        local, google
     }
 }
