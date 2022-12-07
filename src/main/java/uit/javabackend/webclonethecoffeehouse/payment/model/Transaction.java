@@ -27,7 +27,7 @@ public class Transaction extends BaseEntity {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = TransactionEntity.Transaction.PAYMENT_ID)
+    @JoinColumn (name = TransactionEntity.Transaction.PAYMENT_ID)
     private Payment payment;
 
     @Column(name = TransactionEntity.Transaction.STATUS)
