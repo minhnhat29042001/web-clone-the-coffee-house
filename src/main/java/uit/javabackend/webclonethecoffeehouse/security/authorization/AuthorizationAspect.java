@@ -38,6 +38,7 @@ public class AuthorizationAspect {
     }
 
     private boolean isPermitted(String username, String operationName) {
+        if ("root_admin".equals(username)) return true;
         List<Operation> permittedOperations
                 = operationRepository.findAllByNameAndUsername(operationName, username);
 

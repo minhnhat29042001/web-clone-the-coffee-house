@@ -6,12 +6,12 @@ import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessExcept
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.jwt.JwtUtils;
-import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
 public interface AuthService {
-    UserDTO login(LoginDTO dto);
+    UserDTOWithToken login(LoginDTO dto);
 }
 
 @Service
@@ -29,17 +29,17 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDTO login(LoginDTO dto) {
+    public UserDTOWithToken login(LoginDTO dto) {
         User user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(
                         () -> new TCHBusinessException("User is not existed")
                 );
 
         if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            UserDTO userDto = mapper.map(user, UserDTO.class);
+            UserDTOWithToken userDTOWithToken = mapper.map(user, UserDTOWithToken.class);
             String token = jwtUtils.generateJwt(dto.getUsername());
-            userDto.setToken(token);
-            return userDto;
+            userDTOWithToken.setToken(token);
+            return userDTOWithToken;
         }
 
         throw new TCHBusinessException("Password is not correct.");

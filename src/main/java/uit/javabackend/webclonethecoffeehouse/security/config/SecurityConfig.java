@@ -70,6 +70,7 @@ public class SecurityConfig {
 
         // API Authentication
         http
+//                .authorizeRequests().anyRequest().permitAll();
                 .formLogin()
                 .disable()
                 .httpBasic()
@@ -78,7 +79,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/swagger-ui/index.html").permitAll()
+                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
