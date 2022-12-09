@@ -62,11 +62,6 @@ public class User extends BaseEntity {
     private Gender gender;
 
 
-    // ManyToMany
-    @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
-    private Set<UserGroup> userGroups = new LinkedHashSet<>();
-
-
     // OneToMany
     // relationship Bidirectional
     @OneToMany(mappedBy =UserEntity.UserMapped.USER_MAPPED_ORDER)
@@ -82,11 +77,20 @@ public class User extends BaseEntity {
         this.orders.remove(order);
         order.setUser(null);
     }
+    @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
+    private Set<UserGroup> userGroups = new LinkedHashSet<>();
 
+    @Transient
+    private String token;
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     public enum Gender {
         MALE,
         FEMALE,
         OTHER
+    }
+    public enum Provider {
+        local, google
     }
 }
