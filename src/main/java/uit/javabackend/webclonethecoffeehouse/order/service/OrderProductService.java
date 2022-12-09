@@ -67,10 +67,10 @@ class OrderProductServiceImp implements OrderProductService{
     @Value("${order.id.existed}")
     private GiraBusinessException orderIsNotExisted ;
 
-    @Value("${product.id.existed}")
+    @Value("${product.name.existed}")
     private GiraBusinessException productIsNotExsited ;
 
-    @Value("${product.id.existed}")
+    @Value("${product.name.existed}")
     private GiraBusinessException orderProductIsNotExisted;
 
     OrderProductServiceImp(OrderProductRepository repository, OrderRepository orderRepository, ProductRepository productRepository, TCHMapper mapper) {

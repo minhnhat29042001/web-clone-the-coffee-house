@@ -53,6 +53,7 @@ public class OrderRestResource {
     }
 
 
+    @Operation(summary = "su dung thang nay de tao don hang ")
     @PostMapping(path = "/save-order")
     public Object save(@RequestBody @Valid OrderDTO orderDTO){
         return ResponseUtil.get(orderService.save(orderDTO),HttpStatus.CREATED);
@@ -63,7 +64,7 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.update(orderDTO),HttpStatus.OK);
     }
 
-
+    @Operation(summary = "")
     @PostMapping("/create-order")
     public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto){
         return ResponseUtil.get(orderService.saveOrder(orderDto),HttpStatus.OK);

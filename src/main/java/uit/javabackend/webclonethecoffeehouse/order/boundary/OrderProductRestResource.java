@@ -48,10 +48,6 @@ public class OrderProductRestResource {
 //        return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
 //    }
 
-    @PostMapping(path = "/AddOrderProduct")
-    public Object save(@RequestBody @Valid OrderProductDTO orderProductDTO){
-        return ResponseUtil.get(service.save(orderProductDTO),HttpStatus.CREATED);
-    }
 
     @PostMapping(path = "/add-orderproducts/{order-id}")
     public Object save(@PathVariable("order-id") UUID orderId, @RequestBody List<OrderProductWithProductDTO> orderProductWithProductDTOS){

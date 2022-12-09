@@ -16,6 +16,7 @@ public class OrderEntity {
         public static final String USER_ID ="P_USER_ID";
         public static final String DISCOUNT_ID ="P_DISCOUNT_ID";
         public static final String PAYMENT_ID ="P_PAYMENT_ID";
+        public static final String VNPAY_PAYMENT_ID ="P_VNPAYPAYMENT_ID";
     }
 
     @UtilityClass

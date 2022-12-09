@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.payment.vnp_payment.dto;
+package uit.javabackend.webclonethecoffeehouse.vnp_payment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

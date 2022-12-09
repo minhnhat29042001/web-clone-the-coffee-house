@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.order.dto;
 
 import lombok.*;
 import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.VnpayPaymentDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderWithPaymentDTO {
+public class OrderWithVnpayPaymentDTO {
 
         private UUID id;
 
@@ -30,5 +31,6 @@ public class OrderWithPaymentDTO {
         private Integer totalPrice;
 
         private OrderStatus status;
+        private VnpayPaymentDTO vnpayPaymentDTO;
 
 }

@@ -1,8 +1,9 @@
-package uit.javabackend.webclonethecoffeehouse.payment.vnp_payment.dto;
+package uit.javabackend.webclonethecoffeehouse.vnp_payment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +20,6 @@ public class VnpayTransactionDto {
     private String vnp_TransactionNo;
     private String vnp_ResponseCode;
     private String vnp_TransactionStatus;
-    private String vnp_SecureHashType;
+
     private String vnp_SecureHash;
 }

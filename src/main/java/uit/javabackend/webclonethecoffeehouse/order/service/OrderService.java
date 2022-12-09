@@ -32,10 +32,14 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     //void deleteByName(String name);
 
     OrderDTO save(OrderDTO orderDTO);
+    OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO);
+
 
     OrderWithProductsDTO saveOrder(OrderWithProductsDTO orderDto);
 
     OrderDTO findOrderByOrderId(UUID id);
+
+    OrderWithVnpayPaymentDTO findOrderWithVnpayPaymentByOrderId(UUID id);
 
     /**
      * duoc su dung de view danh sach don hang da thuc hien cua user
@@ -116,9 +120,22 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO) {
+        Order order = mapper.map(orderWithVnpayPaymentDTO,Order.class);
+        Order savedOrder = orderRepository.save(order);
+        return mapper.map(savedOrder, OrderWithVnpayPaymentDTO.class) ;
+    }
+
+    @Override
     public OrderDTO findOrderByOrderId(UUID id) {
         Order cur = orderRepository.findById(id).orElseThrow(() -> orderIsNotExisted);
         return mapper.map(cur, OrderDTO.class);
+    }
+
+    @Override
+    public OrderWithVnpayPaymentDTO findOrderWithVnpayPaymentByOrderId(UUID id) {
+        Order curOrder = orderRepository.findById(id).orElseThrow(() -> orderIsNotExisted);
+        return mapper.map(curOrder, OrderWithVnpayPaymentDTO.class);
     }
 
     /**

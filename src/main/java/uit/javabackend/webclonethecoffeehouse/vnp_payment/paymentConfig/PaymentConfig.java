@@ -1,4 +1,4 @@
-package uit.javabackend.webclonethecoffeehouse.payment.vnp_payment.paymentConfig;
+package uit.javabackend.webclonethecoffeehouse.vnp_payment.paymentConfig;
 
 import lombok.experimental.UtilityClass;
 
