@@ -45,10 +45,7 @@ public class User extends BaseEntity {
     )
     private String email;
 
-    @Column(name = UserEntity.User.PHONE
-            , nullable = false
-            , length = 11
-    )
+    @Column(name = UserEntity.User.PHONE)
     private String phone;
 
     @Column(name = UserEntity.User.BIRTH)
@@ -60,7 +57,6 @@ public class User extends BaseEntity {
     @Column(name = UserEntity.User.GENDER)
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
 
     // OneToMany
     // relationship Bidirectional
@@ -77,6 +73,7 @@ public class User extends BaseEntity {
         this.orders.remove(order);
         order.setUser(null);
     }
+
     @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
     private Set<UserGroup> userGroups = new LinkedHashSet<>();
 
@@ -90,6 +87,7 @@ public class User extends BaseEntity {
         FEMALE,
         OTHER
     }
+
     public enum Provider {
         local, google
     }

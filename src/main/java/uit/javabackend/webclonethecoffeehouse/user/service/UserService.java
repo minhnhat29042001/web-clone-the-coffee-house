@@ -2,21 +2,18 @@ package uit.javabackend.webclonethecoffeehouse.user.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
-
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
-
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.UUID;
 
 public interface UserService extends GenericService<User, UserDTO, UUID> {
@@ -28,14 +25,20 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     List<UserGroupDTO> findAllUserGroupUsername(String username);
 
+    UserDTO createUser(UserDTO dto);
+
 }
 
 @Service
 class UserServiceImpl implements UserService {
+    private final TCHMapper giraMapper;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TCHMapper tchMapper;
 
-    UserServiceImpl(UserRepository userRepository, TCHMapper tchMapper) {
+    UserServiceImpl(TCHMapper giraMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
+        this.giraMapper = giraMapper;
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tchMapper = tchMapper;
     }
@@ -74,6 +77,18 @@ class UserServiceImpl implements UserService {
                 userGroup -> userGroupDTOs.add(tchMapper.map(userGroup, UserGroupDTO.class))
         );
         return userGroupDTOs;
+    }
+
+    @Override
+    public UserDTO createUser(UserDTO dto) {
+        User user = giraMapper.map(dto, User.class);
+        // encode password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setProvider(User.Provider.local);
+        return giraMapper.map(
+                userRepository.save(user),
+                UserDTO.class
+        );
     }
 
 }
