@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserDTOWithToken {
     private UUID id;
 
     @Size(min = 5, max = 100, message = "{user.username.size}")
@@ -28,6 +28,7 @@ public class UserDTO {
     private String avatar;
     @NotBlank(message = "{user.phone.blank}")
     private String phone;
+    private String token;
     private User.Gender gender;
     private User.Provider provider;
 }

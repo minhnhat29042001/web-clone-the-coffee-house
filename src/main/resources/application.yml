@@ -3,9 +3,15 @@ server:
 
 spring:
   security:
-    user:
-      name: admin
-      password: 1234
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 307631907025-nrsq4dog0i2bg8ll8n9akuposk8deplb.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
