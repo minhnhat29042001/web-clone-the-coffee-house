@@ -27,7 +27,7 @@ public class TestObjectMap {
 
         String dateTimeConvert = "2022-12-03 19:29:14.883484";
         LocalDateTime d = LocalDateTime.parse(dateTimeConvert);
-        String converted = d.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATETIME_FORMAT_VNPAY));
+       // String converted = d.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATETIME_FORMAT_VNPAY));
         System.out.println();
     }
 }

@@ -29,6 +29,7 @@ public class OrderDTO {
 
         private String codeCoupon;
 
+        @Range(min = 1, message= "product.price.null")
         private Integer totalPrice;
 
         private OrderStatus status;

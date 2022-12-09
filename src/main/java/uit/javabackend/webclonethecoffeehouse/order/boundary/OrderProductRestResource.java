@@ -72,6 +72,7 @@ public class OrderProductRestResource {
         return ResponseUtil.get(service.findById(orderProductId),HttpStatus.CREATED);
     }
 
+
     @PutMapping("/UpdateOrderProduct")
     public Object update(@RequestBody OrderProduct orderProduct){
         return ResponseUtil.get(service.update(orderProduct),HttpStatus.OK);
