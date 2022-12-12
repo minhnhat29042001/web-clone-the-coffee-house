@@ -20,8 +20,6 @@ public class UserDTOWithToken {
     @NotBlank(message = "{user.username.blank}")
     @UniqueUsername(message = "{user.username.existed}")
     private String username;
-    @NotBlank(message = "{user.password.blank}")
-    private String password;
     @NotBlank(message = "{user.email.blank}")
     private String email;
     private String birth;

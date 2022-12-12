@@ -30,7 +30,7 @@ public class User extends BaseEntity {
     )
     private String username;
 
-    @Column(name = UserEntity.User.PASSWORD, nullable = false)
+    @Column(name = UserEntity.User.PASSWORD)
     private String password;
 
     @Column(name = UserEntity.User.EMAIL

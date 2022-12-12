@@ -29,10 +29,10 @@ public class GlobalExceptionHandler { // bắt các lỗi
         return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(TCHBusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleLoginException(
-            RuntimeException exception
+            TCHBusinessException exception
     ) {
         return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
     }
