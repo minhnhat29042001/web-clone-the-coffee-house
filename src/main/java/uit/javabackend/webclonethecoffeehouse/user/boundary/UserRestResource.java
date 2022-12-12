@@ -4,18 +4,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
+import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
+import uit.javabackend.webclonethecoffeehouse.role.service.UserGroupService;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/UsersManagement")
 public class UserRestResource {
     private final UserService userService;
+    private final UserGroupService userGroupService;
 
-    public UserRestResource(UserService userService) {
+    public UserRestResource(UserService userService, UserGroupService userGroupService) {
         this.userService = userService;
+        this.userGroupService = userGroupService;
     }
 
     @GetMapping("/GetAllUser")
@@ -36,7 +41,9 @@ public class UserRestResource {
 
     @PostMapping("/SaveUser")
     public ResponseEntity<?> saveUser(@RequestBody @Valid UserDTO userDTO) {
-        System.out.println(userDTO.toString());
+        UserDTO user = userService.createUser(userDTO);
+        UserGroup userGroup = userGroupService.findUserGroupByName(UserGroup.USER_GROUP.CUSTOMER.name());
+        userGroupService.addUsers(userGroup.getId(), Collections.singletonList(user.getId()));
         return ResponseUtil.get(
                 userService.createUser(userDTO)
                 , HttpStatus.OK

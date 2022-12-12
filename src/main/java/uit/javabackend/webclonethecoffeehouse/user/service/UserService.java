@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
@@ -30,14 +31,13 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 }
 
 @Service
+@Transactional
 class UserServiceImpl implements UserService {
-    private final TCHMapper giraMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TCHMapper tchMapper;
 
-    UserServiceImpl(TCHMapper giraMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
-        this.giraMapper = giraMapper;
+    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tchMapper = tchMapper;
@@ -81,11 +81,11 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO dto) {
-        User user = giraMapper.map(dto, User.class);
+        User user = tchMapper.map(dto, User.class);
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
-        return giraMapper.map(
+        return tchMapper.map(
                 userRepository.save(user),
                 UserDTO.class
         );

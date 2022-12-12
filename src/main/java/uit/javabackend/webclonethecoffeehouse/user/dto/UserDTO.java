@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.user.dto;
 
 import lombok.*;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
+import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.UniqueEmail;
 import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.UniqueUsername;
 
 import javax.validation.constraints.NotBlank;
@@ -23,6 +24,7 @@ public class UserDTO {
     @NotBlank(message = "{user.password.blank}")
     private String password;
     @NotBlank(message = "{user.email.blank}")
+    @UniqueEmail(message = "{user.email.existed}")
     private String email;
     private String birth;
     private String avatar;

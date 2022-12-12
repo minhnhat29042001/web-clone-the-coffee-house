@@ -37,6 +37,14 @@ public class UserGroupRestResource {
         );
     }
 
+    @GetMapping("/GetUserGroupByName")
+    public ResponseEntity<?> findUserGroupByName(@RequestParam("name") String name) {
+        return ResponseUtil.get(
+                service.findUserGroupByNameDTO(name)
+                , HttpStatus.OK
+        );
+    }
+
     @PostMapping("/SaveUserGroup")
     public ResponseEntity<?> saveUserGroup(@RequestBody @Valid UserGroupDTO userGroupDto) {
         return ResponseUtil.get(
@@ -51,6 +59,16 @@ public class UserGroupRestResource {
             @RequestBody List<UUID> ids) {
         return ResponseUtil.get(
                 service.addUsers(userGroupId, ids)
+                , HttpStatus.OK
+        );
+    }
+
+    @PostMapping("{user-group-id}/RemoveUsers")
+    public ResponseEntity<?> removeUsers(
+            @PathVariable("user-group-id") UUID userGroupId,
+            @RequestBody List<UUID> ids) {
+        return ResponseUtil.get(
+                service.removeUsers(userGroupId, ids)
                 , HttpStatus.OK
         );
     }
