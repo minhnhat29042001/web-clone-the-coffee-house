@@ -12,18 +12,17 @@ spring:
             scope:
               - email
               - profile
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 1234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     generate-ddl: true
     show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: false
     driver-class-name: org.postgresql.Driver
+  profiles:
+    active: dev
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
