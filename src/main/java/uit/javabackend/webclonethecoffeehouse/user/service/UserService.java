@@ -17,6 +17,7 @@ import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService extends GenericService<User, UserDTO, UUID> {
@@ -93,12 +94,12 @@ class UserServiceImpl implements UserService {
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
-        UserGroup userGroup = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name())
-                .orElseThrow(() ->
-                        new ValidationException("UserGroup is not existed.")
-                );
-        userGroup.addUser(user);
-        user.getUserGroups().add(userGroup);
+        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name());
+        if (userGroupOptional.isPresent()) {
+            UserGroup userGroup = userGroupOptional.get();
+            userGroup.addUser(user);
+            user.getUserGroups().add(userGroup);
+        } else throw new ValidationException("UserGroup is not existed.");
 
         return tchMapper.map(
                 userRepository.save(user),
