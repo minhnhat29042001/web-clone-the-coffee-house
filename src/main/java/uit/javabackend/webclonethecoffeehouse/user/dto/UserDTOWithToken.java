@@ -28,5 +28,4 @@ public class UserDTOWithToken {
     private String phone;
     private String token;
     private User.Gender gender;
-    private User.Provider provider;
 }

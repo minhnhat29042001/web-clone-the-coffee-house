@@ -31,5 +31,4 @@ public class UserDTO {
     @NotBlank(message = "{user.phone.blank}")
     private String phone;
     private User.Gender gender;
-    private User.Provider provider;
 }
