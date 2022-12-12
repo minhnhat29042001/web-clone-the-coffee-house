@@ -5,11 +5,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.model.BaseEntity;
+import uit.javabackend.webclonethecoffeehouse.order.model.Order;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderEntity;
+import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.role.model.RoleEntity;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -52,6 +57,22 @@ public class User extends BaseEntity {
     @Column(name = UserEntity.User.GENDER)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    // OneToMany
+    // relationship Bidirectional
+    @OneToMany(mappedBy =UserEntity.UserMapped.USER_MAPPED_ORDER)
+    private List<Order> orders = new ArrayList<>();
+
+    public User addOrder(Order order) {
+        this.orders.add(order);
+        order.setUser(this);
+        return this;
+    }
+
+    public void removeOrder(Order order) {
+        this.orders.remove(order);
+        order.setUser(null);
+    }
 
     @ManyToMany(mappedBy = RoleEntity.UserGroupMappedUser.USER_MAPPED_USER_GROUP)
     private Set<UserGroup> userGroups = new LinkedHashSet<>();

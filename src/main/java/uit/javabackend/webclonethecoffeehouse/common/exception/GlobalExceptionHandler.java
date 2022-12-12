@@ -18,14 +18,14 @@ public class GlobalExceptionHandler { // bắt các lỗi
     @ExceptionHandler(ConstraintViolationException.class) // bắt kiểu lỗi
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleConstraintViolationException(ConstraintViolationException exception) { // hàm bắt lỗi ConstraintViolation
-        return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
+            return ResponseUtil.error(exception,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException exception
-    ) {
+    ){
         return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
     }
 

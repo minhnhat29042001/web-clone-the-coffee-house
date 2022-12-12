@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8086
 
 spring:
   security:
@@ -13,7 +13,7 @@ spring:
               - email
               - profile
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=thecoffeehouse1
     username: postgres
     password: 1234
   jpa:
