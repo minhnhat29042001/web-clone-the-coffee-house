@@ -6,19 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupWithUsersDTO;
-import uit.javabackend.webclonethecoffeehouse.role.model.Role;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
-import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
+import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
 import javax.validation.ValidationException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public interface UserGroupService extends GenericService<UserGroup, UserGroupDTO, UUID> {
     UserGroupWithUsersDTO addUsers(UUID userGroupId, List<UUID> ids);
@@ -30,20 +28,26 @@ public interface UserGroupService extends GenericService<UserGroup, UserGroupDTO
     void deleteByName(String name);
 
     public UserGroupDTO update(UserGroupDTO userGroupDTO);
+
+    UserGroupWithUsersDTO removeUsers(UUID userGroupId, List<UUID> ids);
+
+    UserGroupDTO findUserGroupByNameDTO(String name);
+
+    UserGroup findUserGroupByName(String name);
 }
 
 @Service
 @Transactional
 class UserGroupServiceImpl implements UserGroupService {
     private final UserGroupRepository repository;
+    private final UserRepository userRepository;
     private final TCHMapper tchMapper;
 
-    private final UserService userService;
 
-    UserGroupServiceImpl(UserGroupRepository repository, TCHMapper tchMapper, UserService userService) {
+    UserGroupServiceImpl(UserGroupRepository repository, UserRepository userRepository, TCHMapper tchMapper) {
         this.repository = repository;
+        this.userRepository = userRepository;
         this.tchMapper = tchMapper;
-        this.userService = userService;
     }
 
     @Override
@@ -61,8 +65,14 @@ class UserGroupServiceImpl implements UserGroupService {
         UserGroup userGroup = repository.findById(userGroupId)
                 .orElseThrow(() -> new ValidationException("UserGroup is not existed."));
 
-        List<User> users = userService.findByIds(ids);
-        users.forEach(userGroup::addUser);
+        ids.forEach(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                userGroup.addUser(user);
+                user.getUserGroups().add(userGroup);
+            }
+        });
         return tchMapper.map(userGroup, UserGroupWithUsersDTO.class);
     }
 
@@ -71,12 +81,40 @@ class UserGroupServiceImpl implements UserGroupService {
         return repository.findAllWithUsers()
                 .stream()
                 .map(model -> tchMapper.map(model, UserGroupWithUsersDTO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public UserGroupDTO update(UserGroupDTO userGroupDTO) {
         UserGroup userGroup = tchMapper.map(userGroupDTO, UserGroup.class);
         return tchMapper.map(repository.save(userGroup), UserGroupDTO.class);
+    }
+
+    @Override
+    public UserGroupWithUsersDTO removeUsers(UUID userGroupId, List<UUID> ids) {
+        UserGroup userGroup = repository.findById(userGroupId)
+                .orElseThrow(() -> new ValidationException("UserGroup is not existed."));
+
+        ids.forEach(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                userGroup.removeUser(user);
+                user.getUserGroups().remove(userGroup);
+            }
+        });
+        return tchMapper.map(userGroup, UserGroupWithUsersDTO.class);
+    }
+
+    @Override
+    public UserGroupDTO findUserGroupByNameDTO(String name) {
+        Optional<UserGroup> userGroup = repository.findByName(name);
+        return tchMapper.map(userGroup, UserGroupDTO.class);
+    }
+
+    @Override
+    public UserGroup findUserGroupByName(String name) {
+        Optional<UserGroup> userGroup = repository.findByName(name);
+        return userGroup.orElse(null);
     }
 
     @Override

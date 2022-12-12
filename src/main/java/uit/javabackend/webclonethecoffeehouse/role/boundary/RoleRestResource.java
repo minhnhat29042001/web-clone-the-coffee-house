@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.service.RoleService;
-import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,11 +22,13 @@ public class RoleRestResource {
         this.service = roleService;
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @GetMapping("/GetAllRoles")
     public Object findAll() {
         return ResponseUtil.get(service.findAllDto(RoleDTO.class), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @GetMapping("/GetAllRolesPaging")
     public Object findAllDtoPaging(@RequestParam("size") int size,
                                    @RequestParam("index") int index) {
@@ -36,6 +38,7 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @GetMapping("{role-id}/GetOperationsWithRoleId")
     public ResponseEntity<?> getOperationsWithRole(
             @PathVariable("role-id") UUID roleId) {
@@ -45,6 +48,7 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @GetMapping("{role-id}/GetUserGroupsWithRoleId")
     public ResponseEntity<?> getUserGroupsWithRole(
             @PathVariable("role-id") UUID roleId) {
@@ -54,11 +58,13 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @PostMapping("/SaveRole")
     public Object save(@RequestBody @Valid RoleDTO roleDTO) {
         return ResponseUtil.get(service.save(roleDTO), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @PostMapping("{role-id}/AddOperations")
     public ResponseEntity<?> addOperations(
             @RequestBody List<UUID> ids,
@@ -69,6 +75,7 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @DeleteMapping("{role-id}/RemoveOperations")
     public ResponseEntity<?> removeOperations(
             @RequestBody List<UUID> ids,
@@ -79,6 +86,7 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @PostMapping("{role-id}/addUserGroup")
     public ResponseEntity<?> addUserGroup(
             @RequestBody List<UUID> ids,
@@ -89,11 +97,13 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @PutMapping("/UpdateRole")
     public Object update(@RequestBody RoleDTO roleDTO) {
         return ResponseUtil.get(service.update(roleDTO), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @DeleteMapping("{role-id}/removeUserGroup")
     public ResponseEntity<?> removeUserGroup(
             @RequestBody List<UUID> ids,

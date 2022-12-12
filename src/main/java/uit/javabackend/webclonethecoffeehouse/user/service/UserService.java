@@ -4,9 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
+import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
+import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
@@ -14,6 +17,7 @@ import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService extends GenericService<User, UserDTO, UUID> {
@@ -30,16 +34,17 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 }
 
 @Service
+@Transactional
 class UserServiceImpl implements UserService {
-    private final TCHMapper giraMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserGroupRepository userGroupRepository;
     private final TCHMapper tchMapper;
 
-    UserServiceImpl(TCHMapper giraMapper, PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
-        this.giraMapper = giraMapper;
+    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, UserGroupRepository userGroupRepository, TCHMapper tchMapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.userGroupRepository = userGroupRepository;
         this.tchMapper = tchMapper;
     }
 
@@ -56,8 +61,12 @@ class UserServiceImpl implements UserService {
     @Override
 
     public void deleteByUserName(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new ValidationException("User is not existed.")
+                );
+        user.getUserGroups().forEach(userGroup -> userGroup.removeUser(user));
         userRepository.deleteByUsername(username);
-
     }
 
     public UserDTO update(UserDTO userDTO) {
@@ -81,11 +90,18 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO dto) {
-        User user = giraMapper.map(dto, User.class);
+        User user = tchMapper.map(dto, User.class);
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
-        return giraMapper.map(
+        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name());
+        if (userGroupOptional.isPresent()) {
+            UserGroup userGroup = userGroupOptional.get();
+            userGroup.addUser(user);
+            user.getUserGroups().add(userGroup);
+        } else throw new ValidationException("UserGroup is not existed.");
+
+        return tchMapper.map(
                 userRepository.save(user),
                 UserDTO.class
         );

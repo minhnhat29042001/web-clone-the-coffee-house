@@ -29,10 +29,11 @@ public class GlobalExceptionHandler { // bắt các lỗi
         return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
     }
 
-
-    @ExceptionHandler(GiraBusinessException.class) // bắt kiểu lỗi
+    @ExceptionHandler(TCHBusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ResponseDTO> handleGlobalException(GiraBusinessException exception) { // hàm bắt lỗi ConstraintViolation
-        return ResponseUtil.error(exception,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseDTO> handleLoginException(
+            TCHBusinessException exception
+    ) {
+        return ResponseUtil.error(exception, HttpStatus.BAD_REQUEST);
     }
 }

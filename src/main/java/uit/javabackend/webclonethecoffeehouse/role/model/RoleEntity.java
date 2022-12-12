@@ -39,7 +39,7 @@ public class RoleEntity {
     @UtilityClass
     public static class UserGroup {
 
-        public static final String TABLE_NAME = "TCH_GROUP";
+        public static final String TABLE_NAME = "TCH_USER_GROUP";
         public static final String NAME = "TCH_NAME";
         public static final String DESCRIPTION = "TCH_DESCRIPTION";
         public static final String CODE = "TCH_CODE";

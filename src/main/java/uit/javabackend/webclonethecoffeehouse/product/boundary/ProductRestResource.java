@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
-import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,58 +23,65 @@ public class ProductRestResource {
         this.productService = productService;
     }
 
+    @TCHOperation(name = "ViewProduct")
     @GetMapping("/GetAllProducts")
-    public Object findAll(){
+    public Object findAll() {
         return ResponseUtil.get(productService.findAllDto(ProductDTO.class), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "ViewProduct")
     @GetMapping("/{product-id}/GetProductWithCurrency")
-    public Object findProductWithCurrencyDTO(@PathVariable ("product-id") UUID productID){
-        return ResponseUtil.get(productService.getProductWithCurrencyDTO(productID),HttpStatus.OK);
+    public Object findProductWithCurrencyDTO(@PathVariable("product-id") UUID productID) {
+        return ResponseUtil.get(productService.getProductWithCurrencyDTO(productID), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "ViewProduct")
     @GetMapping("/GetAllProductsWithCurrency")
-    public Object findAllProductWithCurrencyDTO(){
-        return ResponseUtil.get(productService.getAllProductWithCurrenCyDTO(),HttpStatus.OK);
+    public Object findAllProductWithCurrencyDTO() {
+        return ResponseUtil.get(productService.getAllProductWithCurrenCyDTO(), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "ViewProduct")
     @GetMapping("/{product-id}/GetProductWithProductGroup")
-    public Object findProductWithProductGroupDTO(@PathVariable ("product-id") UUID productID){
-        return ResponseUtil.get(productService.getProductWithProductGroupDTO(productID),HttpStatus.OK);
+    public Object findProductWithProductGroupDTO(@PathVariable("product-id") UUID productID) {
+        return ResponseUtil.get(productService.getProductWithProductGroupDTO(productID), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "ViewProduct")
     @GetMapping("/GetAllProductsWithProductGroup")
-    public Object findAllProductWithProductGroupDTO(){
-        return ResponseUtil.get(productService.getAllProductWithProductGroupDTO(),HttpStatus.OK);
+    public Object findAllProductWithProductGroupDTO() {
+        return ResponseUtil.get(productService.getAllProductWithProductGroupDTO(), HttpStatus.OK);
     }
 
     /*
         Khi thêm lần đầu thì Fe có thể để chỗ imgUrl là null hoặc rỗng vì Api này trả về ProductDTO nó chứa cả (imgUrl) sau đó có thể gọi Api AddProductImg để lưu link ảnh cho product
      */
+    @TCHOperation(name = "AddRemoveProduct")
     @PostMapping(path = "/AddProduct")
-    public Object save(@RequestBody @Valid ProductDTO productDTO){
-        return ResponseUtil.get(productService.save(productDTO),HttpStatus.CREATED);
+    public Object save(@RequestBody @Valid ProductDTO productDTO) {
+        return ResponseUtil.get(productService.save(productDTO), HttpStatus.CREATED);
     }
 
-
-    @PostMapping(path = "/AddProductImg",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Object saveProudctImg(@RequestParam("productName") String productName, @RequestPart("productimg") MultipartFile productImg,HttpServletRequest request){
+    @TCHOperation(name = "AddRemoveProduct")
+    @PostMapping(path = "/AddProductImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Object saveProudctImg(@RequestParam("productName") String productName, @RequestPart("productimg") MultipartFile productImg, HttpServletRequest request) {
         String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
                 .replacePath(null)
                 .build()
                 .toUriString();
-        return ResponseUtil.get(productService.saveProductImg(productName,productImg,baseUrl),HttpStatus.CREATED);
+        return ResponseUtil.get(productService.saveProductImg(productName, productImg, baseUrl), HttpStatus.CREATED);
     }
 
 
-
+    @TCHOperation(name = "UpdateProduct")
     @PutMapping("/UpdateProduct")
-    public Object update(@RequestBody ProductDTO product){
-        return ResponseUtil.get(productService.update(product),HttpStatus.OK);
+    public Object update(@RequestBody ProductDTO product) {
+        return ResponseUtil.get(productService.update(product), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "AddRemoveProduct")
     @DeleteMapping("/DeleteProduct")
-    public Object delete(@RequestParam("name")  String name){
+    public Object delete(@RequestParam("name") String name) {
         productService.deleteByName(name);
         return HttpStatus.OK;
     }

@@ -6,10 +6,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uit.javabackend.webclonethecoffeehouse.common.exception.GiraBusinessException;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-import uit.javabackend.webclonethecoffeehouse.order.dto.*;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithProductsDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithVnpayPaymentDTO;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
@@ -18,8 +21,6 @@ import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
-import javax.validation.ValidationException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     //void deleteByName(String name);
 
     OrderDTO save(OrderDTO orderDTO);
+
     OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO);
 
 
@@ -47,7 +49,6 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     List<OrderWithProductsDTO> findAllOrderByUserId(UUID userId); // replace with OderWithUserDto
 
 
-
 }
 
 
@@ -61,13 +62,14 @@ class OrderServiceImpl implements OrderService {
     private final OrderProductService orderProductService;
     private final TCHMapper mapper;
     @Value("${order.id.existed}")
-    private GiraBusinessException orderIsNotExisted ;
+    private TCHBusinessException orderIsNotExisted;
 
     @Value("${user.username.existed}")
-    private GiraBusinessException userIsNotExisted ;
+    private TCHBusinessException userIsNotExisted;
 
     @Value("${orderproduct.id.existed}")
-    private GiraBusinessException productIsNotExisted;
+    private TCHBusinessException productIsNotExisted;
+
     OrderServiceImpl(OrderRepository orderRepository, UserService userService, ProductService productService, OrderProductService orderProductService, TCHMapper mapper) {
         this.orderRepository = orderRepository;
         this.userService = userService;
@@ -104,7 +106,7 @@ class OrderServiceImpl implements OrderService {
         curOrder.setTotalPrice(orderDTO.getTotalPrice());
         curOrder.setStatus(orderDTO.getStatus());
 
-        return save(curOrder, Order.class,OrderDTO.class);
+        return save(curOrder, Order.class, OrderDTO.class);
     }
 
 //    @Override
@@ -114,16 +116,16 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
-        Order order = mapper.map(orderDTO,Order.class);
+        Order order = mapper.map(orderDTO, Order.class);
         Order savedOrder = orderRepository.save(order);
-        return mapper.map(savedOrder, OrderDTO.class) ;
+        return mapper.map(savedOrder, OrderDTO.class);
     }
 
     @Override
     public OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO) {
-        Order order = mapper.map(orderWithVnpayPaymentDTO,Order.class);
+        Order order = mapper.map(orderWithVnpayPaymentDTO, Order.class);
         Order savedOrder = orderRepository.save(order);
-        return mapper.map(savedOrder, OrderWithVnpayPaymentDTO.class) ;
+        return mapper.map(savedOrder, OrderWithVnpayPaymentDTO.class);
     }
 
     @Override
@@ -158,7 +160,6 @@ class OrderServiceImpl implements OrderService {
     }
 
 
-
     @Override
     public OrderWithProductsDTO saveOrder(OrderWithProductsDTO orderDto) {
 
@@ -178,7 +179,7 @@ class OrderServiceImpl implements OrderService {
 //                () -> orderIsNotExisted
 //        );
         // add list id orderproduct to Order
-        orderProducts.forEach(savedOrder :: addOrderProduct);
+        orderProducts.forEach(savedOrder::addOrderProduct);
         // save list<OrderProduct> to db
 
 
@@ -191,7 +192,6 @@ class OrderServiceImpl implements OrderService {
                 });
 
         List<OrderProduct> savedOrderProducts = orderProductService.saveAll(orderProducts);
-
 
 
         // map to response

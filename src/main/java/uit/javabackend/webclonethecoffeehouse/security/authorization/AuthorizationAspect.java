@@ -3,11 +3,12 @@ package uit.javabackend.webclonethecoffeehouse.security.authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
+import org.springframework.web.server.ResponseStatusException;
 import uit.javabackend.webclonethecoffeehouse.role.model.Operation;
 import uit.javabackend.webclonethecoffeehouse.role.repository.OperationRepository;
 
@@ -31,9 +32,8 @@ public class AuthorizationAspect {
         String username = getCurrentUser();
         // check permission
         if (!isPermitted(username, TCHOperation.name())) {
-            throw new TCHBusinessException(
-                    "User is not permitted to use this operation. Please contact administrators for permissions."
-            );
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not permitted to use this operation. Please contact administrators for permissions");
         }
     }
 

@@ -7,6 +7,7 @@ import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.service.UserGroupService;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,6 +22,7 @@ public class UserGroupRestResource {
         this.service = service;
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @GetMapping("/GetAllUserGroups")
     public ResponseEntity<?> findAllUserGroup() {
         return ResponseUtil.get(
@@ -29,6 +31,7 @@ public class UserGroupRestResource {
         );
     }
 
+    @TCHOperation(name = "LowUserManagement")
     @GetMapping("/GetAllUserGroupIncludeUsers")
     public ResponseEntity<?> findAllUserGroupIncludedUsers() {
         return ResponseUtil.get(
@@ -36,6 +39,16 @@ public class UserGroupRestResource {
                 , HttpStatus.OK
         );
     }
+
+    @TCHOperation(name = "RoleSystemManagement")
+    @GetMapping("/GetUserGroupByName")
+    public ResponseEntity<?> findUserGroupByName(@RequestParam("name") String name) {
+        return ResponseUtil.get(
+                service.findUserGroupByNameDTO(name)
+                , HttpStatus.OK
+        );
+    }
+
 
     @PostMapping("/SaveUserGroup")
     public ResponseEntity<?> saveUserGroup(@RequestBody @Valid UserGroupDTO userGroupDto) {
@@ -45,6 +58,7 @@ public class UserGroupRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @PostMapping("{user-group-id}/AddUsers")
     public ResponseEntity<?> addUsers(
             @PathVariable("user-group-id") UUID userGroupId,
@@ -55,11 +69,24 @@ public class UserGroupRestResource {
         );
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
+    @PostMapping("{user-group-id}/RemoveUsers")
+    public ResponseEntity<?> removeUsers(
+            @PathVariable("user-group-id") UUID userGroupId,
+            @RequestBody List<UUID> ids) {
+        return ResponseUtil.get(
+                service.removeUsers(userGroupId, ids)
+                , HttpStatus.OK
+        );
+    }
+
+    @TCHOperation(name = "RoleSystemManagement")
     @PutMapping("/UpdateUserGroup")
     public Object update(@RequestBody UserGroupDTO userGroupDTO) {
         return ResponseUtil.get(service.update(userGroupDTO), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "RoleSystemManagement")
     @DeleteMapping("/DeleteUserGroup")
     public Object delete(@RequestParam("name") String name) {
         service.deleteByName(name);

@@ -8,8 +8,8 @@ import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
 import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderProductService;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class OrderProductRestResource {
     }
 
     @GetMapping("/get-all")
-    public Object findAll(){
+    public Object findAll() {
         return ResponseUtil.get(service.findAllDto(OrderProductDTO.class), HttpStatus.OK);
     }
 
@@ -48,34 +48,37 @@ public class OrderProductRestResource {
 //        return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
 //    }
 
-
+    @TCHOperation(name = "PersonalOrderManagement")
     @PostMapping(path = "/add-orderproducts/{order-id}")
-    public Object save(@PathVariable("order-id") UUID orderId, @RequestBody List<OrderProductWithProductDTO> orderProductWithProductDTOS){
-        return ResponseUtil.get(service.saveOrderProductToOrderId(orderProductWithProductDTOS,orderId),HttpStatus.CREATED);
+    public Object save(@PathVariable("order-id") UUID orderId, @RequestBody List<OrderProductWithProductDTO> orderProductWithProductDTOS) {
+        return ResponseUtil.get(service.saveOrderProductToOrderId(orderProductWithProductDTOS, orderId), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "get list orderProduct by orderId")
     @GetMapping(path = "order/{order-id}")
-    public Object findAllOrderProductByOrderId(@PathVariable("order-id") UUID orderId){
-        return ResponseUtil.get(service.getAllByOrderId(orderId),HttpStatus.CREATED);
+    public Object findAllOrderProductByOrderId(@PathVariable("order-id") UUID orderId) {
+        return ResponseUtil.get(service.getAllByOrderId(orderId), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "get list orderProduct by productId")
     @GetMapping(path = "product/{product-id}")
-    public Object findAllOrderProductByProductId(@PathVariable("product-id") UUID productId){
-        return ResponseUtil.get(service.getAllByProductId(productId),HttpStatus.CREATED);
+    public Object findAllOrderProductByProductId(@PathVariable("product-id") UUID productId) {
+        return ResponseUtil.get(service.getAllByProductId(productId), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "get orderProduct by Id")
     @GetMapping(path = "{orderproduct-id}")
-    public Object findOrderProductById(@PathVariable("orderproduct-id") UUID orderProductId){
-        return ResponseUtil.get(service.findById(orderProductId),HttpStatus.CREATED);
+    public Object findOrderProductById(@PathVariable("orderproduct-id") UUID orderProductId) {
+        return ResponseUtil.get(service.findById(orderProductId), HttpStatus.CREATED);
     }
 
-
+    @TCHOperation(name = "PersonalOrderManagement")
     @PutMapping("/UpdateOrderProduct")
-    public Object update(@RequestBody OrderProduct orderProduct){
-        return ResponseUtil.get(service.update(orderProduct),HttpStatus.OK);
+    public Object update(@RequestBody OrderProduct orderProduct) {
+        return ResponseUtil.get(service.update(orderProduct), HttpStatus.OK);
     }
 
 }
