@@ -3,6 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.user.boundary;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
@@ -17,6 +18,7 @@ public class UserRestResource {
         this.userService = userService;
     }
 
+    @TCHOperation(name = "HighUserManagement")
     @GetMapping("/GetAllUser")
     public Object findAllUser() {
         return ResponseUtil.get(
@@ -25,7 +27,8 @@ public class UserRestResource {
         );
     }
 
-    @GetMapping("/GetAllUserGroupUsername")
+    @TCHOperation(name = "HighUserManagement")
+    @GetMapping("/GetAllUserGroupByUsername")
     public Object findAllUserGroupUsername(@RequestParam("username") String username) {
         return ResponseUtil.get(
                 userService.findAllUserGroupUsername(username)
@@ -41,11 +44,13 @@ public class UserRestResource {
         );
     }
 
+    @TCHOperation(name = "LowUserManagement")
     @PutMapping("/UpdateUser")
     public Object update(@RequestBody UserDTO user) {
         return ResponseUtil.get(userService.update(user), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "HighUserManagement")
     @DeleteMapping("/DeleteUser")
     public Object delete(@RequestParam("username") String username) {
         userService.deleteByUserName(username);

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
-import uit.javabackend.webclonethecoffeehouse.common.exception.GiraBusinessException;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
@@ -34,20 +34,23 @@ public interface VnpayPaymentService extends GenericService<VnpayPayment, VnpayP
     //void deleteByName(String name);
 
     VnpayPaymentDTO findVnpayPaymentById(UUID vnpayPaymentId);
+
     VnpayPaymentDTO save(VnpayPaymentDTO vnpayPaymentDTO);
+
     Object createPayment(VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest servletRequest) throws UnsupportedEncodingException;
-    Object updateTransactionOfOrder( VnpayTransactionDto vnpayTransactionDto);
+
+    Object updateTransactionOfOrder(VnpayTransactionDto vnpayTransactionDto);
 }
 
 @Service
 @PropertySource("classpath:validation/ValidationMessages.properties")
-class VnpayPaymentServiceImp implements VnpayPaymentService{
+class VnpayPaymentServiceImp implements VnpayPaymentService {
 
     private final VnpayPaymentRepository repository;
     private final OrderService orderService;
     private final TCHMapper mapper;
     @Value("${vnpaypayment.id.existed}")
-    private GiraBusinessException vnpayPaypentIsNotExisted ;
+    private TCHBusinessException vnpayPaypentIsNotExisted;
 
     VnpayPaymentServiceImp(VnpayPaymentRepository repository, OrderService orderService, TCHMapper mapper) {
         this.repository = repository;
@@ -68,7 +71,7 @@ class VnpayPaymentServiceImp implements VnpayPaymentService{
 
     @Override
     public VnpayPaymentDTO update(VnpayPaymentDTO vnpayPaymentDTO) {
-    return null;
+        return null;
     }
 
     @Override
@@ -80,9 +83,9 @@ class VnpayPaymentServiceImp implements VnpayPaymentService{
     @Override
     public VnpayPaymentDTO save(VnpayPaymentDTO vnpayPaymentDTO) {
 
-        VnpayPayment vnpayPayment = getMapper().map(vnpayPaymentDTO,VnpayPayment.class);
+        VnpayPayment vnpayPayment = getMapper().map(vnpayPaymentDTO, VnpayPayment.class);
         VnpayPayment savedVnpayPayment = repository.save(vnpayPayment);
-        return getMapper().map(savedVnpayPayment, VnpayPaymentDTO.class) ;
+        return getMapper().map(savedVnpayPayment, VnpayPaymentDTO.class);
     }
 
     @Override
@@ -136,10 +139,10 @@ class VnpayPaymentServiceImp implements VnpayPaymentService{
         vnpayPaymentDTO.setVnp_ExpireDate(vnp_ExpireDate);
         vnpayPaymentDTO.setVnp_IpAddr(request.getRemoteAddr());
 
-        VnpayPayment vnpayPayment = getMapper().map(vnpayPaymentDTO,VnpayPayment.class);
+        VnpayPayment vnpayPayment = getMapper().map(vnpayPaymentDTO, VnpayPayment.class);
         VnpayPayment savedVnpayPayment = repository.save(vnpayPayment);
 
-        Order order = orderService.findById(vnpPaymentCreateDTO.getOrderId()).orElseThrow(() -> new GiraBusinessException("order is not existed"));
+        Order order = orderService.findById(vnpPaymentCreateDTO.getOrderId()).orElseThrow(() -> new TCHBusinessException("order is not existed"));
         order.setVnpayPayment(savedVnpayPayment);
         orderService.save(order);
 
@@ -178,40 +181,37 @@ class VnpayPaymentServiceImp implements VnpayPaymentService{
         rspDto.setCode("00");
         rspDto.setMessage("success");
         rspDto.setData(paymentUrl);
-        return  rspDto;
+        return rspDto;
     }
 
     @Override
     public Object updateTransactionOfOrder(VnpayTransactionDto vnpayTransactionDto) {
         ObjectMapper objectMapper = new ObjectMapper();
         VnpayPayment savedVnpayPayment = new VnpayPayment();
-        Map fields = objectMapper.convertValue(vnpayTransactionDto,Map.class);
+        Map fields = objectMapper.convertValue(vnpayTransactionDto, Map.class);
 
         String vnp_SecureHash = vnpayTransactionDto.getVnp_SecureHash();
-        if (fields.containsKey("vnp_SecureHashType"))
-        {
+        if (fields.containsKey("vnp_SecureHashType")) {
             fields.remove("vnp_SecureHashType");
         }
-        if (fields.containsKey("vnp_SecureHash"))
-        {
+        if (fields.containsKey("vnp_SecureHash")) {
             fields.remove("vnp_SecureHash");
         }
 //        // Check checksum
         String signValue = PaymentConfig.hashAllFields(fields);
-        if (signValue.equals(vnp_SecureHash))
-        {
+        if (signValue.equals(vnp_SecureHash)) {
             // 1 update status for order
 
             Order order = orderService.findById(UUID.fromString(vnpayTransactionDto.getVnp_TxnRef()))
-                    .orElseThrow(() -> new GiraBusinessException("order is not existed"));
+                    .orElseThrow(() -> new TCHBusinessException("order is not existed"));
 
             // 1.1 check orderid
-            if(order != null){
+            if (order != null) {
 
 
                 int realAmount = Integer.valueOf(vnpayTransactionDto.getVnp_Amount()) / 100;
                 //1.2 check amount la chinh xac
-                if(order.getTotalPrice().compareTo(realAmount) == 0){
+                if (order.getTotalPrice().compareTo(realAmount) == 0) {
 
 
                     // get vnpayPament by order id nay
@@ -226,24 +226,24 @@ class VnpayPaymentServiceImp implements VnpayPaymentService{
 
 
                     // 1.3 check response code cua order
-                    if(vnpayTransactionDto.getVnp_ResponseCode().equals("00") && order.getStatus() == OrderStatus.ORDERED){
+                    if (vnpayTransactionDto.getVnp_ResponseCode().equals("00") && order.getStatus() == OrderStatus.ORDERED) {
 
                         // update transaction status to db
                         order.setStatus(OrderStatus.PROCESSED);
-                    }else {
+                    } else {
                         order.setStatus(OrderStatus.CANCELED);
 
                     }
                     orderService.update(order);
-                }else{
-                    throw  new GiraBusinessException("so tien khong chinh xac");
+                } else {
+                    throw new TCHBusinessException("so tien khong chinh xac");
                 }
             }
 
-        }else {
-            throw new GiraBusinessException("securehash khong chinh xac");
+        } else {
+            throw new TCHBusinessException("securehash khong chinh xac");
         }
-        return getMapper().map(savedVnpayPayment,VnpayPaymentDTO.class);
+        return getMapper().map(savedVnpayPayment, VnpayPaymentDTO.class);
     }
 
     @Override

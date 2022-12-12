@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uit.javabackend.webclonethecoffeehouse.common.exception.GiraBusinessException;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 public interface OrderProductService extends GenericService<OrderProduct, OrderProductDTO, UUID> {
 
 
-    OrderProduct update (OrderProduct orderProduct);
+    OrderProduct update(OrderProduct orderProduct);
 
-    OrderProductDTO save (OrderProductDTO orderProductDTO);
+    OrderProductDTO save(OrderProductDTO orderProductDTO);
 
 //    OrderProductWithOrderDTO getOrderProductWithOrderDTO(UUID orderID);
 //
@@ -47,7 +47,7 @@ public interface OrderProductService extends GenericService<OrderProduct, OrderP
 
     OrderProductDTO findOrderProductById(UUID orderProductId);
 
-    List<OrderProductWithProductDTO> saveOrderProductToOrderId(List<OrderProductWithProductDTO> orderProductWithProductDTOS,UUID orderId);
+    List<OrderProductWithProductDTO> saveOrderProductToOrderId(List<OrderProductWithProductDTO> orderProductWithProductDTOS, UUID orderId);
 
     //
 
@@ -56,7 +56,7 @@ public interface OrderProductService extends GenericService<OrderProduct, OrderP
 @Service
 @Transactional
 @PropertySource("classpath:validation/ValidationMessages.properties")
-class OrderProductServiceImp implements OrderProductService{
+class OrderProductServiceImp implements OrderProductService {
 
     private final OrderProductRepository repository;
     private final OrderRepository orderRepository;
@@ -65,13 +65,13 @@ class OrderProductServiceImp implements OrderProductService{
     private final TCHMapper mapper;
 
     @Value("${order.id.existed}")
-    private GiraBusinessException orderIsNotExisted ;
+    private TCHBusinessException orderIsNotExisted;
 
     @Value("${product.name.existed}")
-    private GiraBusinessException productIsNotExsited ;
+    private TCHBusinessException productIsNotExsited;
 
     @Value("${product.name.existed}")
-    private GiraBusinessException orderProductIsNotExisted;
+    private TCHBusinessException orderProductIsNotExisted;
 
     OrderProductServiceImp(OrderProductRepository repository, OrderRepository orderRepository, ProductRepository productRepository, TCHMapper mapper) {
         this.repository = repository;
@@ -104,8 +104,8 @@ class OrderProductServiceImp implements OrderProductService{
 
     @Override
     public OrderProductDTO save(OrderProductDTO orderProductDTO) {
-        OrderProduct product = mapper.map(orderProductDTO,OrderProduct.class);
-        OrderProduct savedOrderProduct= repository.save(product);
+        OrderProduct product = mapper.map(orderProductDTO, OrderProduct.class);
+        OrderProduct savedOrderProduct = repository.save(product);
         return mapper.map(savedOrderProduct, OrderProductDTO.class);
     }
 
@@ -163,12 +163,12 @@ class OrderProductServiceImp implements OrderProductService{
     public List<OrderProductDTO> getAllByOrderId(UUID orderId) {
         List<OrderProduct> orderProducts;
 
-        if(orderRepository.findById(orderId).isPresent()){
+        if (orderRepository.findById(orderId).isPresent()) {
             orderProducts = repository.findAllByOrderId(orderId);
             return orderProducts.stream()
                     .map(model -> mapper.map(model, OrderProductDTO.class))
                     .collect(Collectors.toList());
-        }else{
+        } else {
             throw orderIsNotExisted;
         }
 
@@ -178,12 +178,12 @@ class OrderProductServiceImp implements OrderProductService{
     public List<OrderProductDTO> getAllByProductId(UUID productId) {
         List<OrderProduct> orderProducts;
 
-        if(productRepository.findById(productId).isPresent()){
+        if (productRepository.findById(productId).isPresent()) {
             orderProducts = repository.findAllByProductId(productId);
             return orderProducts.stream()
                     .map(model -> mapper.map(model, OrderProductDTO.class))
                     .collect(Collectors.toList());
-        }else{
+        } else {
             throw productIsNotExsited;
         }
 
@@ -194,16 +194,16 @@ class OrderProductServiceImp implements OrderProductService{
         OrderProduct orderProduct = repository.findById(orderProductId)
                 .orElseThrow(() -> orderProductIsNotExisted);
 
-        return mapper.map(orderProduct,OrderProductDTO.class );
+        return mapper.map(orderProduct, OrderProductDTO.class);
     }
 
     @Override
     public List<OrderProductWithProductDTO> saveOrderProductToOrderId(List<OrderProductWithProductDTO> orderProductWithProductDTOS, UUID orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(()-> orderIsNotExisted);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> orderIsNotExisted);
         List<OrderProduct> orderProducts = orderProductWithProductDTOS.stream()
-                .map(model -> mapper.map(model,OrderProduct.class))
+                .map(model -> mapper.map(model, OrderProduct.class))
                 .collect(Collectors.toList());
-        orderProducts.forEach(order ::addOrderProduct);
+        orderProducts.forEach(order::addOrderProduct);
 
         orderProducts.forEach(
                 orderProduct -> {
@@ -214,12 +214,10 @@ class OrderProductServiceImp implements OrderProductService{
         List<OrderProduct> saveOrderProducts = repository.saveAll(orderProducts);
 
         return saveOrderProducts.stream()
-                .map(model -> mapper.map(model,OrderProductWithProductDTO.class))
+                .map(model -> mapper.map(model, OrderProductWithProductDTO.class))
                 .collect(Collectors.toList());
 
     }
-
-
 
 
 }

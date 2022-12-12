@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithProductsDTO;
-import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderService;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -22,51 +22,53 @@ public class OrderRestResource {
         this.orderService = orderService;
     }
 
-
+    @TCHOperation(name = "GeneralOrderManagement")
     @Operation(summary = "get list order Dto, for admin tool ")
     @GetMapping("/get-all-dto")
-    public Object findAllDto(){
+    public Object findAllDto() {
         return ResponseUtil.get(orderService.findAllDto(OrderDTO.class), HttpStatus.OK);
     }
 
-
+    @TCHOperation(name = "GeneralOrderManagement")
     @Operation(summary = "get list order Dto, for admin tool")
     @GetMapping("/get-all-dto-page")
     public Object findAllDtoPaging(@RequestParam("size") int size
-            , @RequestParam("index") int index){
-        return ResponseUtil.get(orderService.findAllDto(Pageable.ofSize(size).withPage(index),OrderDTO.class), HttpStatus.OK);
+            , @RequestParam("index") int index) {
+        return ResponseUtil.get(orderService.findAllDto(Pageable.ofSize(size).withPage(index), OrderDTO.class), HttpStatus.OK);
     }
 
-
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "get an order by id")
     @GetMapping("/get-order")
-    public Object findOrderById(@RequestParam("order-id") UUID id){
+    public Object findOrderById(@RequestParam("order-id") UUID id) {
         return ResponseUtil.get(orderService.findOrderByOrderId(id), HttpStatus.OK);
     }
 
 
-
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "get all order by User id")
     @PostMapping("{user-id}/get-all")
-    public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId){
-        return ResponseUtil.get(orderService.findAllOrderByUserId(userId),HttpStatus.OK);
+    public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId) {
+        return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
 
-
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "su dung thang nay de tao don hang ")
     @PostMapping(path = "/save-order")
-    public Object save(@RequestBody @Valid OrderDTO orderDTO){
-        return ResponseUtil.get(orderService.save(orderDTO),HttpStatus.CREATED);
+    public Object save(@RequestBody @Valid OrderDTO orderDTO) {
+        return ResponseUtil.get(orderService.save(orderDTO), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "PersonalOrderManagement")
     @PutMapping("/update")
-    public Object update(@RequestBody OrderDTO orderDTO){
-        return ResponseUtil.get(orderService.update(orderDTO),HttpStatus.OK);
+    public Object update(@RequestBody OrderDTO orderDTO) {
+        return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "PersonalOrderManagement")
     @Operation(summary = "")
     @PostMapping("/create-order")
-    public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto){
-        return ResponseUtil.get(orderService.saveOrder(orderDto),HttpStatus.OK);
+    public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto) {
+        return ResponseUtil.get(orderService.saveOrder(orderDto), HttpStatus.OK);
     }
 }
