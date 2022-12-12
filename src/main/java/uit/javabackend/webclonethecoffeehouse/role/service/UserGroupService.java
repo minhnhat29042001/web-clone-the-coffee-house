@@ -11,7 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupWithUsersDTO;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
-import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
+import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -40,14 +40,14 @@ public interface UserGroupService extends GenericService<UserGroup, UserGroupDTO
 @Transactional
 class UserGroupServiceImpl implements UserGroupService {
     private final UserGroupRepository repository;
+    private final UserRepository userRepository;
     private final TCHMapper tchMapper;
 
-    private final UserService userService;
 
-    UserGroupServiceImpl(UserGroupRepository repository, TCHMapper tchMapper, UserService userService) {
+    UserGroupServiceImpl(UserGroupRepository repository, UserRepository userRepository, TCHMapper tchMapper) {
         this.repository = repository;
+        this.userRepository = userRepository;
         this.tchMapper = tchMapper;
-        this.userService = userService;
     }
 
     @Override
@@ -65,10 +65,13 @@ class UserGroupServiceImpl implements UserGroupService {
         UserGroup userGroup = repository.findById(userGroupId)
                 .orElseThrow(() -> new ValidationException("UserGroup is not existed."));
 
-        List<User> users = userService.findByIds(ids);
-        users.forEach(user -> {
-            userGroup.addUser(user);
-            user.getUserGroups().add(userGroup);
+        ids.forEach(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                userGroup.addUser(user);
+                user.getUserGroups().add(userGroup);
+            }
         });
         return tchMapper.map(userGroup, UserGroupWithUsersDTO.class);
     }
@@ -91,10 +94,13 @@ class UserGroupServiceImpl implements UserGroupService {
         UserGroup userGroup = repository.findById(userGroupId)
                 .orElseThrow(() -> new ValidationException("UserGroup is not existed."));
 
-        List<User> users = userService.findByIds(ids);
-        users.forEach(user -> {
-            userGroup.removeUser(user);
-            user.getUserGroups().remove(userGroup);
+        ids.forEach(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                userGroup.removeUser(user);
+                user.getUserGroups().remove(userGroup);
+            }
         });
         return tchMapper.map(userGroup, UserGroupWithUsersDTO.class);
     }

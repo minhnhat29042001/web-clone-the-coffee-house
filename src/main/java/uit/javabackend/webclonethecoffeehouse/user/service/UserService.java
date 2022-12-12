@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
+import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
+import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
@@ -35,11 +37,13 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserGroupRepository userGroupRepository;
     private final TCHMapper tchMapper;
 
-    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
+    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, UserGroupRepository userGroupRepository, TCHMapper tchMapper) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.userGroupRepository = userGroupRepository;
         this.tchMapper = tchMapper;
     }
 
@@ -56,8 +60,12 @@ class UserServiceImpl implements UserService {
     @Override
 
     public void deleteByUserName(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new ValidationException("User is not existed.")
+                );
+        user.getUserGroups().forEach(userGroup -> userGroup.removeUser(user));
         userRepository.deleteByUsername(username);
-
     }
 
     public UserDTO update(UserDTO userDTO) {
@@ -85,6 +93,13 @@ class UserServiceImpl implements UserService {
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
+        UserGroup userGroup = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name())
+                .orElseThrow(() ->
+                        new ValidationException("UserGroup is not existed.")
+                );
+        userGroup.addUser(user);
+        user.getUserGroups().add(userGroup);
+
         return tchMapper.map(
                 userRepository.save(user),
                 UserDTO.class
