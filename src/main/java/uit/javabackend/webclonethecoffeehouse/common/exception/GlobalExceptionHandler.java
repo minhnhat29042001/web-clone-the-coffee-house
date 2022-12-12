@@ -30,9 +30,9 @@ public class GlobalExceptionHandler { // bắt các lỗi
     }
 
 
-//    @ExceptionHandler(RuntimeException.class) // bắt kiểu lỗi
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ResponseEntity<ResponseDTO> handleGlobalException(RuntimeException exception) { // hàm bắt lỗi ConstraintViolation
-//        return ResponseUtil.error(exception,HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(GiraBusinessException.class) // bắt kiểu lỗi
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ResponseDTO> handleGlobalException(GiraBusinessException exception) { // hàm bắt lỗi ConstraintViolation
+        return ResponseUtil.error(exception,HttpStatus.BAD_REQUEST);
+    }
 }

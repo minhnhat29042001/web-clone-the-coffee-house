@@ -49,6 +49,11 @@ public interface GenericService <T extends BaseEntity, D, I> {
         return getRepository().save(entity);
     }
 
+    default T save(D dto,Class<T> modelClass){
+        T model = getMapper().map(dto, modelClass);
+        return getRepository().save(model);
+    }
+
 
     default D save(D dto, Class<T> modelClass, Class<D> dtoClass) {
         T model = getMapper().map(dto, modelClass);
