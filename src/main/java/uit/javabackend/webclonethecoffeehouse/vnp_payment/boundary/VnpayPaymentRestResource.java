@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderService;
+import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.*;
 import uit.javabackend.webclonethecoffeehouse.vnp_payment.paymentConfig.PaymentConfig;
 import uit.javabackend.webclonethecoffeehouse.vnp_payment.service.VnpayPaymentService;
@@ -38,7 +39,7 @@ public class VnpayPaymentRestResource {
         this.orderService = orderService;
         this.vnpayPaymentService = vnpayPaymentService;
     }
-
+    @TCHOperation(name = "PersonalPayment")
     @PostMapping("create-payment")
     public Object createPayment(@RequestBody @Valid VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest request) throws IOException {
 
@@ -46,6 +47,7 @@ public class VnpayPaymentRestResource {
     }
 
     // demo return url
+    @TCHOperation(name = "PersonalPayment")
     @GetMapping("billing-infomation")
     public Object billingInfomation(@RequestParam("vnp_ResponseCode") String code
             ,HttpServletRequest request){
@@ -57,6 +59,7 @@ public class VnpayPaymentRestResource {
     }
 
     @Operation(summary = "post data response từ vnpay cap nhat giao dich cua don hang")
+    @TCHOperation(name = "PersonalPayment")
     @PostMapping ("payment-order") // fix cho nay lai
     public Object updateTransactionOfOrder( @RequestBody VnpayTransactionDto vnpayTransactionDto) throws IOException {
 
@@ -64,6 +67,7 @@ public class VnpayPaymentRestResource {
     }
 
     @Operation(summary = "truy van thong tin don hang truy xuat truc tiep tu vnpay")
+    @TCHOperation(name = "PersonalPayment")
     @PostMapping ("order-payment-infomation") // fix cho nay lai
     public Object vnpayQuery(HttpServletRequest req, @RequestBody VnpayQueryDTO vnpayQueryDTO) throws IOException {
         //vnp_Command = querydr
@@ -137,12 +141,12 @@ public class VnpayPaymentRestResource {
         return ResponseUtil.get(Arrays.toString(responseData), HttpStatus.ACCEPTED);
 
     }
-
+    @TCHOperation(name = "PaymentManagement")
     @GetMapping("get-all")
     public Object getAllVnpayPayment(){
         return ResponseUtil.get(vnpayPaymentService.findAllDto(VnpayPaymentDTO.class),HttpStatus.OK);
     }
-
+    @TCHOperation(name = "PersonalPayment")
     @GetMapping("{vnpaypayment-id}")
     public Object getVnpayPaymentById(@PathVariable("vnpaypayment-id") UUID vnpayPaymentId){
         return ResponseUtil.get(vnpayPaymentService.findVnpayPaymentById(vnpayPaymentId),HttpStatus.OK);

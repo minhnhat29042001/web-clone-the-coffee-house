@@ -22,20 +22,17 @@ public class ProductGroupRestResource {
         this.productGroupService = productGroupService;
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("GetAllProductGroups")
+    @GetMapping("common/GetAllProductGroups")
     public Object findAll() {
         return ResponseUtil.get(productGroupService.findAllDto(ProductGroupDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/{productgroup-id}/GetProductGroupsWithProduct")
+    @GetMapping("/common/{productgroup-id}/GetProductGroupsWithProduct")
     public Object findProductGroupWithProductDTO(@PathVariable("productgroup-id") UUID productGroupID) {
         return ResponseUtil.get(productGroupService.getProductGroupWithProductDTO(productGroupID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/GetAllProductGroupsWithProduct")
+    @GetMapping("common/GetAllProductGroupsWithProduct")
     public Object findAllProductGroupWithProductDTO() {
         return ResponseUtil.get(productGroupService.getAllProductGroupWithProductDTO(), HttpStatus.OK);
     }

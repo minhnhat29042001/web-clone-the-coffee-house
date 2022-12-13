@@ -22,20 +22,17 @@ public class CurrencyRestResource {
         this.currencyService = currencyService;
     }
 
-    @TCHOperation(name = "GetCurrencyInfo")
-    @GetMapping("/GetAllCurrencies")
+    @GetMapping("/common/GetAllCurrencies")
     public Object findAll() {
         return ResponseUtil.get(currencyService.findAllDto(CurrencyDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GetCurrencyInfo")
-    @GetMapping("/{currency-id}/GetCurrencyWithProduct")
+    @GetMapping("/common/{currency-id}/GetCurrencyWithProduct")
     public Object findProductWithProductDTO(@PathVariable("currency-id") UUID currencyID) {
         return ResponseUtil.get(currencyService.getCurrencyWithProductDTO(currencyID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GetCurrencyInfo")
-    @GetMapping("/GetAllCurrenciesWithProduct")
+    @GetMapping("/common/GetAllCurrenciesWithProduct")
     public Object findAllCurrencyWithProductDTO() {
         return ResponseUtil.get(currencyService.getAllCurrencyWithProductDTO(), HttpStatus.OK);
     }

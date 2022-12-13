@@ -23,32 +23,27 @@ public class ProductRestResource {
         this.productService = productService;
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/GetAllProducts")
+    @GetMapping("/common/GetAllProducts")
     public Object findAll() {
         return ResponseUtil.get(productService.findAllDto(ProductDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/{product-id}/GetProductWithCurrency")
+    @GetMapping("/common/{product-id}/GetProductWithCurrency")
     public Object findProductWithCurrencyDTO(@PathVariable("product-id") UUID productID) {
         return ResponseUtil.get(productService.getProductWithCurrencyDTO(productID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/GetAllProductsWithCurrency")
+    @GetMapping("/common/GetAllProductsWithCurrency")
     public Object findAllProductWithCurrencyDTO() {
         return ResponseUtil.get(productService.getAllProductWithCurrenCyDTO(), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/{product-id}/GetProductWithProductGroup")
+    @GetMapping("/common/{product-id}/GetProductWithProductGroup")
     public Object findProductWithProductGroupDTO(@PathVariable("product-id") UUID productID) {
         return ResponseUtil.get(productService.getProductWithProductGroupDTO(productID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "ViewProduct")
-    @GetMapping("/GetAllProductsWithProductGroup")
+    @GetMapping("/common/GetAllProductsWithProductGroup")
     public Object findAllProductWithProductGroupDTO() {
         return ResponseUtil.get(productService.getAllProductWithProductGroupDTO(), HttpStatus.OK);
     }
