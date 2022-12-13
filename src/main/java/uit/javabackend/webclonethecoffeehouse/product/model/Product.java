@@ -32,7 +32,7 @@ public class Product extends BaseEntity {
     private String imgUrl;
 
     @Column(name = ProductEntity.Product.DESCRIPTION)
-    @Length(min = 5, max = 100, message = "Product description must have length between {min} and {max}")
+    @Lob
     private String description;
 
 

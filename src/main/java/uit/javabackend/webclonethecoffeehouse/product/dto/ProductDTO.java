@@ -28,6 +28,5 @@ public class ProductDTO {
         private Integer price;
 
         @NotBlank(message = "product.description.blank")
-        @Size(min = 5 , max = 100,message = "Product description must have length between {min} and {max}")
         private String description;
 }

@@ -19,6 +19,7 @@ import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public interface ProductService  extends GenericService<Product, ProductDTO, UUID> {
     @Override
@@ -32,7 +33,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     ProductWithProductGroupDTO getProductWithProductGroupDTO(UUID productID);
     List<ProductWithProductGroupDTO> getAllProductWithProductGroupDTO();
     ProductDTO saveProductImg(String productName,MultipartFile file,String baseUrl);
-
+    List<ProductDTO> saveProducts(List<ProductDTO> productDTOS);
 }
 
 @Service
@@ -133,6 +134,13 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
         String urlLoadFile = baseUrl+"/api/Files/"+file.getOriginalFilename();
         product.setImgUrl(urlLoadFile);
         return mapper.map(product,ProductDTO.class);
+    }
+
+    @Override
+    public List<ProductDTO> saveProducts(List<ProductDTO> productDTOS) {
+        List<Product> products = productDTOS.stream().map(model -> mapper.map(model,Product.class))
+                .collect(Collectors.toList());
+       return repository.saveAll(products).stream().map(model -> mapper.map(model,ProductDTO.class)).collect(Collectors.toList());
     }
 
     @Override
