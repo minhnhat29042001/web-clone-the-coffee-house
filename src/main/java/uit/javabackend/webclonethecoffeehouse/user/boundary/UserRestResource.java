@@ -36,6 +36,7 @@ public class UserRestResource {
         );
     }
 
+    @TCHOperation(name = "HighUserManagement")
     @PostMapping("/SaveUser")
     public Object saveUser(@RequestBody @Valid UserDTO userDTO) {
         return ResponseUtil.get(

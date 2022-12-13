@@ -58,9 +58,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
-        http.cors()
-                .and().csrf()
-                .disable();
+        http.cors();
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -70,7 +68,6 @@ public class SecurityConfig {
 
         // API Authentication
         http
-//                .authorizeRequests().anyRequest().permitAll();
                 .formLogin()
                 .disable()
                 .httpBasic()
@@ -79,7 +76,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/UsersManagement/SaveUser")
+                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
