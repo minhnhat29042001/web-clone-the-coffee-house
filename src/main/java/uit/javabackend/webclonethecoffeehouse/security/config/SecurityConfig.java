@@ -58,9 +58,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
-        http.cors()
-                .and().csrf()
-                .disable();
+        http.cors();
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
