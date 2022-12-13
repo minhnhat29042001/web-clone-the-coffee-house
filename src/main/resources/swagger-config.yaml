@@ -1,0 +1,8 @@
+servers:
+  - url: '{protocol}://web-clone-the-coffee-house-production.up.railway.app'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
