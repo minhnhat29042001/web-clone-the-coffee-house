@@ -12,6 +12,7 @@ import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperatio
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -55,6 +56,12 @@ public class ProductRestResource {
     @PostMapping(path = "/AddProduct")
     public Object save(@RequestBody @Valid ProductDTO productDTO) {
         return ResponseUtil.get(productService.save(productDTO), HttpStatus.CREATED);
+    }
+
+    @TCHOperation(name = "AddRemoveProduct")
+    @PostMapping(path = "/add-products")
+    public Object saveList(@RequestBody @Valid List<ProductDTO> productDTOs) {
+        return ResponseUtil.get(productService.saveProducts(productDTOs), HttpStatus.CREATED);
     }
 
     @TCHOperation(name = "AddRemoveProduct")
