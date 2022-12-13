@@ -14,9 +14,9 @@ import java.util.*;
 @UtilityClass
 public class PaymentConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8086/api/v1/payment/billing-infomation"; //domain return
-    public static String vnp_TmnCode = "VW4CHF8Y"; //dang ki xong thay ma o day
-    public static String vnp_HashSecret = "FEWXXWKLFFOTOINDLREISFEZVKOFHXBU"; //dang ki xong thay ma o day
+    public static String vnp_ReturnUrl = "https://web-clone-the-coffee-house-production.up.railway.app/api/v1/payment/billing-infomation"; //domain return
+    public static String vnp_TmnCode = "7B8WU0OZ"; //dang ki xong thay ma o day
+    public static String vnp_HashSecret = "RUFCJWAKYHVCUKJCZVTZKWEEXQKVQFUP"; //dang ki xong thay ma o day
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/merchant.html"; //xem xet lai cai api cho nay
     public static String vnp_Version = "2.1.0";
     public static String vnp_Command = "pay";
@@ -28,8 +28,8 @@ public class PaymentConfig {
     @UtilityClass
     public static class PaymentQuery{
         public static String vnp_ReturnUrl = "https://www.facebook.com/"; //domain return
-        public static String vnp_TmnCode = "VW4CHF8Y"; //dang ki xong thay ma o day
-        public static String vnp_HashSecret = "FEWXXWKLFFOTOINDLREISFEZVKOFHXBU"; //dang ki xong thay ma o day
+        public static String vnp_TmnCode = "7B8WU0OZ"; //dang ki xong thay ma o day
+        public static String vnp_HashSecret = "RUFCJWAKYHVCUKJCZVTZKWEEXQKVQFUP"; //dang ki xong thay ma o day
         public static String vnp_apiUrlQuery = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
         public static String vnp_Version = "2.1.0";
         public static String vnp_Command = "querydr";

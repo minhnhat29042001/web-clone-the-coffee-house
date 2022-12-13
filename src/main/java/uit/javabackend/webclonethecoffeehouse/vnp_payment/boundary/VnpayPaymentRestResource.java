@@ -46,8 +46,7 @@ public class VnpayPaymentRestResource {
         return ResponseUtil.get(vnpayPaymentService.createPayment(vnpPaymentCreateDTO,request),HttpStatus.OK);
     }
 
-    // demo return url
-    @TCHOperation(name = "PersonalPayment")
+    @Operation(summary = " demo return url")
     @GetMapping("billing-infomation")
     public Object billingInfomation(@RequestParam("vnp_ResponseCode") String code
             ,HttpServletRequest request){
