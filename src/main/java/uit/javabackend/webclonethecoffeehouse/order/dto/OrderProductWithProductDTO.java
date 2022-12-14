@@ -13,6 +13,8 @@ import java.util.UUID;
 public class OrderProductWithProductDTO {
     private UUID id;
     private String note;
+    private String size;
+    private String topping;
     private int totalPrice;
     private int quantity;
     private ProductDTO productDTO;
