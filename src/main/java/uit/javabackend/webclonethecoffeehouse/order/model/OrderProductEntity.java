@@ -12,6 +12,8 @@ public class OrderProductEntity {
         public static final String QUANTITY = "P_QUANTITY";
         public static final String PRODUCT_ID ="P_PRODUCT_ID";
         public static final String ORDER_ID ="P_ORDER_ID";
+        public static final String SIZE = "P_SIZE";
+        public static final String TOPPING = "P_TOPPING";
     }
 
 }
