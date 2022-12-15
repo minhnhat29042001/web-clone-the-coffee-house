@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.role.dto;
 
 import lombok.*;
 import uit.javabackend.webclonethecoffeehouse.role.model.Operation;
+import uit.javabackend.webclonethecoffeehouse.role.validation.annotation.UniqueOperationCode;
 import uit.javabackend.webclonethecoffeehouse.role.validation.annotation.UniqueOperationName;
 
 import javax.validation.constraints.NotBlank;
@@ -23,6 +24,7 @@ public class OperationDTO {
 
     @Size(min = 3, max = 10, message = "{operation.code.size}")
     @NotBlank
+    @UniqueOperationCode
     private String code;
 
     @NotBlank(message = "{operation.description.blank}")
