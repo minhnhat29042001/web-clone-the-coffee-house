@@ -69,7 +69,7 @@ public class OrderProductRestResource {
         return ResponseUtil.get(service.getAllByProductId(productId), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "GetOrderProductById")
+    @TCHOperation(name = "GetOrderProduct")
     @Operation(summary = "get orderProduct by Id")
     @GetMapping(path = "{orderproduct-id}")
     public Object findOrderProductById(@PathVariable("orderproduct-id") UUID orderProductId) {

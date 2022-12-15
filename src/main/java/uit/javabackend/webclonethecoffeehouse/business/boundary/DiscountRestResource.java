@@ -29,13 +29,13 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.findAllDto(DiscountDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GetDiscountWithUserDiscountDTO")
+    @TCHOperation(name = "GetDiscountWithUserDiscount")
     @GetMapping("/{discount-id}/GetDiscountWithUserDiscount")
     public Object findDiscountWithUserDiscountDTO(@PathVariable("discount-id") UUID discountID) {
         return ResponseUtil.get(services.getDiscountWithUserDiscountDTO(discountID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GetAllDiscountWithUserDiscountDTO")
+    @TCHOperation(name = "GetAllDiscountWithUserDiscount")
     @GetMapping("/GetAllDiscountWithUserDiscount")
     public Object findAllDiscountWithUserDiscountDTO() {
         return ResponseUtil.get(services.getAllDiscountWithUserDiscountDTO(), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.update(discountDTO), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "DeleteDiscountByCode")
+    @TCHOperation(name = "DeleteDiscount")
     @DeleteMapping("/DeleteByCodeDiscount")
     public Object deleteProductGroup(@RequestParam("code") String code) {
         services.deleteByCode(code);

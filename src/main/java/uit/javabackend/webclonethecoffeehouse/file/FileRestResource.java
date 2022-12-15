@@ -25,7 +25,7 @@ public class FileRestResource {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @TCHOperation(name = "LoaddFile")
+    @TCHOperation(name = "LoadFile")
     @GetMapping("/{filename}") // đọc file
     public ResponseEntity<?> loadFile(@PathVariable("filename") String fileName) {
         Resource resource = fileService.load(fileName);

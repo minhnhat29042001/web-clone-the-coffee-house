@@ -64,7 +64,7 @@ public class RoleRestResource {
         return ResponseUtil.get(service.save(roleDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "AddOperations")
+    @TCHOperation(name = "AddOperationsToRole")
     @PostMapping("{role-id}/AddOperations")
     public ResponseEntity<?> addOperations(
             @RequestBody List<UUID> ids,
@@ -75,7 +75,7 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RemoveOperations")
+    @TCHOperation(name = "RemoveOperationsFromRole")
     @DeleteMapping("{role-id}/RemoveOperations")
     public ResponseEntity<?> removeOperations(
             @RequestBody List<UUID> ids,

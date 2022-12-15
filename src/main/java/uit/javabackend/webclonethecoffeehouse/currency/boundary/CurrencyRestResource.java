@@ -50,7 +50,7 @@ public class CurrencyRestResource {
         return ResponseUtil.get(currencyService.update(currency), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "DeleteCurrencyByName")
+    @TCHOperation(name = "DeleteCurrency")
     @DeleteMapping("/DeleteByNameCurrency")
     public Object deleteCurrency(@RequestParam("name") String name) {
         currencyService.deleteByName(name);
