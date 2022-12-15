@@ -52,19 +52,19 @@ public class ProductRestResource {
     /*
         Khi thêm lần đầu thì Fe có thể để chỗ imgUrl là null hoặc rỗng vì Api này trả về ProductDTO nó chứa cả (imgUrl) sau đó có thể gọi Api AddProductImg để lưu link ảnh cho product
      */
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "AddProduct")
     @PostMapping(path = "/AddProduct")
     public Object save(@RequestBody @Valid ProductDTO productDTO) {
         return ResponseUtil.get(productService.save(productDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "AddProduct")
     @PostMapping(path = "/add-products")
     public Object saveList(@RequestBody @Valid List<ProductDTO> productDTOs) {
         return ResponseUtil.get(productService.saveProducts(productDTOs), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "UpdateProduct")
     @PostMapping(path = "/AddProductImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Object saveProudctImg(@RequestParam("productName") String productName, @RequestPart("productimg") MultipartFile productImg, HttpServletRequest request) {
         String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
@@ -81,7 +81,7 @@ public class ProductRestResource {
         return ResponseUtil.get(productService.update(product), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "DeleteProduct")
     @DeleteMapping("/DeleteProduct")
     public Object delete(@RequestParam("name") String name) {
         productService.deleteByName(name);

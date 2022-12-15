@@ -37,33 +37,33 @@ public class CurrencyRestResource {
         return ResponseUtil.get(currencyService.getAllCurrencyWithProductDTO(), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "CurrencyManagement")
+    @TCHOperation(name = "AddCurrency")
     @PostMapping("/AddCurrency")
     public Object save(@RequestBody @Valid CurrencyDTO currencyDTO) {
 
         return ResponseUtil.get(currencyService.save(currencyDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "CurrencyManagement")
+    @TCHOperation(name = "UpdateCurrency")
     @PutMapping("/UpdateCurrency")
     public Object updateCurrency(@RequestBody CurrencyDTO currency) {
         return ResponseUtil.get(currencyService.update(currency), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "CurrencyManagement")
+    @TCHOperation(name = "DeleteCurrency")
     @DeleteMapping("/DeleteByNameCurrency")
     public Object deleteCurrency(@RequestParam("name") String name) {
         currencyService.deleteByName(name);
         return HttpStatus.OK;
     }
 
-    @TCHOperation(name = "CurrencyManagement")
+    @TCHOperation(name = "AddProductsToCurrency")
     @PostMapping("/{currency-id}/AddProducts")
     public ResponseEntity<?> addProduct(@RequestBody List<UUID> ids, @PathVariable("currency-id") UUID currencyId) {
         return ResponseUtil.get(currencyService.addProduct(ids, currencyId), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "CurrencyManagement")
+    @TCHOperation(name = "RemoveProductsFromCurrency")
     @DeleteMapping("/{currency-id}/RemoveProducts")
     public ResponseEntity<?> deleteProduct(@RequestBody List<UUID> ids, @PathVariable("currency-id") UUID currencyId) {
         return ResponseUtil.get(currencyService.removeProduct(ids, currencyId), HttpStatus.OK);

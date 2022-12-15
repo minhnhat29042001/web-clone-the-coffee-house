@@ -9,6 +9,7 @@ import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
@@ -26,7 +27,7 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     List<UserGroupDTO> findAllUserGroupUsername(String username);
 
-    UserDTO createUser(UserDTO dto);
+    UserDTOWithToken createUser(UserDTO dto);
 
 }
 
@@ -84,7 +85,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(UserDTO dto) {
+    public UserDTOWithToken createUser(UserDTO dto) {
         User user = tchMapper.map(dto, User.class);
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -92,7 +93,7 @@ class UserServiceImpl implements UserService {
 
         return tchMapper.map(
                 userRepository.save(user),
-                UserDTO.class
+                UserDTOWithToken.class
         );
     }
 

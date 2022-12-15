@@ -18,7 +18,7 @@ public class UserRestResource {
         this.userService = userService;
     }
 
-    @TCHOperation(name = "HighUserManagement")
+    @TCHOperation(name = "GetAllUser")
     @GetMapping("/GetAllUser")
     public Object findAllUser() {
         return ResponseUtil.get(
@@ -27,7 +27,7 @@ public class UserRestResource {
         );
     }
 
-    @TCHOperation(name = "HighUserManagement")
+    @TCHOperation(name = "GetAllUserGroupByUsername")
     @GetMapping("/GetAllUserGroupByUsername")
     public Object findAllUserGroupUsername(@RequestParam("username") String username) {
         return ResponseUtil.get(
@@ -36,7 +36,7 @@ public class UserRestResource {
         );
     }
 
-    @TCHOperation(name = "HighUserManagement")
+    @TCHOperation(name = "SaveUser")
     @PostMapping("/SaveUser")
     public Object saveUser(@RequestBody @Valid UserDTO userDTO) {
         return ResponseUtil.get(
@@ -45,13 +45,13 @@ public class UserRestResource {
         );
     }
 
-    @TCHOperation(name = "LowUserManagement")
+    @TCHOperation(name = "UpdateUser")
     @PutMapping("/UpdateUser")
     public Object update(@RequestBody UserDTO user) {
         return ResponseUtil.get(userService.update(user), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "HighUserManagement")
+    @TCHOperation(name = "DeleteUser")
     @DeleteMapping("/DeleteUser")
     public Object delete(@RequestParam("username") String username) {
         userService.deleteByUserName(username);

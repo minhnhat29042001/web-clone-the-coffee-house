@@ -22,13 +22,13 @@ public class RoleRestResource {
         this.service = roleService;
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "GetAllRoles")
     @GetMapping("/GetAllRoles")
     public Object findAll() {
         return ResponseUtil.get(service.findAllDto(RoleDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "GetAllRoles")
     @GetMapping("/GetAllRolesPaging")
     public Object findAllDtoPaging(@RequestParam("size") int size,
                                    @RequestParam("index") int index) {
@@ -38,7 +38,7 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "GetOperationsWithRoleId")
     @GetMapping("{role-id}/GetOperationsWithRoleId")
     public ResponseEntity<?> getOperationsWithRole(
             @PathVariable("role-id") UUID roleId) {
@@ -48,7 +48,7 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "GetUserGroupsWithRoleId")
     @GetMapping("{role-id}/GetUserGroupsWithRoleId")
     public ResponseEntity<?> getUserGroupsWithRole(
             @PathVariable("role-id") UUID roleId) {
@@ -58,13 +58,13 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "SaveRole")
     @PostMapping("/SaveRole")
     public Object save(@RequestBody @Valid RoleDTO roleDTO) {
         return ResponseUtil.get(service.save(roleDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "AddOperationsToRole")
     @PostMapping("{role-id}/AddOperations")
     public ResponseEntity<?> addOperations(
             @RequestBody List<UUID> ids,
@@ -75,7 +75,7 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "RemoveOperationsFromRole")
     @DeleteMapping("{role-id}/RemoveOperations")
     public ResponseEntity<?> removeOperations(
             @RequestBody List<UUID> ids,
@@ -86,7 +86,7 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "AddUserGroupIntoRole")
     @PostMapping("{role-id}/addUserGroup")
     public ResponseEntity<?> addUserGroup(
             @RequestBody List<UUID> ids,
@@ -97,13 +97,13 @@ public class RoleRestResource {
         );
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "UpdateRole")
     @PutMapping("/UpdateRole")
     public Object update(@RequestBody RoleDTO roleDTO) {
         return ResponseUtil.get(service.update(roleDTO), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "RoleSystemManagement")
+    @TCHOperation(name = "RemoveUserGroupFromRole")
     @DeleteMapping("{role-id}/removeUserGroup")
     public ResponseEntity<?> removeUserGroup(
             @RequestBody List<UUID> ids,

@@ -17,7 +17,7 @@ public class FileRestResource {
         this.fileService = fileService;
     }
 
-    @TCHOperation(name = "FileManagement")
+    @TCHOperation(name = "UploadFiles")
     @PostMapping(path = "/Upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFiles(@RequestPart("file") MultipartFile file) {
         fileService.init();
@@ -25,7 +25,7 @@ public class FileRestResource {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @TCHOperation(name = "FileManagement")
+    @TCHOperation(name = "LoadFile")
     @GetMapping("/{filename}") // đọc file
     public ResponseEntity<?> loadFile(@PathVariable("filename") String fileName) {
         Resource resource = fileService.load(fileName);

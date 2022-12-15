@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface AuthService {
     UserDTOWithToken login(LoginDTO dto);
 
-    UserDTO registerCustomer(UserDTO dto);
+    UserDTOWithToken registerCustomer(UserDTO dto);
 }
 
 @Service
@@ -55,12 +55,12 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDTO registerCustomer(UserDTO dto) {
+    public UserDTOWithToken registerCustomer(UserDTO dto) {
         User user = mapper.map(dto, User.class);
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
-        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name());
+        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName("CUSTOMER");
         if (userGroupOptional.isPresent()) {
             UserGroup userGroup = userGroupOptional.get();
             userGroup.addUser(user);
@@ -69,7 +69,7 @@ class AuthServiceImpl implements AuthService {
 
         return mapper.map(
                 userRepository.save(user),
-                UserDTO.class
+                UserDTOWithToken.class
         );
     }
 }
