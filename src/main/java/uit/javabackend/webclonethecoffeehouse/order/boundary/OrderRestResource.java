@@ -22,14 +22,14 @@ public class OrderRestResource {
         this.orderService = orderService;
     }
 
-    @TCHOperation(name = "GeneralOrderManagement")
+    @TCHOperation(name = "GetAllOrder")
     @Operation(summary = "get list order Dto, for admin tool ")
     @GetMapping("/get-all-dto")
     public Object findAllDto() {
         return ResponseUtil.get(orderService.findAllDto(OrderDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GeneralOrderManagement")
+    @TCHOperation(name = "GetAllOrder")
     @Operation(summary = "get list order Dto, for admin tool")
     @GetMapping("/get-all-dto-page")
     public Object findAllDtoPaging(@RequestParam("size") int size
@@ -37,7 +37,7 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.findAllDto(Pageable.ofSize(size).withPage(index), OrderDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "PersonalOrderManagement")
+    @TCHOperation(name = "GetOrderById")
     @Operation(summary = "get an order by id")
     @GetMapping("/get-order")
     public Object findOrderById(@RequestParam("order-id") UUID id) {
@@ -45,27 +45,27 @@ public class OrderRestResource {
     }
 
 
-    @TCHOperation(name = "PersonalOrderManagement")
+    @TCHOperation(name = "GetAllOrderByUserId")
     @Operation(summary = "get all order by User id")
     @PostMapping("{user-id}/get-all")
     public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId) {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "PersonalOrderManagement")
+    @TCHOperation(name = "SaveOrder")
     @Operation(summary = "su dung thang nay de tao don hang ")
     @PostMapping(path = "/save-order")
     public Object save(@RequestBody @Valid OrderDTO orderDTO) {
         return ResponseUtil.get(orderService.save(orderDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "PersonalOrderManagement")
+    @TCHOperation(name = "UpdateOrder")
     @PutMapping("/update")
     public Object update(@RequestBody OrderDTO orderDTO) {
         return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "PersonalOrderManagement")
+    @TCHOperation(name = "SaveOrder")
     @Operation(summary = "")
     @PostMapping("/create-order")
     public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto) {

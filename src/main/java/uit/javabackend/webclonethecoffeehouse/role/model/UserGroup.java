@@ -51,10 +51,4 @@ public class UserGroup extends BaseEntity {
         user.getUserGroups().remove(this);
     }
 
-    public enum USER_GROUP {
-        CUSTOMER,
-        STAFF,
-        MANAGER,
-        ADMIN
-    }
 }

@@ -37,32 +37,32 @@ public class ProductGroupRestResource {
         return ResponseUtil.get(productGroupService.getAllProductGroupWithProductDTO(), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "AddProductGroup")
     @PostMapping(path = "/AddProductGroup")
     public Object save(@RequestBody @Valid ProductGroupDTO productGroupDTO) {
         return ResponseUtil.get(productGroupService.save(productGroupDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "UpdateProduct")
+    @TCHOperation(name = "UpdateProductGroup")
     @PutMapping("/UpdateProductGroup")
     public Object updateProductGroup(@RequestBody ProductGroupDTO productGroup) {
         return ResponseUtil.get(productGroupService.update(productGroup), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "DeleteByNameProductGroup")
     @DeleteMapping("/DeleteByNameProductGroup")
     public Object deleteProductGroup(@RequestParam("name") String name) {
         productGroupService.deleteByName(name);
         return HttpStatus.OK;
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "AddProductsIntoProductGroup")
     @PostMapping("/{productgroup-id}/AddProducts")
     public ResponseEntity<?> addProduct(@RequestBody List<UUID> ids, @PathVariable("productgroup-id") UUID productGroupId) {
         return ResponseUtil.get(productGroupService.addProduct(ids, productGroupId), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "AddRemoveProduct")
+    @TCHOperation(name = "RemoveProductsFromProductGroup")
     @DeleteMapping("/{productgroup-id}/RemoveProducts")
     public ResponseEntity<?> deleteProduct(@RequestBody List<UUID> ids, @PathVariable("productgroup-id") UUID productGroupId) {
         return ResponseUtil.get(productGroupService.removeProduct(ids, productGroupId), HttpStatus.OK);

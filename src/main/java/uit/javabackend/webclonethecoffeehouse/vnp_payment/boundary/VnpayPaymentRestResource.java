@@ -20,7 +20,10 @@ import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -31,43 +34,44 @@ public class VnpayPaymentRestResource {
 
     private final OrderService orderService;
     private final VnpayPaymentService vnpayPaymentService;
+    Logger logger = LoggerFactory.getLogger(VnpayPaymentRestResource.class);
     @Autowired
     private TCHMapper mapper;
-    Logger logger = LoggerFactory.getLogger(VnpayPaymentRestResource.class);
 
     public VnpayPaymentRestResource(OrderService orderService, VnpayPaymentService vnpayPaymentService) {
         this.orderService = orderService;
         this.vnpayPaymentService = vnpayPaymentService;
     }
-    @TCHOperation(name = "PersonalPayment")
+
+    @TCHOperation(name = "CreatePayment")
     @PostMapping("create-payment")
     public Object createPayment(@RequestBody @Valid VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest request) throws IOException {
 
-        return ResponseUtil.get(vnpayPaymentService.createPayment(vnpPaymentCreateDTO,request),HttpStatus.OK);
+        return ResponseUtil.get(vnpayPaymentService.createPayment(vnpPaymentCreateDTO, request), HttpStatus.OK);
     }
 
     @Operation(summary = " demo return url")
     @GetMapping("billing-infomation")
     public Object billingInfomation(@RequestParam("vnp_ResponseCode") String code
-            ,HttpServletRequest request){
-        logger.info("contextpath:  " + request.getRemoteAddr() );
+            , HttpServletRequest request) {
+        logger.info("contextpath:  " + request.getRemoteAddr());
         ResponseForVnpayDTO rspDto = new ResponseForVnpayDTO();
         rspDto.setCode(code);
         //rspDto.setMessage("success");
-        return new ResponseEntity<>(rspDto,HttpStatus.OK);
+        return new ResponseEntity<>(rspDto, HttpStatus.OK);
     }
 
     @Operation(summary = "post data response từ vnpay cap nhat giao dich cua don hang")
-    @TCHOperation(name = "PersonalPayment")
-    @PostMapping ("payment-order") // fix cho nay lai
-    public Object updateTransactionOfOrder( @RequestBody VnpayTransactionDto vnpayTransactionDto) throws IOException {
+    @TCHOperation(name = "UpdateTransactionOfOrder")
+    @PostMapping("payment-order") // fix cho nay lai
+    public Object updateTransactionOfOrder(@RequestBody VnpayTransactionDto vnpayTransactionDto) throws IOException {
 
-        return ResponseUtil.get(vnpayPaymentService.updateTransactionOfOrder(vnpayTransactionDto),HttpStatus.OK);
+        return ResponseUtil.get(vnpayPaymentService.updateTransactionOfOrder(vnpayTransactionDto), HttpStatus.OK);
     }
 
     @Operation(summary = "truy van thong tin don hang truy xuat truc tiep tu vnpay")
-    @TCHOperation(name = "PersonalPayment")
-    @PostMapping ("order-payment-infomation") // fix cho nay lai
+    @TCHOperation(name = "QueryPaymentInformation")
+    @PostMapping("order-payment-infomation") // fix cho nay lai
     public Object vnpayQuery(HttpServletRequest req, @RequestBody VnpayQueryDTO vnpayQueryDTO) throws IOException {
         //vnp_Command = querydr
         String vnp_TxnRef = vnpayQueryDTO.getOrderId();
@@ -120,7 +124,7 @@ public class VnpayPaymentRestResource {
         String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = PaymentConfig.vnp_apiUrl + "?" + queryUrl;
-        System.out.println( " paymentUrl: " + paymentUrl);
+        System.out.println(" paymentUrl: " + paymentUrl);
 
         URL url = new URL(paymentUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -140,17 +144,18 @@ public class VnpayPaymentRestResource {
         return ResponseUtil.get(Arrays.toString(responseData), HttpStatus.ACCEPTED);
 
     }
-    @TCHOperation(name = "PaymentManagement")
+
+    @TCHOperation(name = "GetAllVnpayPayment")
     @GetMapping("get-all")
-    public Object getAllVnpayPayment(){
-        return ResponseUtil.get(vnpayPaymentService.findAllDto(VnpayPaymentDTO.class),HttpStatus.OK);
-    }
-    @TCHOperation(name = "PersonalPayment")
-    @GetMapping("{vnpaypayment-id}")
-    public Object getVnpayPaymentById(@PathVariable("vnpaypayment-id") UUID vnpayPaymentId){
-        return ResponseUtil.get(vnpayPaymentService.findVnpayPaymentById(vnpayPaymentId),HttpStatus.OK);
+    public Object getAllVnpayPayment() {
+        return ResponseUtil.get(vnpayPaymentService.findAllDto(VnpayPaymentDTO.class), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "GetVnpayPaymentById")
+    @GetMapping("{vnpaypayment-id}")
+    public Object getVnpayPaymentById(@PathVariable("vnpaypayment-id") UUID vnpayPaymentId) {
+        return ResponseUtil.get(vnpayPaymentService.findVnpayPaymentById(vnpayPaymentId), HttpStatus.OK);
+    }
 
 
 }

@@ -60,7 +60,7 @@ class AuthServiceImpl implements AuthService {
         // encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setProvider(User.Provider.local);
-        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName(UserGroup.USER_GROUP.CUSTOMER.name());
+        Optional<UserGroup> userGroupOptional = userGroupRepository.findByName("CUSTOMER");
         if (userGroupOptional.isPresent()) {
             UserGroup userGroup = userGroupOptional.get();
             userGroup.addUser(user);

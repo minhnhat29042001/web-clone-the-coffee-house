@@ -22,50 +22,55 @@ public class DiscountRestResource {
     public DiscountRestResource(DiscountService services) {
         this.services = services;
     }
-    @TCHOperation(name = "DiscountManagement")
+
+    @TCHOperation(name = "GetAllDiscount")
     @GetMapping("/get-all")
     public Object findAll() {
         return ResponseUtil.get(services.findAllDto(DiscountDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "DiscountGet")
+    @TCHOperation(name = "GetDiscountWithUserDiscountDTO")
     @GetMapping("/{discount-id}/GetDiscountWithUserDiscount")
-    public Object findDiscountWithUserDiscountDTO(@PathVariable("discount-id") UUID discountID){
-        return ResponseUtil.get(services.getDiscountWithUserDiscountDTO(discountID),HttpStatus.OK);
-    }
-    @TCHOperation(name = "DiscountGet")
-    @GetMapping("/GetAllDiscountWithUserDiscount")
-    public Object findAllDiscountWithUserDiscountDTO(){
-        return ResponseUtil.get(services.getAllDiscountWithUserDiscountDTO(),HttpStatus.OK);
+    public Object findDiscountWithUserDiscountDTO(@PathVariable("discount-id") UUID discountID) {
+        return ResponseUtil.get(services.getDiscountWithUserDiscountDTO(discountID), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "DiscounManagement")
+    @TCHOperation(name = "GetAllDiscountWithUserDiscountDTO")
+    @GetMapping("/GetAllDiscountWithUserDiscount")
+    public Object findAllDiscountWithUserDiscountDTO() {
+        return ResponseUtil.get(services.getAllDiscountWithUserDiscountDTO(), HttpStatus.OK);
+    }
+
+    @TCHOperation(name = "AddDiscount")
     @PostMapping(path = "/add-discount")
     public Object save(@RequestBody @Valid DiscountDTO discountDTO) {
         return ResponseUtil.get(services.save(discountDTO, Discount.class, DiscountDTO.class), HttpStatus.CREATED);
     }
-    @TCHOperation(name = "DiscounManagement")
+
+    @TCHOperation(name = "UpdateDiscount")
     @PutMapping("/update-discount")
     public Object update(@RequestBody DiscountDTO discountDTO) {
         return ResponseUtil.get(services.update(discountDTO), HttpStatus.OK);
     }
-    @TCHOperation(name = "DiscounManagement")
+
+    @TCHOperation(name = "DeleteDiscountByCode")
     @DeleteMapping("/DeleteByCodeDiscount")
-    public Object deleteProductGroup(@RequestParam ("code") String code){
+    public Object deleteProductGroup(@RequestParam("code") String code) {
         services.deleteByCode(code);
         return HttpStatus.OK;
     }
-    @TCHOperation(name = "AddRemoveDiscountForSpecificCustomer")
+
+    @TCHOperation(name = "AddUserDiscounts")
     @PostMapping("/{discount-id}/AddUserDiscounts")
-    public ResponseEntity<?> addUserDiscount (@RequestBody List<UUID> ids, @PathVariable ("discount-id") UUID discountId){
-        return ResponseUtil.get(services.addUserDiscount(ids,discountId),HttpStatus.CREATED);
-    }
-    @TCHOperation(name = "AddRemoveDiscountForSpecificCustomer")
-    @DeleteMapping ("/{discount-id}/RemoveUserDiscounts")
-    public ResponseEntity<?> deleteUserDiscount(@RequestBody List<UUID> ids,@PathVariable ("discount-id") UUID discountId){
-        return ResponseUtil.get(services.removeUserDiscount(ids,discountId),HttpStatus.OK);
+    public ResponseEntity<?> addUserDiscount(@RequestBody List<UUID> ids, @PathVariable("discount-id") UUID discountId) {
+        return ResponseUtil.get(services.addUserDiscount(ids, discountId), HttpStatus.CREATED);
     }
 
+    @TCHOperation(name = "RemoveUserDiscounts")
+    @DeleteMapping("/{discount-id}/RemoveUserDiscounts")
+    public ResponseEntity<?> deleteUserDiscount(@RequestBody List<UUID> ids, @PathVariable("discount-id") UUID discountId) {
+        return ResponseUtil.get(services.removeUserDiscount(ids, discountId), HttpStatus.OK);
+    }
 
 
 }
