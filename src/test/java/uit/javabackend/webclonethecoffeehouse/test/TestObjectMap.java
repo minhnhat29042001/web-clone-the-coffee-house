@@ -1,6 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.test;
 
 import uit.javabackend.webclonethecoffeehouse.common.util.DateTimeUtils;
+import uit.javabackend.webclonethecoffeehouse.order.enums.OrderProductTopping;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,9 +26,13 @@ public class TestObjectMap {
 //        System.out.println(fields);
 
 
-        String dateTimeConvert = "2022-12-03 19:29:14.883484";
-        LocalDateTime d = LocalDateTime.parse(dateTimeConvert);
-       // String converted = d.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATETIME_FORMAT_VNPAY));
-        System.out.println();
+//        String dateTimeConvert = "2022-12-03 19:29:14.883484";
+//        LocalDateTime d = LocalDateTime.parse(dateTimeConvert);
+//       // String converted = d.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATETIME_FORMAT_VNPAY));
+//        System.out.println();
+
+        int price = OrderProductTopping.KEM_PHO_MAI_MACCHIATO.GetPrice();
+        OrderProductTopping topping = OrderProductTopping.DAO_MIENG;
+        System.out.println(topping);
     }
 }

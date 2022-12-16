@@ -3,26 +3,32 @@ package uit.javabackend.webclonethecoffeehouse.vnp_payment.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderService;
-import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.ResponseForVnpayDTO;
-import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.VnpPaymentCreateDTO;
-import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.VnpayPaymentDTO;
-import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.VnpayTransactionDto;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.*;
 import uit.javabackend.webclonethecoffeehouse.vnp_payment.model.VnpayPayment;
-import uit.javabackend.webclonethecoffeehouse.vnp_payment.paymentConfig.PaymentConfig;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.paymentConfig.VnpayConstant;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.paymentConfig.VnpayConfig;
 import uit.javabackend.webclonethecoffeehouse.vnp_payment.repository.VnpayPaymentRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -40,6 +46,7 @@ public interface VnpayPaymentService extends GenericService<VnpayPayment, VnpayP
     Object createPayment(VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest servletRequest) throws UnsupportedEncodingException;
 
     Object updateTransactionOfOrder(VnpayTransactionDto vnpayTransactionDto);
+    Object vnpayQuery(HttpServletRequest req, VnpayQueryDTO vnpayQueryDTO) throws IOException;
 }
 
 @Service
@@ -51,6 +58,8 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
     private final TCHMapper mapper;
     @Value("${vnpaypayment.id.existed}")
     private TCHBusinessException vnpayPaypentIsNotExisted;
+    @Autowired
+    private VnpayConfig vnpayConfig;
 
     VnpayPaymentServiceImp(VnpayPaymentRepository repository, OrderService orderService, TCHMapper mapper) {
         this.repository = repository;
@@ -98,17 +107,17 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
 
         // conver to map
         Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_Version", PaymentConfig.vnp_Version);
-        vnp_Params.put("vnp_Command", PaymentConfig.vnp_Command);
-        vnp_Params.put("vnp_TmnCode", PaymentConfig.vnp_TmnCode);
+        vnp_Params.put("vnp_Version", VnpayConstant.vnp_Version);
+        vnp_Params.put("vnp_Command", VnpayConstant.vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnpayConfig.getVnp_TmnCode());
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
-        vnp_Params.put("vnp_CurrCode", PaymentConfig.vnp_CurrCode);
+        vnp_Params.put("vnp_CurrCode", VnpayConstant.vnp_CurrCode);
         vnp_Params.put("vnp_BankCode", bank_code);//
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);//
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);//
-        vnp_Params.put("vnp_OrderType", PaymentConfig.vnp_OrderType);
-        vnp_Params.put("vnp_Locale", PaymentConfig.vnp_Locale);
-        vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
+        vnp_Params.put("vnp_OrderType", VnpayConstant.vnp_OrderType);
+        vnp_Params.put("vnp_Locale", VnpayConstant.vnp_Locale);
+        vnp_Params.put("vnp_ReturnUrl", vnpayConfig.getVnp_ReturnUrl());
         vnp_Params.put("vnp_IpAddr", request.getRemoteAddr());
 
 
@@ -125,16 +134,16 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
         VnpayPaymentDTO vnpayPaymentDTO = new VnpayPaymentDTO();
-        vnpayPaymentDTO.setVnp_Version(PaymentConfig.vnp_Version);
-        vnpayPaymentDTO.setVnp_Command(PaymentConfig.vnp_Command);
-        vnpayPaymentDTO.setVnp_TmnCode(PaymentConfig.vnp_TmnCode);
+        vnpayPaymentDTO.setVnp_Version(VnpayConstant.vnp_Version);
+        vnpayPaymentDTO.setVnp_Command(VnpayConstant.vnp_Command);
+        vnpayPaymentDTO.setVnp_TmnCode(vnpayConfig.getVnp_TmnCode());
         vnpayPaymentDTO.setVnp_Amount(String.valueOf(amount));
-        vnpayPaymentDTO.setVnp_CurrCode(PaymentConfig.vnp_CurrCode);
+        vnpayPaymentDTO.setVnp_CurrCode(VnpayConstant.vnp_CurrCode);
         vnpayPaymentDTO.setVnp_BankCode(bank_code);
         vnpayPaymentDTO.setVnp_TxnRef(vnp_TxnRef);
         vnpayPaymentDTO.setVnp_OrderInfo(vnp_OrderInfo);
-        vnpayPaymentDTO.setVnp_OrderType(PaymentConfig.vnp_OrderType);
-        vnpayPaymentDTO.setVnp_Locale(PaymentConfig.vnp_Locale);
+        vnpayPaymentDTO.setVnp_OrderType(VnpayConstant.vnp_OrderType);
+        vnpayPaymentDTO.setVnp_Locale(VnpayConstant.vnp_Locale);
         vnpayPaymentDTO.setVnp_CreateDate(vnp_CreateDate);
         vnpayPaymentDTO.setVnp_ExpireDate(vnp_ExpireDate);
         vnpayPaymentDTO.setVnp_IpAddr(request.getRemoteAddr());
@@ -173,9 +182,9 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
         }
         String queryUrl = query.toString();
 
-        String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.vnp_HashSecret, hashData.toString());
+        String vnp_SecureHash = VnpayConstant.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = PaymentConfig.vnp_PayUrl + "?" + queryUrl;
+        String paymentUrl = vnpayConfig.getVnp_PayUrl() + "?" + queryUrl;
 
         ResponseForVnpayDTO rspDto = new ResponseForVnpayDTO();
         rspDto.setCode("00");
@@ -198,7 +207,7 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
             fields.remove("vnp_SecureHash");
         }
 //        // Check checksum
-        String signValue = PaymentConfig.hashAllFields(fields);
+        String signValue = VnpayConstant.hashAllFields(fields);
         if (signValue.equals(vnp_SecureHash)) {
             // 1 update status for order
 
@@ -244,6 +253,78 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
             throw new TCHBusinessException("securehash khong chinh xac");
         }
         return getMapper().map(savedVnpayPayment, VnpayPaymentDTO.class);
+    }
+
+    @Override
+    public Object vnpayQuery(HttpServletRequest req, VnpayQueryDTO vnpayQueryDTO) throws IOException {
+        //vnp_Command = querydr
+        String vnp_TxnRef = vnpayQueryDTO.getOrderId();
+        String vnp_TransDate = vnpayQueryDTO.getCreate_date();
+        String vnp_TmnCode = VnpayConstant.PaymentQuery.vnp_TmnCode;
+        String vnp_IpAddr = req.getRemoteAddr();
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        //vnp_Params.put("vnp_RequestId", PaymentConfig.getRandomNumber32bi(5));
+        vnp_Params.put("vnp_Version", "2.1.0");
+        vnp_Params.put("vnp_Command", VnpayConstant.PaymentQuery.vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Kiem tra ket qua GD OrderId:" + vnp_TxnRef);
+        vnp_Params.put("vnp_TransDate", vnp_TransDate);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+
+        //Build data to hash and querystring
+        List fieldNames = new ArrayList(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                //Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                //Build query
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                query.append('=');
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
+            }
+        }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = VnpayConstant.hmacSHA512(vnpayConfig.getVnp_HashSecret(), hashData.toString());
+        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        String paymentUrl = vnpayConfig.getVnp_apiUrl() + "?" + queryUrl;
+        System.out.println(" paymentUrl: " + paymentUrl);
+
+        URL url = new URL(paymentUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        String Rsp = response.toString();
+        String respDecode = URLDecoder.decode(Rsp, "UTF-8");
+        String[] responseData = respDecode.split("&|\\=");
+        return Arrays.toString(responseData);
     }
 
     @Override
