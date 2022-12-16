@@ -3,3 +3,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 1234
+
+payment:
+  vnpay:
+    params:
+      vnp-pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      vnp-return-url: http://localhost:8080/api/v1/payment/billing-infomation
+      vnp-tmn-code: 7B8WU0OZ
+      vnp-hash-serect: RUFCJWAKYHVCUKJCZVTZKWEEXQKVQFUP
+      vnp-api-url: https://sandbox.vnpayment.vn/merchant_webapi/merchant.html
+

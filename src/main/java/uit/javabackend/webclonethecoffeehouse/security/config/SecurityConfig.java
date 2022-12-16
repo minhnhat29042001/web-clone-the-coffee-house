@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import uit.javabackend.webclonethecoffeehouse.security.jwt.JwtAuthenticationFilter;
 import uit.javabackend.webclonethecoffeehouse.security.oauth.CustomOAuth2UserService;
 import uit.javabackend.webclonethecoffeehouse.security.oauth.RestAuthenticationEntryPoint;
@@ -64,7 +65,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("https://web-clone-the-coffee-house-production.up.railway.app"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST","PUT"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -93,9 +94,10 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                .antMatchers( "/api/ProductsManagement/common/**", "api/ProductGroupManagement/common/**", "/api/CurrencyMangement/common/**").permitAll()
-                .antMatchers( "api/v1/business-info/get-all").permitAll()
+                .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html/**","/swagger-resources/**", "/swagger-ui/**","/webjars/**").permitAll()
+                .antMatchers( "/api/ProductsManagement/common/**", "/api/ProductGroupManagement/common/**", "/api/CurrencyMangement/common/**").permitAll()
+                .antMatchers( "/api/v1/business-info/get-all").permitAll()
+                .antMatchers( "/api/v1/payment/billing-infomation").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -114,5 +116,6 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().antMatchers("/js/**", "/images/**");
     }
+
 
 }

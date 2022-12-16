@@ -5,3 +5,11 @@ spring:
     password: ${PROD_DB_PASSWORD}
     name: the-coffee-house
 
+payment:
+  vnpay:
+    params:
+      vnp-pay-url: https://vnpayment.vn/paymentv2/vpcpay.html
+      vnp-return-url: https://web-clone-the-coffee-house-production.up.railway.app/api/v1/payment/billing-infomation
+      vnp-tmn-code: 7B8WU0OZ
+      vnp-hash-serect: RUFCJWAKYHVCUKJCZVTZKWEEXQKVQFUP
+      vnp-api-url: https://vnpayment.vn/merchant_webapi/merchant.html
