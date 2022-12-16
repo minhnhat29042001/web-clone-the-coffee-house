@@ -72,5 +72,10 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.removeUserDiscount(ids, discountId), HttpStatus.OK);
     }
 
+    @GetMapping ("/check-coupon")
+    public ResponseEntity<?> checkCoupon(@RequestParam("code") String code) {
+        return ResponseUtil.get(services.checkCoupon(code), HttpStatus.OK);
+    }
+
 
 }

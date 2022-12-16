@@ -33,21 +33,19 @@ public class DiscountDTO implements Serializable {
     @UniqueDescription
     private String description;
 
-    @Range(min = 5,max = 50,message= "Numbers of users must have range between {min} and {max}")
     private Integer  numbersOfUsers;
 
 
-    @Range(min = 5,max = 50,message= "Usage numbers must have range between {min} and {max}")
     private Integer limitAmountOnUser;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeUtils.DATETIME_FORMAT)
-    @DateTimeFormat(pattern = DateTimeUtils.DATETIME_FORMAT)
+
     private LocalDateTime effectiveDay;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeUtils.DATETIME_FORMAT)
-    @DateTimeFormat(pattern = DateTimeUtils.DATETIME_FORMAT)
+
     private LocalDateTime expirationDay;
 
     @Enumerated(value = EnumType.STRING)
     private Discount.AmountType amountType;
+
+    private Integer discountAmount;
 }

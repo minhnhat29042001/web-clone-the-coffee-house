@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.business.dto.BusinessDTO;
 import uit.javabackend.webclonethecoffeehouse.business.model.Business;
 import uit.javabackend.webclonethecoffeehouse.business.repository.BusinessRepository;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 
@@ -23,7 +24,7 @@ public interface BusinessService extends GenericService<Business, BusinessDTO, U
 class BusinessServiceImp implements BusinessService {
     private final BusinessRepository repository;
     private final TCHMapper mapper;
-    private final ValidationException businessIsNotExisted = new ValidationException("Business is not existed.");
+    private final TCHBusinessException businessIsNotExisted = new TCHBusinessException("Business is not existed.");
 
 
     BusinessServiceImp(BusinessRepository repository, TCHMapper mapper) {
