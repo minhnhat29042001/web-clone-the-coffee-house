@@ -9,6 +9,8 @@ import uit.javabackend.webclonethecoffeehouse.role.service.OperationService;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/OperationsManagement")
@@ -30,6 +32,15 @@ public class OperationRestResource {
     public Object save(@RequestBody @Valid OperationDTO dto) {
         return ResponseUtil.get(
                 operationService.save(dto, Operation.class, OperationDTO.class)
+                , HttpStatus.OK
+        );
+    }
+
+    @TCHOperation(name = "SaveOperation")
+    @PostMapping("/SaveOperations/{role-id}")
+    public Object saveOperations(@RequestBody List<OperationDTO> dtos, @PathVariable("role-id") UUID roleId) {
+        return ResponseUtil.get(
+                operationService.saveOperations(dtos, roleId)
                 , HttpStatus.OK
         );
     }
