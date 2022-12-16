@@ -3,10 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.security.boundary;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.service.AuthService;
@@ -23,6 +20,16 @@ public class AuthRestResource {
         this.authService = authService;
     }
 
+
+    @Operation(summary = "validate a jwt token")
+    @PostMapping("/validateToken")
+    public Object validateToken(@RequestParam String token) {
+        return ResponseUtil.get(
+                authService.validateToken(token)
+                , HttpStatus.OK
+        );
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
         return ResponseUtil.get(authService.login(loginDTO), HttpStatus.OK);
@@ -36,4 +43,6 @@ public class AuthRestResource {
                 , HttpStatus.OK
         );
     }
+
+
 }
