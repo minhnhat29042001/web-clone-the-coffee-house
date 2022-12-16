@@ -7,6 +7,7 @@ import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
+import uit.javabackend.webclonethecoffeehouse.security.dto.ValidateTokenDTO;
 import uit.javabackend.webclonethecoffeehouse.security.jwt.JwtUtils;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
@@ -19,6 +20,8 @@ public interface AuthService {
     UserDTOWithToken login(LoginDTO dto);
 
     UserDTOWithToken registerCustomer(UserDTO dto);
+
+    ValidateTokenDTO validateToken(String token);
 }
 
 @Service
@@ -72,4 +75,11 @@ class AuthServiceImpl implements AuthService {
                 UserDTOWithToken.class
         );
     }
+
+    @Override
+    public ValidateTokenDTO validateToken(String token) {
+        return jwtUtils.validateToken(token);
+    }
+
+
 }

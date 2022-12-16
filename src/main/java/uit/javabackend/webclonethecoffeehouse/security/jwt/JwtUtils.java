@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import uit.javabackend.webclonethecoffeehouse.security.dto.ValidateTokenDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +59,21 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    public ValidateTokenDTO validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(token);
+
+            return new ValidateTokenDTO(ValidateTokenDTO.STATUS.TRUE, "The token is valid");
+        } catch (UnsupportedJwtException | IllegalArgumentException | MalformedJwtException | SignatureException e1) {
+            return new ValidateTokenDTO(ValidateTokenDTO.STATUS.INVALID, "The token is invalid");
+        } catch (ExpiredJwtException e2) {
+            return new ValidateTokenDTO(ValidateTokenDTO.STATUS.EXPIRED, "The token is expired");
+        }
     }
 
     public String getToken(HttpServletRequest request) {
