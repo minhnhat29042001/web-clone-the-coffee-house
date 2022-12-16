@@ -40,11 +40,9 @@ public class Discount extends BaseEntity {
     private String description;
 
     @Column(name = BusinessEntity.Discount.ALLOWED_USERS)
-    @Range(min = 5,max = 50,message= "Numbers of users must have range between {min} and {max}")
     private Integer numbersOfUsers;
 
     @Column(name = BusinessEntity.Discount.LIMIT_AMOUNT_ON_USERS)
-    @Range(min = 5,max = 50,message= "Usage numbers must have range between {min} and {max}")
     private Integer limitAmountOnUser;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateTimeUtils.DATETIME_FORMAT)
