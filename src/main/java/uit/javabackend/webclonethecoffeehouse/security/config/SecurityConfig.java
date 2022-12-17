@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +32,8 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter authenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
-
+    @Autowired
+    private ListAllowedOriginConfig listAllowedOriginConfig;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     public SecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter authenticationFilter, CustomOAuth2UserService customOAuth2UserService, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
@@ -64,7 +66,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://web-clone-the-coffee-house-production.up.railway.app","https://spectacular-clafoutis-af79ec.netlify.app"));
+        configuration.setAllowedOrigins(listAllowedOriginConfig.getListAllowedOrigin());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","PUT","DELETE"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
