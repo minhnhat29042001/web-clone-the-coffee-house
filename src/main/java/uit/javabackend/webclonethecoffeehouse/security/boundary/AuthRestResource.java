@@ -9,6 +9,7 @@ import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.service.AuthService;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -44,5 +45,21 @@ public class AuthRestResource {
         );
     }
 
+    @Operation(summary = "Forgot password")
+    @PostMapping("/resetPassword")
+    public Object resetPassword(@RequestParam String host, @RequestParam String email) {
+        return ResponseUtil.get(
+                authService.resetPassword(host, email)
+                , HttpStatus.OK
+        );
+    }
 
+    @Operation(summary = "Change password")
+    @PostMapping("/changePassword")
+    public Object changePassword(@RequestParam String token, @RequestParam String password) {
+        return ResponseUtil.get(
+                authService.changePassword(token, password)
+                , HttpStatus.OK
+        );
+    }
 }
