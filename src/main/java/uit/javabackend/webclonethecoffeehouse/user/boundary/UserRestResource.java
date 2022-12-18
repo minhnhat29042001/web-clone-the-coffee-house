@@ -27,6 +27,15 @@ public class UserRestResource {
         );
     }
 
+    @TCHOperation(name = "GetUserBySpecificField")
+    @GetMapping("/GetUserByUsername")
+    public Object getUserByUsername(@RequestParam String username) {
+        return ResponseUtil.get(
+                userService.getUserByUsername(username)
+                , HttpStatus.OK
+        );
+    }
+
     @TCHOperation(name = "GetAllUserGroupByUsername")
     @GetMapping("/GetAllUserGroupByUsername")
     public Object findAllUserGroupUsername(@RequestParam("username") String username) {

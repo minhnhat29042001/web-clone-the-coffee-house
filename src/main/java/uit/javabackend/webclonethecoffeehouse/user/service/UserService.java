@@ -29,6 +29,7 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     UserDTOWithToken createUser(UserDTO dto);
 
+    UserDTO getUserByUsername(String username);
 }
 
 @Service
@@ -95,6 +96,11 @@ class UserServiceImpl implements UserService {
                 userRepository.save(user),
                 UserDTOWithToken.class
         );
+    }
+
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        return tchMapper.map(userRepository.findByUsername(username), UserDTO.class);
     }
 
 }
