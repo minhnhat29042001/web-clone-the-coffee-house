@@ -3,6 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.security.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Optional;
 
 public interface AuthService {
@@ -99,20 +101,25 @@ class AuthServiceImpl implements AuthService {
     public String resetPassword(String host, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
         String token = jwtUtils.generateJwt(user.getUsername());
-            // Try block to check for exceptions
         try {
-
-            // Creating a simple mail message
-            SimpleMailMessage mailMessage
-                    = new SimpleMailMessage();
             String url = host + "/auth/resetPassword?token=" + token;
+            MimeMessage mailMessage =  javaMailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
             // Setting up necessary details
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(email);
-            mailMessage.setText("Email sent to reset the coffee house password" + " \r\n" + url);
-            mailMessage.setSubject("Reset the clone of the coffee house account password");
+            mailMessage.setContent(
+                    "<p>Dear " + user.getName() + ",</p>" +
+                    "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
+                    "<a href=" + url + ">" +
+                        "<button style=\"background-color: #49CC90; border-color:#49CC90; color: white;\" >Click me to change password</button>" +
+                    "</a>" +
+                    "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
 
-            // Sending the mail
+                    "<p>Thank you !</p>"
+                    ,"text/html"
+            );
+            mailHelper.setTo(email);
+            mailHelper.setSubject("Reset the clone of the coffee house account password");
+
             javaMailSender.send(mailMessage);
             return "Mail Sent Successfully...";
         }
