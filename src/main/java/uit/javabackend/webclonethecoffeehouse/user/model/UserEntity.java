@@ -6,7 +6,9 @@ import lombok.experimental.UtilityClass;
 public class UserEntity {
     @UtilityClass
     public class User {
+
         public static final String TABLE_NAME = "TCH_USER";
+        public static final String NAME = "TCH_NAME";
         public static final String USERNAME = "TCH_USERNAME";
         public static final String PASSWORD = "TCH_PASSWORD";
         public static final String EMAIL = "TCH_EMAIL";

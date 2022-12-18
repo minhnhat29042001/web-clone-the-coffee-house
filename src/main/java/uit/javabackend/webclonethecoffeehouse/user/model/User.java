@@ -27,6 +27,9 @@ import java.util.Set;
         @NamedQuery(name = "User.findByUsernameLikeIgnoreCase", query = "select u from User u where upper(u.username) like upper(:username)")
 })
 public class User extends BaseEntity {
+
+    @Column(name = UserEntity.User.NAME)
+    private String name;
     @Column(name = UserEntity.User.USERNAME
             , nullable = false
             , unique = true

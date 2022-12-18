@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserDTO {
     private UUID id;
-
+    private String name;
     @Size(min = 5, max = 100, message = "{user.username.size}")
     @NotBlank(message = "{user.username.blank}")
     @UniqueUsername(message = "{user.username.existed}")
