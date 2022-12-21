@@ -33,6 +33,8 @@ public class DiscountDTO implements Serializable {
     @UniqueDescription
     private String description;
 
+    private String imageUrl;
+
     private Integer  numbersOfUsers;
 
 
@@ -48,4 +50,6 @@ public class DiscountDTO implements Serializable {
     private Discount.AmountType amountType;
 
     private Integer discountAmount;
+
+
 }

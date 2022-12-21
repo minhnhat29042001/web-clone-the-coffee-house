@@ -39,6 +39,9 @@ public class Discount extends BaseEntity {
     @Length(min = 5, max = 50, message = "Discount description must have length between {min} and {max}")
     private String description;
 
+    @Column(name = BusinessEntity.Discount.IMAGEURL)
+    private String imageUrl;
+
     @Column(name = BusinessEntity.Discount.ALLOWED_USERS)
     private Integer numbersOfUsers;
 

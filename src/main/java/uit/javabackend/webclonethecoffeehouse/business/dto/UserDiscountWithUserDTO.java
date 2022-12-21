@@ -17,6 +17,7 @@ public class UserDiscountWithUserDTO implements Serializable {
     private UUID id;
 
     private String description;
+    private String imageUrl;
 
     private Integer usedCount;
 
