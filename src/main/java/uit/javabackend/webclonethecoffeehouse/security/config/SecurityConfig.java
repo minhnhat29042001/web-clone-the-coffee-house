@@ -98,7 +98,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/", "/login/**", "/oauth2/**", "/oauth/**", "/auth/**", "/v3/api-docs/**", "/swagger-ui.html/**","/swagger-resources/**", "/swagger-ui/**","/webjars/**").permitAll()
                 .antMatchers( "/api/ProductsManagement/common/**", "/api/ProductGroupManagement/common/**", "/api/CurrencyMangement/common/**").permitAll()
-                .antMatchers( "/api/v1/business/common/**").permitAll()
+                .antMatchers( "/api/v1/business/common/**","/api/v1/discount/common/**").permitAll()
                 .antMatchers( "/api/v1/payment/billing-infomation").permitAll()
                 .anyRequest().authenticated()
                 .and()
