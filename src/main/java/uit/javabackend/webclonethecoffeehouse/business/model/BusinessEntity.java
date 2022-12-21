@@ -26,6 +26,7 @@ public class BusinessEntity {
         public static final String TABLE_NAME = "TCH_DISCOUNT";
         public static final String CODE = "CODE";
         public static final String DESCRIPTION = "DESCRIPTION";
+        public static final String IMAGEURL = "IMAGEURL";
         public static final String ALLOWED_USERS = "ALLOWED_USERS";
         public static final String LIMIT_AMOUNT_ON_USERS = "LIMIT_AMOUNT_ON_USERS";
         public static final String EFFECTIVE_DAY = "EFFECTIVE_DAY";

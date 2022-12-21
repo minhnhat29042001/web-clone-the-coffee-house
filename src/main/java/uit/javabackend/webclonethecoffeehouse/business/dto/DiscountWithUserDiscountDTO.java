@@ -1,6 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.business.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,11 +16,17 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DiscountWithUserDiscountDTO {
 
     private UUID id;
     private String code;
     private String description;
+    private String imageUrl;
     private Integer  numbersOfUsers;
     private Integer limitAmountOnUser;
 

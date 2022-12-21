@@ -80,6 +80,7 @@ class DiscountServiceImp implements DiscountService {
 
         curDiscount.setCode(discountDTO.getCode());
         curDiscount.setDescription(discountDTO.getDescription());
+        curDiscount.setImageUrl(discountDTO.getImageUrl());
         curDiscount.setNumbersOfUsers(discountDTO.getNumbersOfUsers());
         curDiscount.setLimitAmountOnUser(discountDTO.getLimitAmountOnUser());
         curDiscount.setEffectiveDay(discountDTO.getEffectiveDay());
