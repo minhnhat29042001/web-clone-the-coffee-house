@@ -82,6 +82,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
         http.cors(Customizer.withDefaults());
+        http.csrf().disable();
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
