@@ -31,6 +31,6 @@ public class OrderWithVnpayPaymentDTO {
         private Integer totalPrice;
 
         private OrderStatus status;
-        private VnpayPaymentDTO vnpayPaymentDTO;
+        private VnpayPaymentDTO vnpayPayment;
 
 }

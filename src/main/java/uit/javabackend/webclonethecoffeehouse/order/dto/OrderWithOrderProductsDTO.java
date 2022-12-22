@@ -32,5 +32,5 @@ public class OrderWithOrderProductsDTO {
 
     private OrderStatus status;
 
-    private List<OrderProductDTO> orderProductDtos = new ArrayList<>();
+    private List<OrderProductDTO> orderProducts ;
 }

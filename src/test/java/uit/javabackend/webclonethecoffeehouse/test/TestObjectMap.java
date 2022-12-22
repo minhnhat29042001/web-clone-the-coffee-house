@@ -1,12 +1,12 @@
 package uit.javabackend.webclonethecoffeehouse.test;
 
-import uit.javabackend.webclonethecoffeehouse.common.util.DateTimeUtils;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uit.javabackend.webclonethecoffeehouse.order.enums.OrderProductTopping;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class TestObjectMap {
+
+
     public static void main(String[] args) {
 //        VnpayTransactionDto vnpayTransactionDto = new VnpayTransactionDto();
 //        vnpayTransactionDto.setVnp_Amount("43434");
@@ -34,5 +34,9 @@ public class TestObjectMap {
         int price = OrderProductTopping.KEM_PHO_MAI_MACCHIATO.GetPrice();
         OrderProductTopping topping = OrderProductTopping.DAO_MIENG;
         System.out.println(topping);
+
     }
+
+ 
+
 }

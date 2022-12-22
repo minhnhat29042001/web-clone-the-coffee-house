@@ -32,5 +32,5 @@ public class OrderWithProductsDTO {
 
     private OrderStatus status;
 
-    private List<OrderProductWithProductDTO> orderProductDtos;
+    private List<OrderProductWithProductDTO> orderProducts;
 }

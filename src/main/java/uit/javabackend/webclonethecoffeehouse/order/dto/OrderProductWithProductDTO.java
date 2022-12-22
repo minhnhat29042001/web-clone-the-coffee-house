@@ -17,5 +17,5 @@ public class OrderProductWithProductDTO {
     private String topping;
     private int totalPrice;
     private int quantity;
-    private ProductDTO productDTO;
+    private ProductDTO product;
 }
