@@ -100,6 +100,7 @@ public class SecurityConfig {
                 .antMatchers( "/api/ProductsManagement/common/**", "/api/ProductGroupManagement/common/**", "/api/CurrencyMangement/common/**").permitAll()
                 .antMatchers( "/api/v1/business/common/**","/api/v1/discount/common/**").permitAll()
                 .antMatchers( "/api/v1/payment/billing-infomation").permitAll()
+                .antMatchers( "/api/Files/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
