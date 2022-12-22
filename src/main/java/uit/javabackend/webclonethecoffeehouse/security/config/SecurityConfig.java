@@ -69,8 +69,8 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://spectacular-clafoutis-af79ec.netlify.app","https://web-clone-the-coffee-house-production.up.railway.app","http://14.187.171.9:8081","http://localhost"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST","PUT","DELETE"));
+        configuration.setAllowedOrigins(Arrays.asList("https://spectacular-clafoutis-af79ec.netlify.app","https://web-clone-the-coffee-house-production.up.railway.app"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
