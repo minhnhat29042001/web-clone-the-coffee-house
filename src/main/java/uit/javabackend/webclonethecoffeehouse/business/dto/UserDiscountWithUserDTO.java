@@ -21,6 +21,6 @@ public class UserDiscountWithUserDTO implements Serializable {
 
     private Integer usedCount;
 
-    private UserDTO userDTO;
+    private UserDTO user;
 
 }

@@ -15,5 +15,5 @@ public class ProductWithProductGroupDTO {
     private String imgUrl;
     private Integer price;
     private String description;
-    private ProductGroupDTO productGroupDTO;
+    private ProductGroupDTO productGroup;
 }

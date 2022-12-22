@@ -169,7 +169,7 @@ class OrderServiceImpl implements OrderService {
         Order savedOrder = getRepository().save(orderConvert);
 
         // map list<OrderProductWithProductDto to List<OrderProduct>
-        List<OrderProduct> orderProducts = orderDto.getOrderProductDtos()
+        List<OrderProduct> orderProducts = orderDto.getOrderProducts()
                 .stream()
                 .map(model -> mapper.map(model, OrderProduct.class))
                 .collect(Collectors.toList());
@@ -201,7 +201,7 @@ class OrderServiceImpl implements OrderService {
 
         // response
         OrderWithProductsDTO orderDtoRes = mapper.map(savedOrder, OrderWithProductsDTO.class);
-        orderDtoRes.setOrderProductDtos(orderProductWithProductDTOs);
+        orderDtoRes.setOrderProducts(orderProductWithProductDTOs);
         return orderDtoRes;
     }
 
