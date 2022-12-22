@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +25,9 @@ import uit.javabackend.webclonethecoffeehouse.security.oauth.CustomOAuth2UserSer
 import uit.javabackend.webclonethecoffeehouse.security.oauth.RestAuthenticationEntryPoint;
 import uit.javabackend.webclonethecoffeehouse.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -66,21 +69,19 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(listAllowedOriginConfig.getListAllowedOrigin());
+        configuration.setAllowedOrigins(Arrays.asList("https://spectacular-clafoutis-af79ec.netlify.app","https://web-clone-the-coffee-house-production.up.railway.app","http://14.187.171.9:8081","http://localhost"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","PUT","DELETE"));
-
+        configuration.setAllowedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
-
-        http.cors().
-                and().csrf()
-                .disable();
+        http.cors(Customizer.withDefaults());
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
