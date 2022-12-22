@@ -1,12 +1,16 @@
 package uit.javabackend.webclonethecoffeehouse.user.boundary;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -52,6 +56,16 @@ public class UserRestResource {
                 userService.createUser(userDTO)
                 , HttpStatus.OK
         );
+    }
+
+    @TCHOperation(name = "UpdateUser")
+    @PostMapping(path = "/saveUserAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Object saveUserAvatar(@RequestParam("username") String username, @RequestPart("avatar") MultipartFile avatar, HttpServletRequest request) {
+        String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+                .replacePath(null)
+                .build()
+                .toUriString();
+        return ResponseUtil.get(userService.saveUserAvatar(username, avatar, baseUrl), HttpStatus.CREATED);
     }
 
     @TCHOperation(name = "UpdateUser")

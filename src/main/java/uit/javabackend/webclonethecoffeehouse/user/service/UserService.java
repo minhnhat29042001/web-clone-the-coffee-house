@@ -5,8 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.file.FileService;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
@@ -15,6 +18,7 @@ import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +34,8 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
     UserDTOWithToken createUser(UserDTO dto);
 
     UserDTO getUserByUsername(String username);
+
+    UserDTOWithToken saveUserAvatar(String username, MultipartFile file, String baseUrl);
 }
 
 @Service
@@ -38,11 +44,13 @@ class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TCHMapper tchMapper;
+    private final FileService fileService;
 
-    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper) {
+    UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, TCHMapper tchMapper, FileService fileService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.tchMapper = tchMapper;
+        this.fileService = fileService;
     }
 
     @Override
@@ -101,6 +109,18 @@ class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByUsername(String username) {
         return tchMapper.map(userRepository.findByUsername(username), UserDTO.class);
+    }
+
+    @Override
+    public UserDTOWithToken saveUserAvatar(String username, MultipartFile file, String baseUrl) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->
+                new ValidationException("User is not existed")
+        );
+        fileService.init();
+        fileService.save(file);
+        String urlLoadFile = baseUrl+"/api/Files/"+file.getOriginalFilename();
+        user.setAvatar(urlLoadFile);
+        return tchMapper.map(user,UserDTOWithToken.class);
     }
 
 }
