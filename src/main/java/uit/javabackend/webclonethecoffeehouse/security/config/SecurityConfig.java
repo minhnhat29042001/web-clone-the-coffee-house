@@ -66,9 +66,8 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(listAllowedOriginConfig.getListAllowedOrigin());
         configuration.setAllowedMethods(Arrays.asList("GET", "POST","PUT","DELETE"));
-        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -78,8 +77,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
-        http.cors().configurationSource(corsConfigurationSource());
-        http.csrf()
+
+        http.cors().
+                and().csrf()
                 .disable();
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()
