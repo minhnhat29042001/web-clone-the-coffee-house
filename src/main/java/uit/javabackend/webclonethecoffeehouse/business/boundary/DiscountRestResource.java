@@ -23,8 +23,7 @@ public class DiscountRestResource {
         this.services = services;
     }
 
-    @TCHOperation(name = "GetAllDiscount")
-    @GetMapping("/get-all")
+    @GetMapping("common/get-all")
     public Object findAll() {
         return ResponseUtil.get(services.findAllDto(DiscountDTO.class), HttpStatus.OK);
     }
