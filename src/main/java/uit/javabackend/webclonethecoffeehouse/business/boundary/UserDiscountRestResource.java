@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/UserDiscountManagement")
-@CrossOrigin(origins = "*", value = "localhost:8080", allowCredentials = "true")
 public class UserDiscountRestResource {
     private final UserDiscountService services;
 

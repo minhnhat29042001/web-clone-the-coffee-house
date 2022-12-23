@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
 @RestController
-@CrossOrigin(origins = "*", value = "localhost:8080", allowCredentials = "true")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/Files")
 public class FileRestResource {
     private final FileService fileService;

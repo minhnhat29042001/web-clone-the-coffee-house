@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*", value = "localhost:8080", allowCredentials = "true")
 public class AuthRestResource {
     private final AuthService authService;
 

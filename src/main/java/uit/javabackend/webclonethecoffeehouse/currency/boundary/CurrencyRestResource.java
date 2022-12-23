@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/CurrencyMangement")
-@CrossOrigin(origins = "*", value = "localhost:8080", allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class CurrencyRestResource {
 
     private final CurrencyService currencyService;
