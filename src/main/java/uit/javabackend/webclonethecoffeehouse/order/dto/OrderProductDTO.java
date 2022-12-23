@@ -18,6 +18,7 @@ public class OrderProductDTO {
     private String size;
     private List<String> topping;
     private int totalPrice;
+    private int priceTopping;
     private int quantity;
 
 }

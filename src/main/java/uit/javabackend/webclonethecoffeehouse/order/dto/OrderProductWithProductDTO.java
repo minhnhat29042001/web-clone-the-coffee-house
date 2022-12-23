@@ -16,6 +16,7 @@ public class OrderProductWithProductDTO {
     private String note;
     private String size;
     private List<String> topping;
+    private int priceTopping;
     private int totalPrice;
     private int quantity;
     private ProductDTO product;
