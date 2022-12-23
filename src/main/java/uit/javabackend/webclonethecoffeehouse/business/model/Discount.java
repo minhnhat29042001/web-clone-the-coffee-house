@@ -66,6 +66,9 @@ public class Discount extends BaseEntity {
     @Range(min = 1, message= "Discount amount must have lowest range which is {min}")
     private Integer discountAmount;
 
+    @Column(name = BusinessEntity.Discount.MINIMUM_PRICE_ON_ORDER)
+    private Integer minimumPriceOnOrder;
+
 
     //OneToMany
     //relationship - bidirectional
