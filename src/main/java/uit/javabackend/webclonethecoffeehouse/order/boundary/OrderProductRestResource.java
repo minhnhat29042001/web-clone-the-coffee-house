@@ -13,9 +13,10 @@ import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperatio
 import java.util.List;
 import java.util.UUID;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/v1/order-product")
-@CrossOrigin(origins = "*")
 public class OrderProductRestResource {
 
     private final OrderProductService service;

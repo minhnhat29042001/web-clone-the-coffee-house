@@ -12,9 +12,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/CurrencyMangement")
-@CrossOrigin(origins = "*")
+
 public class CurrencyRestResource {
 
     private final CurrencyService currencyService;
