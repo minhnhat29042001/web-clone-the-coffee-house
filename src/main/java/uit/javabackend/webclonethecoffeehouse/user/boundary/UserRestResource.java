@@ -13,9 +13,10 @@ import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/UsersManagement")
-@CrossOrigin(origins = "*")
+
 public class UserRestResource {
     private final UserService userService;
 

@@ -28,9 +28,10 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/v1/payment")
-@CrossOrigin(origins = "*")
+
 public class VnpayPaymentRestResource {
 
     private final OrderService orderService;

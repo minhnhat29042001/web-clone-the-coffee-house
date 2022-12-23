@@ -13,9 +13,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/ProductGroupManagement")
-@CrossOrigin(origins = "*")
+
 public class ProductGroupRestResource {
     private final ProductGroupService productGroupService;
 

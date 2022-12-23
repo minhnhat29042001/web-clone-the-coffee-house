@@ -12,9 +12,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/OperationsManagement")
-@CrossOrigin(origins = "*")
+
 public class OperationRestResource {
     private final OperationService operationService;
 

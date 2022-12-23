@@ -13,9 +13,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/UserGroupsManagement")
-@CrossOrigin(origins = "*")
+
 public class UserGroupRestResource {
     private final UserGroupService service;
 

@@ -13,9 +13,10 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/RolesManagement")
-@CrossOrigin(origins = "*")
+
 public class RoleRestResource {
     private final RoleService service;
 
