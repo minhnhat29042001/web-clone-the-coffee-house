@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/OperationsManagement")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", value = "localhost:8080", allowCredentials = "true")
 public class OperationRestResource {
     private final OperationService operationService;
 
