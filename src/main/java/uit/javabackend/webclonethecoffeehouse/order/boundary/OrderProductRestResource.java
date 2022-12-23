@@ -31,25 +31,25 @@ public class OrderProductRestResource {
         return ResponseUtil.get(service.findAllDto(OrderProductDTO.class), HttpStatus.OK);
     }
 
-//    @GetMapping("/{orderproduct-id}/GetOrderProductWithOrder")
-//    public Object findOrderProductWithOrderDTO(@PathVariable("orderproduct-id") UUID orderProductID){
-//        return ResponseUtil.get(service.getOrderProductWithOrderDTO(orderProductID),HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/GetAllOrderProductsWithOrder")
-//    public Object findAllOrderProductWithOrderDTO(){
-//        return ResponseUtil.get(service.getAllOrderProductWithOrderDTO(),HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{orderproduct-id}/GetOrderProductWithProduct")
-//    public Object findOrderProductWithProductDTO(@PathVariable ("orderproduct-id") UUID orderProductID){
-//        return ResponseUtil.get(service.getOrderProductWithProductDTO(orderProductID),HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/GetAllOrderProductsWithProduct")
-//    public Object findAllProductWithProductGroupDTO(){
-//        return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
-//    }
+    @GetMapping("/{orderproduct-id}/GetOrderProductWithOrder")
+    public Object findOrderProductWithOrderDTO(@PathVariable("orderproduct-id") UUID orderProductID){
+        return ResponseUtil.get(service.getOrderProductWithOrderDTO(orderProductID),HttpStatus.OK);
+    }
+
+    @GetMapping("/GetAllOrderProductsWithOrder")
+    public Object findAllOrderProductWithOrderDTO(){
+        return ResponseUtil.get(service.getAllOrderProductWithOrderDTO(),HttpStatus.OK);
+    }
+
+    @GetMapping("/{orderproduct-id}/GetOrderProductWithProduct")
+    public Object findOrderProductWithProductDTO(@PathVariable ("orderproduct-id") UUID orderProductID){
+        return ResponseUtil.get(service.getOrderProductWithProductDTO(orderProductID),HttpStatus.OK);
+    }
+
+    @GetMapping("/GetAllOrderProductsWithProduct")
+    public Object findAllProductWithProductGroupDTO(){
+        return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
+    }
 
     @TCHOperation(name = "SaveOrderProductToOrderId")
     @PostMapping(path = "/add-orderproducts/{order-id}")
@@ -75,7 +75,7 @@ public class OrderProductRestResource {
     @Operation(summary = "get orderProduct by Id")
     @GetMapping(path = "{orderproduct-id}")
     public Object findOrderProductById(@PathVariable("orderproduct-id") UUID orderProductId) {
-        return ResponseUtil.get(service.findById(orderProductId), HttpStatus.CREATED);
+        return ResponseUtil.get(service.findOrderProductById(orderProductId), HttpStatus.CREATED);
     }
 
     @TCHOperation(name = "UpdateOrderProduct")
