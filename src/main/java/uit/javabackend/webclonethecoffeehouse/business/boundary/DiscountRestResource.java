@@ -3,6 +3,7 @@ package uit.javabackend.webclonethecoffeehouse.business.boundary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountCheckDTO;
 import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountDTO;
 import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
 import uit.javabackend.webclonethecoffeehouse.business.service.DiscountService;
@@ -73,8 +74,8 @@ public class DiscountRestResource {
     }
 
     @GetMapping ("/check-coupon")
-    public ResponseEntity<?> checkCoupon(@RequestParam("code") String code) {
-        return ResponseUtil.get(services.checkCoupon(code), HttpStatus.OK);
+    public ResponseEntity<?> checkCoupon(@RequestBody DiscountCheckDTO discountCheckDTO) {
+        return ResponseUtil.get(services.checkCoupon(discountCheckDTO.getCode(),discountCheckDTO.getTotalPriceOfOrder()), HttpStatus.OK);
     }
 
 

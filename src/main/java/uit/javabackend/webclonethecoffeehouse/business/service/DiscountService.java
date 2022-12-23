@@ -9,6 +9,7 @@ import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountWithUserDisco
 import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
 import uit.javabackend.webclonethecoffeehouse.business.model.UserDiscount;
 import uit.javabackend.webclonethecoffeehouse.business.repository.DiscountRepository;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupWithProductsDTO;
@@ -31,7 +32,7 @@ public interface DiscountService extends GenericService<Discount, DiscountDTO, U
     DiscountWithUserDiscountDTO getDiscountWithUserDiscountDTO (UUID discountId);
     List<DiscountWithUserDiscountDTO>getAllDiscountWithUserDiscountDTO ();
 
-    DiscountDTO checkCoupon(String codeDiscount);
+    DiscountDTO checkCoupon(String codeDiscount,int totalPriceOfOrder);
 
 }
 
@@ -42,7 +43,7 @@ class DiscountServiceImp implements DiscountService {
     private final DiscountRepository repository;
     private final TCHMapper mapper;
     private final UserDiscountService userDiscountService;
-    private final ValidationException discountIsNotExisted = new ValidationException("Discount is not existed.");
+    private final TCHBusinessException discountIsNotExisted = new TCHBusinessException("Discount is not existed.");
 
     @Override
     public JpaRepository<Discount, UUID> getRepository() {
@@ -86,6 +87,8 @@ class DiscountServiceImp implements DiscountService {
         curDiscount.setEffectiveDay(discountDTO.getEffectiveDay());
         curDiscount.setExpirationDay(discountDTO.getExpirationDay());
         curDiscount.setAmountType(discountDTO.getAmountType());
+        curDiscount.setDiscountAmount(discountDTO.getDiscountAmount());
+        curDiscount.setMinimumPriceOnOrder(discountDTO.getMinimumPriceOnOrder());
 
         return save(curDiscount, Discount.class, DiscountDTO.class);
     }
@@ -132,12 +135,14 @@ class DiscountServiceImp implements DiscountService {
     }
 
     @Override
-    public DiscountDTO checkCoupon(String codeDiscount) {
-        Optional<Discount> discount = repository.findByCode(codeDiscount);
-        if(discount.isEmpty()){
-            throw discountIsNotExisted;
+    public DiscountDTO checkCoupon(String codeDiscount, int totalPriceOfOrder) {
+        Discount discount = repository.findByCode(codeDiscount).orElseThrow(() -> discountIsNotExisted);
+        DiscountDTO discountDTO = getMapper().map(discount,DiscountDTO.class);
+
+        if(discountDTO.getMinimumPriceOnOrder() > totalPriceOfOrder){
+            throw new TCHBusinessException("khong du dieu kien");
         }
-        return getMapper().map(discount,DiscountDTO.class);
+        return discountDTO;
     }
 
 

@@ -33,6 +33,7 @@ public class BusinessEntity {
         public static final String EXPIRATION_DAY = "EXPIRATION_DAY";
         public static final String AMOUNT_TYPE = "AMOUNT_TYPE";
         public static final String DISCOUNT_AMOUNT ="DISCOUNT_AMOUNT";
+        public static final String MINIMUM_PRICE_ON_ORDER ="MINIMUM_PRICE_ON_ORDER";
 
     }
 

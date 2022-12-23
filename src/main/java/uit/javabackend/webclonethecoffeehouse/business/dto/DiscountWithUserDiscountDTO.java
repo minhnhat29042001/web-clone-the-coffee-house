@@ -41,5 +41,7 @@ public class DiscountWithUserDiscountDTO {
     @Enumerated(value = EnumType.STRING)
     private Discount.AmountType amountType;
 
+    private Integer discountAmount;
+    private Integer minimumPriceOnOrder;
     private Set<UserDiscountDTO> userDiscounts;
 }

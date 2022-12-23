@@ -50,6 +50,8 @@ public class DiscountDTO implements Serializable {
     private Discount.AmountType amountType;
 
     private Integer discountAmount;
+    private Integer minimumPriceOnOrder;
+
 
 
 }
