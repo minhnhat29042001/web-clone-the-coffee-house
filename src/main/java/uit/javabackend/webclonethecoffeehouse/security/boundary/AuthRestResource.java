@@ -12,9 +12,10 @@ import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+
 public class AuthRestResource {
     private final AuthService authService;
 
