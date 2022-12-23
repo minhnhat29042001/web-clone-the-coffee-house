@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/ProductGroupManagement")
+@CrossOrigin(origins = "*")
 public class ProductGroupRestResource {
     private final ProductGroupService productGroupService;
 
