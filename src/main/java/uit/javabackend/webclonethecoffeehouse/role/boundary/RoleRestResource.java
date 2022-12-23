@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/RolesManagement")
+@CrossOrigin(origins = "*")
 public class RoleRestResource {
     private final RoleService service;
 

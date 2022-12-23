@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/UsersManagement")
+@CrossOrigin(origins = "*")
 public class UserRestResource {
     private final UserService userService;
 

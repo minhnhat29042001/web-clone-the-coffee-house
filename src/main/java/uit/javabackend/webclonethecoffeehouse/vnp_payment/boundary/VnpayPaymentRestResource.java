@@ -30,6 +30,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/payment")
+@CrossOrigin(origins = "*")
 public class VnpayPaymentRestResource {
 
     private final OrderService orderService;

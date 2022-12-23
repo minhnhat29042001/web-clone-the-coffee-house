@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/UserGroupsManagement")
+@CrossOrigin(origins = "*")
 public class UserGroupRestResource {
     private final UserGroupService service;
 
