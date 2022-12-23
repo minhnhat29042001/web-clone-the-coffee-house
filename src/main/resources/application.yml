@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
   forward-headers-strategy: framework
 spring:
   security:
@@ -42,7 +42,3 @@ springdoc:
   swagger-ui:
     path: swagger-ui.html
     operationsSorter: method
-
-tch:
-  configcros:
-    alloworigin: https://web-clone-the-coffee-house-production.up.railway.app,https://spectacular-clafoutis-af79ec.netlify.app,http://14.187.171.9:8081
