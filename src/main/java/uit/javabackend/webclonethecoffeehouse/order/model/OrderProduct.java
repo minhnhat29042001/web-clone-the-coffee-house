@@ -32,9 +32,6 @@ public class OrderProduct extends BaseEntity {
     @Column(name = OrderProductEntity.OrderProduct.TOPPING) // 3
     private List<String> topping;
 
-    @Column(name = OrderProductEntity.OrderProduct.PRICE_TOPPING)
-    private int priceTopping;
-
     @Column(name = OrderProductEntity.OrderProduct.TOTALPRICE)
     private int totalPrice;
 
