@@ -66,25 +66,13 @@ public class SecurityConfig {
         return authConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://spectacular-clafoutis-af79ec.netlify.app","https://web-clone-the-coffee-house-production.up.railway.app","http://localhost"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH", "PUT", "DELETE", "OPTIONS", "HEAD"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type"));
-        configuration.setExposedHeaders(List.of("X-Get-Header"));
-        configuration.setMaxAge(3600L);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CROSS ORIGIN
-        http.cors(Customizer.withDefaults());
+        http.cors();
         http.csrf().disable();
         // DISABLE SESSION -> STATELESS
         http.sessionManagement()

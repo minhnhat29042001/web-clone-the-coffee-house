@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/discount")
+@CrossOrigin(origins = "*")
 public class DiscountRestResource {
 
     private final DiscountService services;
@@ -28,7 +29,7 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.findAllDto(DiscountDTO.class), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "GetDiscountWithUserDiscount")
+    @TCHOperation(name="GetDiscountWithUserDiscount")
     @GetMapping("/{discount-id}/GetDiscountWithUserDiscount")
     public Object findDiscountWithUserDiscountDTO(@PathVariable("discount-id") UUID discountID) {
         return ResponseUtil.get(services.getDiscountWithUserDiscountDTO(discountID), HttpStatus.OK);
@@ -40,7 +41,7 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.getAllDiscountWithUserDiscountDTO(), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "AddDiscount")
+    @TCHOperation(name ="AddDiscount")
     @PostMapping(path = "/add-discount")
     public Object save(@RequestBody @Valid DiscountDTO discountDTO) {
         return ResponseUtil.get(services.save(discountDTO, Discount.class, DiscountDTO.class), HttpStatus.CREATED);
