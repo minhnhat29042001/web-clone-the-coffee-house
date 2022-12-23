@@ -11,6 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.order.enums.OrderProductTopping;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Setter
 @Getter
@@ -26,8 +27,10 @@ public class OrderProduct extends BaseEntity {
     @Column(name = OrderProductEntity.OrderProduct.SIZE)
     private String size;
 
-    @Column(name = OrderProductEntity.OrderProduct.TOPPING)
-    private String topping;
+    @ElementCollection // 1 (tagerClass = String.class)
+    @CollectionTable(name = "list_topping", joinColumns = @JoinColumn(name = "id")) // 2
+    @Column(name = OrderProductEntity.OrderProduct.TOPPING) // 3
+    private List<String> topping;
 
     @Column(name = OrderProductEntity.OrderProduct.TOTALPRICE)
     private int totalPrice;

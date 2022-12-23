@@ -11,6 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessExcept
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithOrderDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
@@ -19,6 +20,7 @@ import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,13 +33,13 @@ public interface OrderProductService extends GenericService<OrderProduct, OrderP
 
     OrderProductDTO save(OrderProductDTO orderProductDTO);
 
-//    OrderProductWithOrderDTO getOrderProductWithOrderDTO(UUID orderID);
-//
-//    OrderProductWithProductDTO getOrderProductWithProductDTO(UUID orderID);
-//
-//    List<OrderProductWithOrderDTO> getAllOrderProductWithOrderDTO();
-//
-//    List<OrderProductWithProductDTO> getAllOrderProductWithProductDTO();
+    OrderProductWithOrderDTO getOrderProductWithOrderDTO(UUID orderID);
+
+    OrderProductWithProductDTO getOrderProductWithProductDTO(UUID orderID);
+
+    List<OrderProductWithOrderDTO> getAllOrderProductWithOrderDTO();
+
+    List<OrderProductWithProductDTO> getAllOrderProductWithProductDTO();
 
     List<OrderProduct> saveAll(List<OrderProduct> orderProducts);
 
@@ -109,49 +111,49 @@ class OrderProductServiceImp implements OrderProductService {
         return mapper.map(savedOrderProduct, OrderProductDTO.class);
     }
 
-//    @Override
-//    public OrderProductWithOrderDTO getOrderProductWithOrderDTO(UUID orderID) {
-//        OrderProduct orderProduct = repository.findById(orderID).orElseThrow(()->
-//                OrderProductIsNotExisted
-//        );
-//
-//
-//        return mapper.map(orderProduct,OrderProductWithOrderDTO.class);
-//    }
-//
-//    @Override
-//    public OrderProductWithProductDTO getOrderProductWithProductDTO(UUID orderID) {
-//        OrderProduct product = repository.findById(orderID).orElseThrow(()->
-//                OrderProductIsNotExisted
-//        );
-//        return mapper.map(product, OrderProductWithProductDTO.class);
-//    }
+    @Override
+    public OrderProductWithOrderDTO getOrderProductWithOrderDTO(UUID orderID) {
+        OrderProduct orderProduct = repository.findById(orderID).orElseThrow(()->
+                orderProductIsNotExisted
+        );
 
-//    @Override
-//    public List<OrderProductWithOrderDTO> getAllOrderProductWithOrderDTO() {
-//        List<OrderProduct> orderProductList = repository.findAll();
-//        List<OrderProductWithOrderDTO> orderProductWithOrderDTOList = new ArrayList<>();
-//        orderProductList.forEach(
-//                orderProduct ->{
-//                    OrderProductWithOrderDTO orderProductWithOrderDTO = mapper.map(orderProduct,OrderProductWithOrderDTO.class);
-//                    orderProductWithOrderDTOList.add(orderProductWithOrderDTO);
-//                }
-//        );
-//        return orderProductWithOrderDTOList;
-//    }
-//
-//    @Override
-//    public List<OrderProductWithProductDTO> getAllOrderProductWithProductDTO() {
-//        List<OrderProduct> orderProductList = repository.findAll();
-//        List<OrderProductWithProductDTO> orderProductWithProductDTOList = new ArrayList<>();
-//        orderProductList.forEach(
-//                 orderProduct -> {
-//                    OrderProductWithProductDTO orderProductWithProductDTO = mapper.map(orderProduct,OrderProductWithProductDTO.class);
-//                    orderProductWithProductDTOList.add(orderProductWithProductDTO);
-//                }
-//        );
-//        return orderProductWithProductDTOList;
-//    }
+
+        return mapper.map(orderProduct,OrderProductWithOrderDTO.class);
+    }
+
+    @Override
+    public OrderProductWithProductDTO getOrderProductWithProductDTO(UUID orderID) {
+        OrderProduct product = repository.findById(orderID).orElseThrow(()->
+                orderProductIsNotExisted
+        );
+        return mapper.map(product, OrderProductWithProductDTO.class);
+    }
+
+    @Override
+    public List<OrderProductWithOrderDTO> getAllOrderProductWithOrderDTO() {
+        List<OrderProduct> orderProductList = repository.findAll();
+        List<OrderProductWithOrderDTO> orderProductWithOrderDTOList = new ArrayList<>();
+        orderProductList.forEach(
+                orderProduct ->{
+                    OrderProductWithOrderDTO orderProductWithOrderDTO = mapper.map(orderProduct,OrderProductWithOrderDTO.class);
+                    orderProductWithOrderDTOList.add(orderProductWithOrderDTO);
+                }
+        );
+        return orderProductWithOrderDTOList;
+    }
+
+    @Override
+    public List<OrderProductWithProductDTO> getAllOrderProductWithProductDTO() {
+        List<OrderProduct> orderProductList = repository.findAll();
+        List<OrderProductWithProductDTO> orderProductWithProductDTOList = new ArrayList<>();
+        orderProductList.forEach(
+                 orderProduct -> {
+                    OrderProductWithProductDTO orderProductWithProductDTO = mapper.map(orderProduct,OrderProductWithProductDTO.class);
+                    orderProductWithProductDTOList.add(orderProductWithProductDTO);
+                }
+        );
+        return orderProductWithProductDTOList;
+    }
 
 
     @Override
