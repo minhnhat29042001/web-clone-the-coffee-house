@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/business")
+@CrossOrigin(origins = "*")
 public class BusinessRestResource {
 
     private final BusinessService services;
