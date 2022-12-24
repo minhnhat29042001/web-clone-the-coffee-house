@@ -152,6 +152,7 @@ class AuthServiceImpl implements AuthService {
             mailHelper.setSubject("Reset the clone of the coffee house account password");
 
             javaMailSender.send(mailMessage);
+            user.setPassword(passwordEncoder.encode(newPassword));
             return "Mail Sent Successfully...";
         }
 
@@ -167,7 +168,7 @@ class AuthServiceImpl implements AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new TCHBusinessException("User not found: " + username));
         if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-            user.setPassword(newPassword);
+            user.setPassword(passwordEncoder.encode(newPassword));
         }
         user.setToken(token);
         return mapper.map(user, UserDTOWithToken.class);
