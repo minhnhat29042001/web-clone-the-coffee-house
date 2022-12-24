@@ -1,9 +1,11 @@
 package uit.javabackend.webclonethecoffeehouse.security.boundary;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.service.AuthService;
@@ -11,6 +13,8 @@ import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -49,19 +53,22 @@ public class AuthRestResource {
 
     @Operation(summary = "Forgot password")
     @PostMapping("/forgotPassword")
-    public Object forgotPassword(@RequestParam String email, HttpServletRequest request) {
+    public Object forgotPassword(@RequestParam String email, String feHomePage, HttpServletRequest request) {
         return ResponseUtil.get(
-                authService.forgotPassword(email, request.getScheme() + "://" + request.getHeader("Host"))
+                authService.forgotPassword(email, feHomePage, request.getScheme() + "://" + request.getHeader("Host"))
                 , HttpStatus.OK
         );
     }
     @Operation(summary = "reset password")
     @GetMapping("/resetPassword")
-    public Object resetPassword(@RequestParam String code) {
-        return ResponseUtil.get(
-                authService.resetPassword(code)
-                , HttpStatus.OK
-        );
+    public ResponseEntity<Object> resetPassword(@RequestParam String code, String redirectUri, HttpServletRequest request) throws URISyntaxException {
+        if (authService.resetPassword(code)) {
+            URI uri = new URI(redirectUri);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(uri);
+            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        }
+        else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Operation(summary = "Change password")
