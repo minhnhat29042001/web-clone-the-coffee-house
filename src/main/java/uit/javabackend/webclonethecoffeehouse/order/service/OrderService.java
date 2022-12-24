@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountDTO;
+import uit.javabackend.webclonethecoffeehouse.business.dto.UserDiscountDTO;
 import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
+import uit.javabackend.webclonethecoffeehouse.business.model.UserDiscount;
 import uit.javabackend.webclonethecoffeehouse.business.service.DiscountService;
+import uit.javabackend.webclonethecoffeehouse.business.service.UserDiscountService;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
@@ -23,11 +25,11 @@ import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
-import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,11 +68,10 @@ class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final ProductService productService;
     private final OrderProductService orderProductService;
-
-
+    private final UserDiscountService userDiscountService;
+    private final TCHMapper mapper;
     @Autowired
     private DiscountService discountService;
-    private final TCHMapper mapper;
     @Value("${order.id.existed}")
     private TCHBusinessException orderIsNotExisted;
 
@@ -80,11 +81,12 @@ class OrderServiceImpl implements OrderService {
     @Value("${orderproduct.id.existed}")
     private TCHBusinessException productIsNotExisted;
 
-    OrderServiceImpl(OrderRepository orderRepository, UserService userService, ProductService productService, OrderProductService orderProductService, TCHMapper mapper) {
+    OrderServiceImpl(OrderRepository orderRepository, UserService userService, ProductService productService, OrderProductService orderProductService, UserDiscountService userDiscountService, TCHMapper mapper) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
         this.orderProductService = orderProductService;
+        this.userDiscountService = userDiscountService;
         this.mapper = mapper;
     }
 
@@ -126,15 +128,55 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
+
         Order order = mapper.map(orderDTO, Order.class);
-        if(!orderDTO.getCodeCoupon().isEmpty()){
-            Discount discount = discountService.findByCode(orderDTO.getCodeCoupon())
-                    .orElseThrow(() -> new TCHBusinessException("code is not existed!"));
-            order.setDiscount(discount);
-        }
+
+        // luu userid vao order
         String usernameprincipal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findUserByUsername(usernameprincipal);
         order.setUser(user);
+
+        //kiem tra co coupon tren order khong
+        if (!orderDTO.getCodeCoupon().isEmpty()) {
+            Discount discount = discountService.findByCode(orderDTO.getCodeCoupon())
+                    .orElseThrow(() -> new TCHBusinessException("code is not existed!"));
+
+            //kiem tra so luong cua discount(coupon) con khong
+            if (discount.getNumbersOfUsers() >= 1) {
+
+                //kiem tra discountId voi userId da co trong userdiscount chua
+                Optional<UserDiscount> userDiscount = userDiscountService.findUserDiscountByUserIdAndDiscountId(user.getId(), discount.getId());
+                if (userDiscount.isPresent()) {
+
+                    UserDiscount getUserDiscount = userDiscount.get();
+
+                    if (getUserDiscount.getUsedCount() >= discount.getLimitAmountOnUser()) {
+                        throw new TCHBusinessException(String.format("moi user chi duoc su dung toi da %s %s", discount.getLimitAmountOnUser(),orderDTO.getCodeCoupon()));
+                    } else {
+                        getUserDiscount.setUsedCount(getUserDiscount.getUsedCount() + 1);
+                    }
+
+                }else{
+                    UserDiscountDTO userDiscountDTO = UserDiscountDTO.builder()
+                            .description("userdiscount")
+                            .usedCount(1)
+                            .userId(user.getId())
+                            .discountId(discount.getId())
+                            .build();
+                    userDiscountService.save(userDiscountDTO);
+                }
+
+                //luu discountId vao order
+                order.setDiscount(discount);
+                //cap nhat lai so luong cho discount
+                discount.setNumbersOfUsers(discount.getNumbersOfUsers() - 1);
+                discountService.save(discount);
+
+            } else {
+                throw new TCHBusinessException("da het coupon");
+            }
+        }
+
 
         Order savedOrder = orderRepository.save(order);
         return mapper.map(savedOrder, OrderDTO.class);

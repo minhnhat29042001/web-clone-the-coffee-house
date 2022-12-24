@@ -29,14 +29,21 @@ import java.util.UUID;
 public interface DiscountService extends GenericService<Discount, DiscountDTO, UUID> {
 
     DiscountDTO save(DiscountDTO discountDTO);
-    void deleteByCode(String code);
-    DiscountDTO update(DiscountDTO discountDTO);
-    DiscountWithUserDiscountDTO addUserDiscount(List<UUID> ids, UUID discountID);
-    DiscountWithUserDiscountDTO removeUserDiscount(List<UUID> ids, UUID discountId);
-    DiscountWithUserDiscountDTO getDiscountWithUserDiscountDTO (UUID discountId);
-    List<DiscountWithUserDiscountDTO>getAllDiscountWithUserDiscountDTO ();
 
-    DiscountDTO checkCoupon(String codeDiscount,int totalPriceOfOrder);
+    void deleteByCode(String code);
+
+    DiscountDTO update(DiscountDTO discountDTO);
+
+    DiscountWithUserDiscountDTO addUserDiscount(List<UUID> ids, UUID discountID);
+
+    DiscountWithUserDiscountDTO removeUserDiscount(List<UUID> ids, UUID discountId);
+
+    DiscountWithUserDiscountDTO getDiscountWithUserDiscountDTO(UUID discountId);
+
+    List<DiscountWithUserDiscountDTO> getAllDiscountWithUserDiscountDTO();
+
+    DiscountDTO checkCoupon(String codeDiscount, int totalPriceOfOrder);
+
     Optional<Discount> findByCode(String name);
 
 }
@@ -51,6 +58,13 @@ class DiscountServiceImp implements DiscountService {
     private final UserDiscountService userDiscountService;
     private final TCHBusinessException discountIsNotExisted = new TCHBusinessException("Discount is not existed.");
 
+    DiscountServiceImp(DiscountRepository repository, TCHMapper mapper, UserService userService, UserDiscountService userDiscountService) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.userService = userService;
+        this.userDiscountService = userDiscountService;
+    }
+
     @Override
     public JpaRepository<Discount, UUID> getRepository() {
         return repository;
@@ -61,18 +75,11 @@ class DiscountServiceImp implements DiscountService {
         return mapper;
     }
 
-    DiscountServiceImp(DiscountRepository repository, TCHMapper mapper, UserService userService, UserDiscountService userDiscountService) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.userService = userService;
-        this.userDiscountService = userDiscountService;
-    }
-
     @Override
     public DiscountDTO save(DiscountDTO discountDTO) {
-        Discount discount = mapper.map(discountDTO,Discount.class);
+        Discount discount = mapper.map(discountDTO, Discount.class);
         Discount savedDiscount = repository.save(discount);
-        return mapper.map(savedDiscount,DiscountDTO.class);
+        return mapper.map(savedDiscount, DiscountDTO.class);
     }
 
     @Override
@@ -102,27 +109,27 @@ class DiscountServiceImp implements DiscountService {
 
     @Override
     public DiscountWithUserDiscountDTO addUserDiscount(List<UUID> ids, UUID discountId) {
-        Discount discount = repository.findById(discountId).orElseThrow(()->
+        Discount discount = repository.findById(discountId).orElseThrow(() ->
                 discountIsNotExisted
         );
         List<UserDiscount> userDiscountList = userDiscountService.findByIds(ids);
         userDiscountList.forEach(discount::addUserDiscount);
-        return mapper.map(discount,DiscountWithUserDiscountDTO.class);
+        return mapper.map(discount, DiscountWithUserDiscountDTO.class);
     }
 
     @Override
     public DiscountWithUserDiscountDTO removeUserDiscount(List<UUID> ids, UUID discountId) {
-        Discount discount = repository.findById(discountId).orElseThrow(()->
+        Discount discount = repository.findById(discountId).orElseThrow(() ->
                 discountIsNotExisted
         );
         List<UserDiscount> userDiscountList = userDiscountService.findByIds(ids);
         userDiscountList.forEach(discount::removeUserDiscount);
-        return mapper.map(discount,DiscountWithUserDiscountDTO.class);
+        return mapper.map(discount, DiscountWithUserDiscountDTO.class);
     }
 
     @Override
     public DiscountWithUserDiscountDTO getDiscountWithUserDiscountDTO(UUID discountId) {
-        Discount discount = repository.findById(discountId).orElseThrow(()->
+        Discount discount = repository.findById(discountId).orElseThrow(() ->
                 discountIsNotExisted
         );
         return mapper.map(discount, DiscountWithUserDiscountDTO.class);
@@ -133,8 +140,8 @@ class DiscountServiceImp implements DiscountService {
         List<Discount> discountList = repository.findAll();
         List<DiscountWithUserDiscountDTO> discountWithUserDiscountDTOList = new ArrayList<>();
         discountList.forEach(
-                discount ->{
-                    DiscountWithUserDiscountDTO discountWithUserDiscountDTO = mapper.map(discount,DiscountWithUserDiscountDTO.class);
+                discount -> {
+                    DiscountWithUserDiscountDTO discountWithUserDiscountDTO = mapper.map(discount, DiscountWithUserDiscountDTO.class);
                     discountWithUserDiscountDTOList.add(discountWithUserDiscountDTO);
                 }
         );
@@ -151,40 +158,40 @@ class DiscountServiceImp implements DiscountService {
         boolean checkEf = now.isAfter(effectiveDay);
         boolean checkEx = now.isBefore(expirationDay);
 
-        if(!checkEf ){
+        if (!checkEf) {
             throw new TCHBusinessException("chua toi thoi gian su dung");
         }
-        if(!checkEx){
+        if (!checkEx) {
             throw new TCHBusinessException("da het han su dung");
         }
 
-        if(discount.getNumbersOfUsers() == 0){
+        if (discount.getNumbersOfUsers() == 0) {
             throw new TCHBusinessException("da het so luong su dung");
         }
 
-        if(discount.getMinimumPriceOnOrder() > totalPriceOfOrder){
+        if (discount.getMinimumPriceOnOrder() > totalPriceOfOrder) {
             throw new TCHBusinessException("khong du dieu kien gia don hang");
         }
 
-       String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO user = userService.getUserByUsername(principal);
 
 
-        Optional<UserDiscount> userDiscount = userDiscountService.findUserDiscountByUserIdAndDiscountId(user.getId(),discount.getId());
-        if(userDiscount.isPresent()){
-            UserDiscountDTO userDiscountDTO = mapper.map(userDiscount.get(),UserDiscountDTO.class);
-            if(userDiscountDTO.getUsedCount() == 1){
-                throw new TCHBusinessException("user da su dung discount nay roi");
+        Optional<UserDiscount> userDiscount = userDiscountService.findUserDiscountByUserIdAndDiscountId(user.getId(), discount.getId());
+        if (userDiscount.isPresent()) {
+            UserDiscountDTO userDiscountDTO = mapper.map(userDiscount.get(), UserDiscountDTO.class);
+            if (userDiscountDTO.getUsedCount() >= discount.getLimitAmountOnUser()) {
+                throw new TCHBusinessException(String.format("moi user chi duoc su dung toi da %s %s", discount.getLimitAmountOnUser(),codeDiscount));
             }
         }
 
-        DiscountDTO discountDTO = getMapper().map(discount,DiscountDTO.class);
+        DiscountDTO discountDTO = getMapper().map(discount, DiscountDTO.class);
         return discountDTO;
     }
 
     @Override
     public Optional<Discount> findByCode(String name) {
-       return repository.findByCode(name);
+        return repository.findByCode(name);
     }
 
 
