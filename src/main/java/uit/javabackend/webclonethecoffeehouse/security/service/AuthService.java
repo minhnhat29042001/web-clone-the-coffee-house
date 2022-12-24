@@ -30,8 +30,8 @@ public interface AuthService {
 
     ValidateTokenDTO validateToken(String token);
 
-    String forgotPassword(String email, String host);
-    String resetPassword(String code);
+    String forgotPassword(String email, String feHomePage, String host);
+    boolean resetPassword(String code);
     UserDTOWithToken changePassword(String token, String newPassword,String oldPassword);
 }
 
@@ -99,11 +99,12 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String forgotPassword(String email, String host) {
+    public String forgotPassword(String email, String feHomePage, String host) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
         String code = jwtUtils.generateJwt(email);
         try {
-            String url = host + "/auth/resetPassword?code=" + code;
+            String url = host + "/auth/resetPassword?code=" + code + "&redirectUri=" +feHomePage;
+
             MimeMessage mailMessage =  javaMailSender.createMimeMessage();
             MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
             // Setting up necessary details
@@ -132,7 +133,7 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String resetPassword(String code) {
+    public boolean resetPassword(String code) {
         String email = jwtUtils.getUsername(code);
         User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
         String newPassword = PasswordGenerateUtils.generateCommonLangPassword();
@@ -153,12 +154,12 @@ class AuthServiceImpl implements AuthService {
 
             javaMailSender.send(mailMessage);
             user.setPassword(passwordEncoder.encode(newPassword));
-            return "Mail Sent Successfully...";
+            return true;
         }
 
         // Catch block to handle the exceptions
         catch (Exception e) {
-            return "Error while Sending Mail:\n" + e.getMessage();
+            return false;
         }
     }
 
