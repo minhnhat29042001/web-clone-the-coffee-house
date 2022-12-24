@@ -2,20 +2,24 @@ package uit.javabackend.webclonethecoffeehouse.business.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountDTO;
 import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountWithUserDiscountDTO;
+import uit.javabackend.webclonethecoffeehouse.business.dto.UserDiscountDTO;
 import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
 import uit.javabackend.webclonethecoffeehouse.business.model.UserDiscount;
 import uit.javabackend.webclonethecoffeehouse.business.repository.DiscountRepository;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupWithProductsDTO;
-import uit.javabackend.webclonethecoffeehouse.product.model.ProductGroup;
+import uit.javabackend.webclonethecoffeehouse.security.oauth.user.UserPrinciple;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
+import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
-import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +37,7 @@ public interface DiscountService extends GenericService<Discount, DiscountDTO, U
     List<DiscountWithUserDiscountDTO>getAllDiscountWithUserDiscountDTO ();
 
     DiscountDTO checkCoupon(String codeDiscount,int totalPriceOfOrder);
+    Optional<Discount> findByCode(String name);
 
 }
 
@@ -42,6 +47,7 @@ class DiscountServiceImp implements DiscountService {
 
     private final DiscountRepository repository;
     private final TCHMapper mapper;
+    private final UserService userService;
     private final UserDiscountService userDiscountService;
     private final TCHBusinessException discountIsNotExisted = new TCHBusinessException("Discount is not existed.");
 
@@ -55,9 +61,10 @@ class DiscountServiceImp implements DiscountService {
         return mapper;
     }
 
-    DiscountServiceImp(DiscountRepository repository, TCHMapper mapper, UserDiscountService userDiscountService) {
+    DiscountServiceImp(DiscountRepository repository, TCHMapper mapper, UserService userService, UserDiscountService userDiscountService) {
         this.repository = repository;
         this.mapper = mapper;
+        this.userService = userService;
         this.userDiscountService = userDiscountService;
     }
 
@@ -137,12 +144,47 @@ class DiscountServiceImp implements DiscountService {
     @Override
     public DiscountDTO checkCoupon(String codeDiscount, int totalPriceOfOrder) {
         Discount discount = repository.findByCode(codeDiscount).orElseThrow(() -> discountIsNotExisted);
-        DiscountDTO discountDTO = getMapper().map(discount,DiscountDTO.class);
 
-        if(discountDTO.getMinimumPriceOnOrder() > totalPriceOfOrder){
-            throw new TCHBusinessException("khong du dieu kien");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime effectiveDay = discount.getEffectiveDay();
+        LocalDateTime expirationDay = discount.getExpirationDay();
+        boolean checkEf = now.isAfter(effectiveDay);
+        boolean checkEx = now.isBefore(expirationDay);
+
+        if(!checkEf ){
+            throw new TCHBusinessException("chua toi thoi gian su dung");
         }
+        if(!checkEx){
+            throw new TCHBusinessException("da het han su dung");
+        }
+
+        if(discount.getNumbersOfUsers() == 0){
+            throw new TCHBusinessException("da het so luong su dung");
+        }
+
+        if(discount.getMinimumPriceOnOrder() > totalPriceOfOrder){
+            throw new TCHBusinessException("khong du dieu kien gia don hang");
+        }
+
+       String principal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDTO user = userService.getUserByUsername(principal);
+
+
+        Optional<UserDiscount> userDiscount = userDiscountService.findUserDiscountByUserIdAndDiscountId(user.getId(),discount.getId());
+        if(userDiscount.isPresent()){
+            UserDiscountDTO userDiscountDTO = mapper.map(userDiscount.get(),UserDiscountDTO.class);
+            if(userDiscountDTO.getUsedCount() == 1){
+                throw new TCHBusinessException("user da su dung discount nay roi");
+            }
+        }
+
+        DiscountDTO discountDTO = getMapper().map(discount,DiscountDTO.class);
         return discountDTO;
+    }
+
+    @Override
+    public Optional<Discount> findByCode(String name) {
+       return repository.findByCode(name);
     }
 
 

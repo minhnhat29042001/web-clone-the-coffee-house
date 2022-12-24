@@ -67,10 +67,10 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "SaveOrder")
-    @Operation(summary = "")
-    @PostMapping("/create-order")
-    public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto) {
-        return ResponseUtil.get(orderService.saveOrder(orderDto), HttpStatus.OK);
-    }
+//    @TCHOperation(name = "SaveOrder")
+//    @Operation(summary = "")
+//    @PostMapping("/create-order")
+//    public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto) {
+//        return ResponseUtil.get(orderService.saveOrder(orderDto), HttpStatus.OK);
+//    }
 }
