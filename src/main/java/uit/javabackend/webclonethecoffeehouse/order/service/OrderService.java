@@ -1,11 +1,16 @@
 package uit.javabackend.webclonethecoffeehouse.order.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uit.javabackend.webclonethecoffeehouse.business.dto.DiscountDTO;
+import uit.javabackend.webclonethecoffeehouse.business.model.Discount;
+import uit.javabackend.webclonethecoffeehouse.business.service.DiscountService;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
@@ -18,6 +23,7 @@ import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
@@ -37,7 +43,7 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO);
 
 
-    OrderWithProductsDTO saveOrder(OrderWithProductsDTO orderDto);
+    Object saveOrder(OrderWithProductsDTO orderDto);
 
     OrderDTO findOrderByOrderId(UUID id);
 
@@ -60,6 +66,10 @@ class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final ProductService productService;
     private final OrderProductService orderProductService;
+
+
+    @Autowired
+    private DiscountService discountService;
     private final TCHMapper mapper;
     @Value("${order.id.existed}")
     private TCHBusinessException orderIsNotExisted;
@@ -117,6 +127,15 @@ class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
         Order order = mapper.map(orderDTO, Order.class);
+        if(!orderDTO.getCodeCoupon().isEmpty()){
+            Discount discount = discountService.findByCode(orderDTO.getCodeCoupon())
+                    .orElseThrow(() -> new TCHBusinessException("code is not existed!"));
+            order.setDiscount(discount);
+        }
+        String usernameprincipal = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findUserByUsername(usernameprincipal);
+        order.setUser(user);
+
         Order savedOrder = orderRepository.save(order);
         return mapper.map(savedOrder, OrderDTO.class);
     }
@@ -161,7 +180,7 @@ class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderWithProductsDTO saveOrder(OrderWithProductsDTO orderDto) {
+    public Object saveOrder(OrderWithProductsDTO orderDto) {
 
         //map to Order
         Order orderConvert = mapper.map(orderDto, Order.class);
@@ -174,10 +193,6 @@ class OrderServiceImpl implements OrderService {
                 .map(model -> mapper.map(model, OrderProduct.class))
                 .collect(Collectors.toList());
 
-
-//        Order curOrder = orderRepository.findById(savedOrder.getId()).orElseThrow(
-//                () -> orderIsNotExisted
-//        );
         // add list id orderproduct to Order
         orderProducts.forEach(savedOrder::addOrderProduct);
         // save list<OrderProduct> to db
@@ -202,7 +217,9 @@ class OrderServiceImpl implements OrderService {
         // response
         OrderWithProductsDTO orderDtoRes = mapper.map(savedOrder, OrderWithProductsDTO.class);
         orderDtoRes.setOrderProducts(orderProductWithProductDTOs);
-        return orderDtoRes;
+
+
+        return savedOrder;
     }
 
 

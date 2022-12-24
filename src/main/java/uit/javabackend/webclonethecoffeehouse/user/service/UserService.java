@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.file.FileService;
@@ -35,7 +36,10 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     UserDTO getUserByUsername(String username);
 
+    User findUserByUsername(String username);
+
     UserDTOWithToken saveUserAvatar(String username, MultipartFile file, String baseUrl);
+
 }
 
 @Service
@@ -109,6 +113,12 @@ class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserByUsername(String username) {
         return tchMapper.map(userRepository.findByUsername(username), UserDTO.class);
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+
+        return userRepository.findByUsername(username).orElseThrow(() -> new TCHBusinessException("username is not existed"));
     }
 
     @Override

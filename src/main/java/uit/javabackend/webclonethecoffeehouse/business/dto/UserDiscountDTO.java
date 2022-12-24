@@ -19,8 +19,9 @@ public class UserDiscountDTO implements Serializable {
     @Length(min = 5, max = 50, message = "")
     @UniqueUserDiscountDescription
     private String description;
-    private String imageUrl;
 
     private Integer usedCount;
+    private UUID userId;
+    private UUID discountId;
 
 }

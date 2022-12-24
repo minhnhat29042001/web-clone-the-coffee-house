@@ -20,6 +20,7 @@ import uit.javabackend.webclonethecoffeehouse.product.model.ProductGroup;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -32,6 +33,10 @@ public interface UserDiscountService extends GenericService<UserDiscount, UserDi
     UserDiscount update(UserDiscountDTO userDiscountDTO);
     UserDiscountWithDiscountDTO getUserDiscountWithDiscountDTO (UUID userDiscountId);
     List<UserDiscountWithDiscountDTO> getAllUserDiscountWithDiscountDTO ();
+
+    Optional<UserDiscount> findUserDiscountByUserIdAndDiscountId(UUID userId, UUID discountId);
+
+
 
 }
 
@@ -99,5 +104,10 @@ class UserDiscountServiceImp implements UserDiscountService {
                 }
         );
         return userDiscountWithDiscountDTOList;
+    }
+
+    @Override
+    public Optional<UserDiscount> findUserDiscountByUserIdAndDiscountId(UUID userId, UUID discountId) {
+        return repository.findByUserIdAndDiscountId(userId,discountId);
     }
 }
