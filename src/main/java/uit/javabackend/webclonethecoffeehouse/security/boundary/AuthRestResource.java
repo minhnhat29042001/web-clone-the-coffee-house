@@ -34,7 +34,7 @@ public class AuthRestResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginDTO loginDTO) {
+    public Object login(@RequestBody @Valid LoginDTO loginDTO) {
         return ResponseUtil.get(authService.login(loginDTO), HttpStatus.OK);
     }
 
@@ -48,19 +48,27 @@ public class AuthRestResource {
     }
 
     @Operation(summary = "Forgot password")
-    @PostMapping("/resetPassword")
-    public Object resetPassword(@RequestParam String host, @RequestParam String email) {
+    @PostMapping("/forgotPassword")
+    public Object forgotPassword(@RequestParam String email, HttpServletRequest request) {
         return ResponseUtil.get(
-                authService.resetPassword(host, email)
+                authService.forgotPassword(email, request.getScheme() + "://" + request.getHeader("Host"))
+                , HttpStatus.OK
+        );
+    }
+    @Operation(summary = "reset password")
+    @GetMapping("/resetPassword")
+    public Object resetPassword(@RequestParam String code) {
+        return ResponseUtil.get(
+                authService.resetPassword(code)
                 , HttpStatus.OK
         );
     }
 
     @Operation(summary = "Change password")
     @PostMapping("/changePassword")
-    public Object changePassword(@RequestParam String token, @RequestParam String password) {
+    public Object changePassword(@RequestParam String token, @RequestParam String oldPassword, @RequestParam String newPassword) {
         return ResponseUtil.get(
-                authService.changePassword(token, password)
+                authService.changePassword(token, newPassword, oldPassword)
                 , HttpStatus.OK
         );
     }

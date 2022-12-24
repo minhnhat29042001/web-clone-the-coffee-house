@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
+import uit.javabackend.webclonethecoffeehouse.common.util.PasswordGenerateUtils;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
@@ -29,9 +30,9 @@ public interface AuthService {
 
     ValidateTokenDTO validateToken(String token);
 
-    String resetPassword(String host, String email);
-
-    UserDTOWithToken changePassword(String token, String password);
+    String forgotPassword(String email, String host);
+    String resetPassword(String code);
+    UserDTOWithToken changePassword(String token, String newPassword,String oldPassword);
 }
 
 @Service
@@ -98,18 +99,18 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String resetPassword(String host, String email) {
+    public String forgotPassword(String email, String host) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
-        String token = jwtUtils.generateJwt(user.getUsername());
+        String code = jwtUtils.generateJwt(email);
         try {
-            String url = host + "/auth/resetPassword?token=" + token;
+            String url = host + "/auth/resetPassword?code=" + code;
             MimeMessage mailMessage =  javaMailSender.createMimeMessage();
             MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
             // Setting up necessary details
             mailMessage.setContent(
                     "<p>Dear " + user.getName() + ",</p>" +
                     "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
-                    "<a href=" + url + ">" +
+                    "<a href=\"" + url + "\">" +
                         "<button style=\"background-color: #49CC90; border-color:#49CC90; color: white;\" >Click me to change password</button>" +
                     "</a>" +
                     "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
@@ -128,14 +129,46 @@ class AuthServiceImpl implements AuthService {
         catch (Exception e) {
             return "Error while Sending Mail:\n" + e.getMessage();
         }
-        }
+    }
 
     @Override
-    public UserDTOWithToken changePassword(String token, String password) {
+    public String resetPassword(String code) {
+        String email = jwtUtils.getUsername(code);
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
+        String newPassword = PasswordGenerateUtils.generateCommonLangPassword();
+        try {
+            MimeMessage mailMessage =  javaMailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
+            // Setting up necessary details
+            mailMessage.setContent(
+                    "<p>Dear " + user.getName() + ",</p>" +
+                            "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
+                            "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
+                            "<p>Your new password is: " +newPassword+ "</p>" +
+                            "<p>Thank you !</p>"
+                    ,"text/html"
+            );
+            mailHelper.setTo(user.getEmail());
+            mailHelper.setSubject("Reset the clone of the coffee house account password");
+
+            javaMailSender.send(mailMessage);
+            return "Mail Sent Successfully...";
+        }
+
+        // Catch block to handle the exceptions
+        catch (Exception e) {
+            return "Error while Sending Mail:\n" + e.getMessage();
+        }
+    }
+
+    @Override
+    public UserDTOWithToken changePassword(String token, String newPassword, String oldPassword) {
         String username = jwtUtils.getUsername(token);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new TCHBusinessException("User not found: " + username));
-        user.setPassword(password);
+        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(newPassword);
+        }
         user.setToken(token);
         return mapper.map(user, UserDTOWithToken.class);
     }
