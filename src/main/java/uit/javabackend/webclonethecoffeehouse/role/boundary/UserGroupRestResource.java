@@ -84,7 +84,7 @@ public class UserGroupRestResource {
 
     @TCHOperation(name = "UpdateUserGroup")
     @PutMapping("/UpdateUserGroup")
-    public Object update(@RequestBody UserGroupDTO userGroupDTO) {
+    public Object update(@RequestBody @Valid UserGroupDTO userGroupDTO) {
         return ResponseUtil.get(service.update(userGroupDTO), HttpStatus.OK);
     }
 

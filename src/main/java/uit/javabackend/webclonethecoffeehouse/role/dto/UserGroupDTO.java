@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserGroupDTO implements Serializable {
     private UUID id;
-    @Length(min = 5, max = 100, message = "{usergroup.name.size}")
+    @Length(min = 5, max = 100, message = "usergroup name must be between {min} and {max}")
     @UniqueUserGroupName
     private String name;
     @Length(min = 3, max = 10, message = "{usergroup.code.size}")
