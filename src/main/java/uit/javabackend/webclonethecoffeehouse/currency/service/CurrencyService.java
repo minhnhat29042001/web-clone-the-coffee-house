@@ -65,7 +65,7 @@ class CurrencyServiceImpl implements  CurrencyService{
 
     @Override
     public Currency update(CurrencyDTO currency) {
-        Currency curCurrency = repository.findByName(currency.getName())
+        Currency curCurrency = repository.findById(currency.getId())
                 .orElseThrow(() -> new RuntimeException("Currency is not existed."));
         curCurrency.setName(currency.getName());
         return repository.save(curCurrency);
