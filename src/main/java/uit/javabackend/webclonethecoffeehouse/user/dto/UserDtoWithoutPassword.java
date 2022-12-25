@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.user.dto;
 
 import lombok.*;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
+import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.CorrectGender;
 import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.UniqueEmail;
 import uit.javabackend.webclonethecoffeehouse.user.validation.annotation.UniqueUsername;
 
@@ -25,5 +26,6 @@ public class UserDtoWithoutPassword {
     private String birth;
     private String avatar;
     private String phone;
-    private User.Gender gender;
+    @CorrectGender(message = "{user.gender.incorrect}")
+    private String gender;
 }
