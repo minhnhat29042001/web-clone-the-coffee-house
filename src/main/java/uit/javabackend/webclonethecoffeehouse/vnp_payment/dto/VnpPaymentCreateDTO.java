@@ -8,6 +8,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class VnpPaymentCreateDTO {
 
     private UUID orderId;

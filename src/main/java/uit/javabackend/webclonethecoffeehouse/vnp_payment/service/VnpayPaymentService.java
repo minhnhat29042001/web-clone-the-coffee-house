@@ -98,11 +98,14 @@ class VnpayPaymentServiceImp implements VnpayPaymentService {
     }
 
     @Override
-    public Object createPayment(VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest request) throws UnsupportedEncodingException {
+    public Object  createPayment(VnpPaymentCreateDTO vnpPaymentCreateDTO, HttpServletRequest request) throws UnsupportedEncodingException {
         String vnp_OrderInfo = vnpPaymentCreateDTO.getDescription();
         String vnp_TxnRef = String.valueOf(vnpPaymentCreateDTO.getOrderId());
         String bank_code = vnpPaymentCreateDTO.getBankcode();
 
+        if(vnpPaymentCreateDTO.getAmount() <= 10000){
+            throw new TCHBusinessException("so tien phai lon hon 10000");
+        }
         int amount = vnpPaymentCreateDTO.getAmount() * 100;
 
         // conver to map
