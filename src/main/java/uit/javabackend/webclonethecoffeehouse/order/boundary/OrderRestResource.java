@@ -10,7 +10,9 @@ import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderService;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -54,12 +56,12 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
 
-    @TCHOperation(name = "SaveOrder")
-    @Operation(summary = "su dung thang nay de tao don hang ")
-    @PostMapping(path = "/save-order")
-    public Object save(@RequestBody @Valid OrderDTO orderDTO) {
-        return ResponseUtil.get(orderService.save(orderDTO), HttpStatus.CREATED);
-    }
+//    @TCHOperation(name = "SaveOrder")
+//    @Operation(summary = "su dung thang nay de tao don hang ")
+//    @PostMapping(path = "/save-order")
+//    public Object save(@RequestBody @Valid OrderDTO orderDTO) {
+//        return ResponseUtil.get(orderService.save(orderDTO), HttpStatus.CREATED);
+//    }
 
     @TCHOperation(name = "UpdateOrder")
     @PutMapping("/update")
@@ -67,10 +69,11 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
     }
 
-//    @TCHOperation(name = "SaveOrder")
-//    @Operation(summary = "")
-//    @PostMapping("/create-order")
-//    public Object saveOrder(@RequestBody OrderWithProductsDTO orderDto) {
-//        return ResponseUtil.get(orderService.saveOrder(orderDto), HttpStatus.OK);
-//    }
+
+    @TCHOperation(name = "tao don hang sau khi user xac nhan")
+    @Operation(summary = "")
+    @PostMapping("/create-order")
+    public Object saveOrder(@RequestBody @Valid OrderWithProductsDTO orderDto, HttpServletRequest req) throws UnsupportedEncodingException {
+        return ResponseUtil.get(orderService.createOrder(orderDto,req), HttpStatus.OK);
+    }
 }

@@ -1,8 +1,8 @@
 package uit.javabackend.webclonethecoffeehouse.order.service;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +27,11 @@ import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.dto.VnpPaymentCreateDTO;
+import uit.javabackend.webclonethecoffeehouse.vnp_payment.service.VnpayPaymentService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +49,7 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     OrderWithVnpayPaymentDTO saveOrderWithVnpayPayment(OrderWithVnpayPaymentDTO orderWithVnpayPaymentDTO);
 
 
-    Object saveOrder(OrderWithProductsDTO orderDto);
+    Object createOrder(OrderWithProductsDTO orderWithProductsDTO, HttpServletRequest request) throws UnsupportedEncodingException;
 
     OrderDTO findOrderByOrderId(UUID id);
 
@@ -70,8 +74,9 @@ class OrderServiceImpl implements OrderService {
     private final OrderProductService orderProductService;
     private final UserDiscountService userDiscountService;
     private final TCHMapper mapper;
-    @Autowired
-    private DiscountService discountService;
+    private final VnpayPaymentService vnpayPaymentService;
+    private final DiscountService discountService;
+
     @Value("${order.id.existed}")
     private TCHBusinessException orderIsNotExisted;
 
@@ -81,13 +86,15 @@ class OrderServiceImpl implements OrderService {
     @Value("${orderproduct.id.existed}")
     private TCHBusinessException productIsNotExisted;
 
-    OrderServiceImpl(OrderRepository orderRepository, UserService userService, ProductService productService, OrderProductService orderProductService, UserDiscountService userDiscountService, TCHMapper mapper) {
+    OrderServiceImpl(OrderRepository orderRepository, UserService userService, ProductService productService, OrderProductService orderProductService, UserDiscountService userDiscountService, TCHMapper mapper, @Lazy VnpayPaymentService vnpayPaymentService, DiscountService discountService) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.productService = productService;
         this.orderProductService = orderProductService;
         this.userDiscountService = userDiscountService;
         this.mapper = mapper;
+        this.vnpayPaymentService = vnpayPaymentService;
+        this.discountService = discountService;
     }
 
 
@@ -189,6 +196,26 @@ class OrderServiceImpl implements OrderService {
         return mapper.map(savedOrder, OrderWithVnpayPaymentDTO.class);
     }
 
+    @Transactional(rollbackFor = {TCHBusinessException.class,UnsupportedEncodingException.class})
+    @Override
+    public Object createOrder(OrderWithProductsDTO orderWithProductsDTO, HttpServletRequest request) throws UnsupportedEncodingException {
+        OrderDTO orderDTO = mapper.map(orderWithProductsDTO,OrderDTO.class);
+        OrderDTO savedOrder = save(orderDTO);
+        List<OrderProductWithProductDTO> orderproducts = orderWithProductsDTO.getOrderProducts();
+
+        orderProductService.saveOrderProductToOrderId(orderproducts,savedOrder.getId());
+
+        VnpPaymentCreateDTO vnpPaymentCreateDTO = VnpPaymentCreateDTO.builder()
+                .orderId(savedOrder.getId())
+                .amount(savedOrder.getTotalPrice())
+                .description("tch")
+                .bankcode(orderWithProductsDTO.getBankcode())
+                .build();
+
+
+        return vnpayPaymentService.createPayment(vnpPaymentCreateDTO,request);
+    }
+
     @Override
     public OrderDTO findOrderByOrderId(UUID id) {
         Order cur = orderRepository.findById(id).orElseThrow(() -> orderIsNotExisted);
@@ -219,50 +246,5 @@ class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
 
     }
-
-
-    @Override
-    public Object saveOrder(OrderWithProductsDTO orderDto) {
-
-        //map to Order
-        Order orderConvert = mapper.map(orderDto, Order.class);
-        // save Order to db
-        Order savedOrder = getRepository().save(orderConvert);
-
-        // map list<OrderProductWithProductDto to List<OrderProduct>
-        List<OrderProduct> orderProducts = orderDto.getOrderProducts()
-                .stream()
-                .map(model -> mapper.map(model, OrderProduct.class))
-                .collect(Collectors.toList());
-
-        // add list id orderproduct to Order
-        orderProducts.forEach(savedOrder::addOrderProduct);
-        // save list<OrderProduct> to db
-
-
-        // add list id orderproduct to product
-        orderProducts.forEach(
-                orderProduct -> {
-                    UUID productId = orderProduct.getProduct().getId();
-                    Product product = productService.findById(productId).orElseThrow(() -> productIsNotExisted);
-                    product.addOrderProduct(orderProduct);
-                });
-
-        List<OrderProduct> savedOrderProducts = orderProductService.saveAll(orderProducts);
-
-
-        // map to response
-        List<OrderProductWithProductDTO> orderProductWithProductDTOs = savedOrderProducts.stream()
-                .map(model -> mapper.map(model, OrderProductWithProductDTO.class))
-                .collect(Collectors.toList());
-
-        // response
-        OrderWithProductsDTO orderDtoRes = mapper.map(savedOrder, OrderWithProductsDTO.class);
-        orderDtoRes.setOrderProducts(orderProductWithProductDTOs);
-
-
-        return savedOrder;
-    }
-
 
 }
