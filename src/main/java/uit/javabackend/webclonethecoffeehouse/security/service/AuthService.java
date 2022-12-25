@@ -32,7 +32,7 @@ public interface AuthService {
 
     String forgotPassword(String email, String feHomePage, String host);
     boolean resetPassword(String code);
-    UserDTOWithToken changePassword(String token, String newPassword,String oldPassword);
+    UserDTOWithToken changePassword(String username, String newPassword, String oldPassword);
 }
 
 @Service
@@ -164,14 +164,12 @@ class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDTOWithToken changePassword(String token, String newPassword, String oldPassword) {
-        String username = jwtUtils.getUsername(token);
+    public UserDTOWithToken changePassword(String username, String newPassword, String oldPassword) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new TCHBusinessException("User not found: " + username));
         if (passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
         }
-        user.setToken(token);
         return mapper.map(user, UserDTOWithToken.class);
     }
 

@@ -72,7 +72,7 @@ class UserServiceImpl implements UserService {
     public void deleteByUserName(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new ValidationException("User is not existed.")
+                        new TCHBusinessException("User is not existed.")
                 );
         user.getUserGroups().forEach(userGroup -> userGroup.removeUser(user));
         userRepository.deleteByUsername(username);
@@ -89,7 +89,7 @@ class UserServiceImpl implements UserService {
         List<UserGroupDTO> userGroupDTOs = new ArrayList<>();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new ValidationException("User is not existed.")
+                        new TCHBusinessException("User is not existed.")
                 );
         user.getUserGroups().forEach(
                 userGroup -> userGroupDTOs.add(tchMapper.map(userGroup, UserGroupDTO.class))
@@ -124,7 +124,7 @@ class UserServiceImpl implements UserService {
     @Override
     public UserDTOWithToken saveUserAvatar(String username, MultipartFile file, String baseUrl) {
         User user = userRepository.findByUsername(username).orElseThrow(()->
-                new ValidationException("User is not existed")
+                new TCHBusinessException("User is not existed")
         );
         fileService.init();
         fileService.save(file);

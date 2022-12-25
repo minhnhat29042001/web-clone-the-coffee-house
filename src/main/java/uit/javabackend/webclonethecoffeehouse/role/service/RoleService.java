@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
@@ -81,7 +82,7 @@ class RoleServiceImpl implements RoleService {
     public RoleWithOperationsDTO addOperations(UUID roleId, List<UUID> ids) {
         Role curRole = repository.findById(roleId)
                 .orElseThrow(() ->
-                        new ValidationException(roleNotExistMessage)
+                        new TCHBusinessException(roleNotExistMessage)
                 );
 
         List<Operation> operations = operationService.findByIds(ids);
@@ -95,7 +96,7 @@ class RoleServiceImpl implements RoleService {
     public RoleWithOperationsDTO removeOperations(UUID roleId, List<UUID> ids) {
         Role curRole = repository.findById(roleId)
                 .orElseThrow(() ->
-                        new ValidationException(roleNotExistMessage)
+                        new TCHBusinessException(roleNotExistMessage)
                 );
 
         List<Operation> operations = operationService.findByIds(ids);
@@ -109,7 +110,7 @@ class RoleServiceImpl implements RoleService {
     public List<RoleWithOperationsDTO> getOperationsWithRoleId(UUID roleId) {
         List<RoleWithOperationsDTO> operationsDTOs = new ArrayList<>();
         if (!repository.existsById(roleId))
-            throw new ValidationException(roleNotExistMessage);
+            throw new TCHBusinessException(roleNotExistMessage);
         List<Operation> operations = operationService.findByRoleId(roleId);
         operations.forEach(
                 operation -> operationsDTOs.add(mapper.map(operation, RoleWithOperationsDTO.class))
@@ -121,7 +122,7 @@ class RoleServiceImpl implements RoleService {
     public RoleWithUserGroupDTO addUserGroup(UUID roleId, List<UUID> ids) {
         Role curRole = repository.findById(roleId)
                 .orElseThrow(() ->
-                        new ValidationException(roleNotExistMessage)
+                        new TCHBusinessException(roleNotExistMessage)
                 );
 
         List<UserGroup> userGroups = userGroupService.findByIds(ids);
@@ -135,7 +136,7 @@ class RoleServiceImpl implements RoleService {
     public RoleWithUserGroupDTO removeUserGroup(UUID roleId, List<UUID> ids) {
         Role curRole = repository.findById(roleId)
                 .orElseThrow(() ->
-                        new ValidationException(roleNotExistMessage)
+                        new TCHBusinessException(roleNotExistMessage)
                 );
 
         List<UserGroup> userGroups = userGroupService.findByIds(ids);
@@ -149,7 +150,7 @@ class RoleServiceImpl implements RoleService {
     public List<RoleWithUserGroupDTO> getUserGroupsWithRoleId(UUID roleId) {
         List<RoleWithUserGroupDTO> userGroupDTOs = new ArrayList<>();
         if (!repository.existsById(roleId))
-            throw new ValidationException(roleNotExistMessage);
+            throw new TCHBusinessException(roleNotExistMessage);
         List<UserGroup> userGroups = userGroupService.findByRoleId(roleId);
         userGroups.forEach(
                 userGroup -> userGroupDTOs.add(mapper.map(userGroup, RoleWithUserGroupDTO.class))

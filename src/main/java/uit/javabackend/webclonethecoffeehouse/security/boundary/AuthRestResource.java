@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
+import uit.javabackend.webclonethecoffeehouse.security.dto.ChangePasswordDto;
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.service.AuthService;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
@@ -73,10 +74,10 @@ public class AuthRestResource {
 
     @Operation(summary = "Change password")
     @PostMapping("/changePassword")
-    public Object changePassword(@RequestParam String token, @RequestParam String oldPassword, @RequestParam String newPassword) {
+    public Object changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         return ResponseUtil.get(
-                authService.changePassword(token, newPassword, oldPassword)
-                , HttpStatus.OK
+                authService.changePassword(changePasswordDto.getUsername(), changePasswordDto.getNewPassword(), changePasswordDto.getOldPassword())
+                ,HttpStatus.OK
         );
     }
 }

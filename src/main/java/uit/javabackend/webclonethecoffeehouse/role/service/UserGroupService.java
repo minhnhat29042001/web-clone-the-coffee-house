@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
@@ -63,7 +64,7 @@ class UserGroupServiceImpl implements UserGroupService {
     @Override
     public UserGroupWithUsersDTO addUsers(UUID userGroupId, List<UUID> ids) {
         UserGroup userGroup = repository.findById(userGroupId)
-                .orElseThrow(() -> new ValidationException("UserGroup is not existed."));
+                .orElseThrow(() -> new TCHBusinessException("UserGroup is not existed."));
 
         ids.forEach(userId -> {
             Optional<User> userOptional = userRepository.findById(userId);
