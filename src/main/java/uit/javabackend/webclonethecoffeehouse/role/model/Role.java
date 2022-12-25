@@ -21,15 +21,15 @@ import java.util.Set;
 @Entity
 @Table(name = RoleEntity.Role.TABLE_NAME)
 public class Role extends BaseEntity {
-    @Column(name = RoleEntity.Role.NAME, unique = true, length = 100)
+    @Column(name = RoleEntity.Role.NAME, length = 100, updatable=true)
     @Length(min = 5, max = 100, message = "{role.name.size}")
     private String name;
 
-    @Column(name = RoleEntity.Role.CODE, unique = true)
+    @Column(name = RoleEntity.Role.CODE, unique = true, updatable=false)
     @Length(min = 3, max = 10, message = "{role.code.size}")
     private String code;
 
-    @Column(name = RoleEntity.Role.DESCRIPTION)
+    @Column(name = RoleEntity.Role.DESCRIPTION, updatable=true)
     @NotBlank
     private String description;
 
