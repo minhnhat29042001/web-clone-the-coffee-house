@@ -25,11 +25,11 @@ public class OrderProductRestResource {
         this.service = service;
     }
 
-    @TCHOperation(name = "GetAllOrderProduct")
-    @GetMapping("/get-all")
-    public Object findAll() {
-        return ResponseUtil.get(service.findAllDto(OrderProductDTO.class), HttpStatus.OK);
-    }
+//    @TCHOperation(name = "GetAllOrderProduct")
+//    @GetMapping("/get-all")
+//    public Object findAll() {
+//        return ResponseUtil.get(service.findAllDto(OrderProductDTO.class), HttpStatus.OK);
+//    }
 
     @GetMapping("/{orderproduct-id}/GetOrderProductWithOrder")
     public Object findOrderProductWithOrderDTO(@PathVariable("orderproduct-id") UUID orderProductID){
