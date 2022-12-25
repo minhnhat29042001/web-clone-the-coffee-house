@@ -22,7 +22,7 @@ public interface ProductGroupService extends GenericService<ProductGroup, Produc
 //    List<ProductGroup> findAll();
 
 
-    ProductGroup update (ProductGroupDTO productGroupDTO);
+    ProductGroupDTO update (ProductGroupDTO productGroupDTO);
     ProductGroupDTO save (ProductGroupDTO productGroupDTO);
     void deleteByName (String name);
     ProductGroupWithProductsDTO addProduct(List<UUID> ids, UUID productGroupId);
@@ -60,11 +60,11 @@ class ProductGroupServiceImpl implements ProductGroupService {
 //    }
 
     @Override
-    public ProductGroup update(ProductGroupDTO productGroupDTO) {
+    public ProductGroupDTO update(ProductGroupDTO productGroupDTO) {
         ProductGroup curProductGroup = repository.findById(productGroupDTO.getId())
                 .orElseThrow(() ->productGroupIsNotExisted);
         curProductGroup.setName(productGroupDTO.getName());
-        return repository.save(curProductGroup);
+        return mapper.map(repository.save(curProductGroup),ProductGroupDTO.class);
     }
 
     @Override
