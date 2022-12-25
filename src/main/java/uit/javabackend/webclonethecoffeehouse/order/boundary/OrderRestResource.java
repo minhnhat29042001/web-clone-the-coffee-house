@@ -63,11 +63,11 @@ public class OrderRestResource {
 //        return ResponseUtil.get(orderService.save(orderDTO), HttpStatus.CREATED);
 //    }
 
-    @TCHOperation(name = "UpdateOrder")
-    @PutMapping("/update")
-    public Object update(@RequestBody OrderDTO orderDTO) {
-        return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
-    }
+//    @TCHOperation(name = "UpdateOrder")
+//    @PutMapping("/update")
+//    public Object update(@RequestBody OrderDTO orderDTO) {
+//        return ResponseUtil.get(orderService.update(orderDTO), HttpStatus.OK);
+//    }
 
 
     @TCHOperation(name = "tao don hang sau khi user xac nhan")

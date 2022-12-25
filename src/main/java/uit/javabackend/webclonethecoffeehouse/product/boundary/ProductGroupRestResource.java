@@ -47,7 +47,7 @@ public class ProductGroupRestResource {
 
     @TCHOperation(name = "UpdateProductGroup")
     @PutMapping("/UpdateProductGroup")
-    public Object updateProductGroup(@RequestBody ProductGroupDTO productGroup) {
+    public Object updateProductGroup(@RequestBody @Valid ProductGroupDTO productGroup) {
         return ResponseUtil.get(productGroupService.update(productGroup), HttpStatus.OK);
     }
 
