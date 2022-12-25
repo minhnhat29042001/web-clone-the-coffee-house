@@ -61,7 +61,7 @@ class ProductGroupServiceImpl implements ProductGroupService {
 
     @Override
     public ProductGroup update(ProductGroupDTO productGroupDTO) {
-        ProductGroup curProductGroup = repository.findByName(productGroupDTO.getName())
+        ProductGroup curProductGroup = repository.findById(productGroupDTO.getId())
                 .orElseThrow(() ->productGroupIsNotExisted);
         curProductGroup.setName(productGroupDTO.getName());
         return repository.save(curProductGroup);
