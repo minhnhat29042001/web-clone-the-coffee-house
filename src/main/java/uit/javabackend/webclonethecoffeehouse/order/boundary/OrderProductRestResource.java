@@ -51,11 +51,11 @@ public class OrderProductRestResource {
         return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
     }
 
-    @TCHOperation(name = "SaveOrderProductToOrderId")
-    @PostMapping(path = "/add-orderproducts/{order-id}")
-    public Object save(@PathVariable("order-id") UUID orderId, @RequestBody List<OrderProductWithProductDTO> orderProductWithProductDTOS) {
-        return ResponseUtil.get(service.saveOrderProductToOrderId(orderProductWithProductDTOS, orderId), HttpStatus.CREATED);
-    }
+//    @TCHOperation(name = "SaveOrderProductToOrderId")
+//    @PostMapping(path = "/add-orderproducts/{order-id}")
+//    public Object save(@PathVariable("order-id") UUID orderId, @RequestBody List<OrderProductWithProductDTO> orderProductWithProductDTOS) {
+//        return ResponseUtil.get(service.saveOrderProductToOrderId(orderProductWithProductDTOS, orderId), HttpStatus.CREATED);
+//    }
 
     @TCHOperation(name = "GetAllOrderProductByOrderId")
     @Operation(summary = "get list orderProduct by orderId")
@@ -78,10 +78,10 @@ public class OrderProductRestResource {
         return ResponseUtil.get(service.findOrderProductById(orderProductId), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "UpdateOrderProduct")
-    @PutMapping("/UpdateOrderProduct")
-    public Object update(@RequestBody OrderProduct orderProduct) {
-        return ResponseUtil.get(service.update(orderProduct), HttpStatus.OK);
-    }
+//    @TCHOperation(name = "UpdateOrderProduct")
+//    @PutMapping("/UpdateOrderProduct")
+//    public Object update(@RequestBody OrderProduct orderProduct) {
+//        return ResponseUtil.get(service.update(orderProduct), HttpStatus.OK);
+//    }
 
 }

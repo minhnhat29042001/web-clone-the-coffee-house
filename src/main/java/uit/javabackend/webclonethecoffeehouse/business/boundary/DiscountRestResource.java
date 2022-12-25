@@ -50,7 +50,7 @@ public class DiscountRestResource {
 
     @TCHOperation(name = "UpdateDiscount")
     @PutMapping("/update-discount")
-    public Object update(@RequestBody DiscountDTO discountDTO) {
+    public Object update(@RequestBody @Valid DiscountDTO discountDTO) {
         return ResponseUtil.get(services.update(discountDTO), HttpStatus.OK);
     }
 

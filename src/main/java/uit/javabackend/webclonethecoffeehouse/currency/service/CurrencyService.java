@@ -23,7 +23,7 @@ public interface CurrencyService  extends GenericService<Currency, CurrencyDTO, 
     List<Currency> findAll();
 
 
-    Currency update (CurrencyDTO currency);
+    CurrencyDTO update (CurrencyDTO currency);
     CurrencyDTO save (CurrencyDTO currencyDTO);
     void deleteByName (String name);
 
@@ -64,11 +64,11 @@ class CurrencyServiceImpl implements  CurrencyService{
     }
 
     @Override
-    public Currency update(CurrencyDTO currency) {
+    public CurrencyDTO update(CurrencyDTO currency) {
         Currency curCurrency = repository.findById(currency.getId())
                 .orElseThrow(() -> new RuntimeException("Currency is not existed."));
         curCurrency.setName(currency.getName());
-        return repository.save(curCurrency);
+        return mapper.map(repository.save(curCurrency),CurrencyDTO.class);
     }
 
     @Override

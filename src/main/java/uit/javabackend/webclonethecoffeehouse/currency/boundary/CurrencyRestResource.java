@@ -48,7 +48,7 @@ public class CurrencyRestResource {
 
     @TCHOperation(name = "UpdateCurrency")
     @PutMapping("/UpdateCurrency")
-    public Object updateCurrency(@RequestBody CurrencyDTO currency) {
+    public Object updateCurrency(@RequestBody @Valid CurrencyDTO currency) {
         return ResponseUtil.get(currencyService.update(currency), HttpStatus.OK);
     }
 

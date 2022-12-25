@@ -33,13 +33,13 @@ public class BusinessRestResource {
 
     @TCHOperation(name = "BusinessManagement")
     @PostMapping(path = "/add-info")
-    public Object save(@RequestBody BusinessDTO businessDTO) {
+    public Object save(@RequestBody @Valid BusinessDTO businessDTO) {
         return ResponseUtil.get(services.save(businessDTO, Business.class, BusinessDTO.class), HttpStatus.CREATED);
     }
 
     @TCHOperation(name = "BusinessManagement")
     @PutMapping("/update-info")
-    public Object update(@RequestBody BusinessDTO businessDTO) {
+    public Object update(@RequestBody @Valid BusinessDTO businessDTO) {
         return ResponseUtil.get(services.update(businessDTO), HttpStatus.OK);
     }
 

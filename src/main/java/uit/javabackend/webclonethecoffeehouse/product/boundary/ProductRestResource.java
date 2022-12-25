@@ -79,7 +79,7 @@ public class ProductRestResource {
 
     @TCHOperation(name = "UpdateProduct")
     @PutMapping("/UpdateProduct")
-    public Object update(@RequestBody ProductDTO product) {
+    public Object update(@RequestBody @Valid ProductDTO product) {
         return ResponseUtil.get(productService.update(product), HttpStatus.OK);
     }
 
