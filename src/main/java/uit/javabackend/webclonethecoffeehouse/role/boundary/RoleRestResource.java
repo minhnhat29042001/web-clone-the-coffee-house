@@ -105,6 +105,13 @@ public class RoleRestResource {
         return ResponseUtil.get(service.update(roleDTO), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "DeleteRole")
+    @DeleteMapping("/DeleteRole")
+    public Object delete(@RequestParam("code") String code) {
+        service.deleteByCode(code);
+        return HttpStatus.OK;
+    }
+
     @TCHOperation(name = "RemoveUserGroupFromRole")
     @DeleteMapping("{role-id}/removeUserGroup")
     public ResponseEntity<?> removeUserGroup(

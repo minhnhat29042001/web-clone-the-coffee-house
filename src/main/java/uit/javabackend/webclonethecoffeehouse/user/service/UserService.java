@@ -12,8 +12,10 @@ import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.file.FileService;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
+import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDtoWithoutPassword;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
@@ -28,7 +30,7 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     void deleteByUserName(String username);
 
-    UserDTO update(UserDTO userDTO);
+    UserDtoWithoutPassword update(UserDtoWithoutPassword userDTO);
 
     List<UserGroupDTO> findAllUserGroupUsername(String username);
 
@@ -78,9 +80,16 @@ class UserServiceImpl implements UserService {
         userRepository.deleteByUsername(username);
     }
 
-    public UserDTO update(UserDTO userDTO) {
-        User user = tchMapper.map(userDTO, User.class);
-        return tchMapper.map(userRepository.save(user), UserDTO.class);
+    public UserDtoWithoutPassword update(UserDtoWithoutPassword userDTO) {
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new TCHBusinessException("User not found"));
+        user.setName(userDTO.getName());
+        user.setUsername(userDTO.getUsername());
+        user.setBirth(userDTO.getBirth());
+        user.setAvatar(userDTO.getAvatar());
+        user.setPhone(userDTO.getPhone());
+        user.setGender(userDTO.getGender());
+        return tchMapper.map(user, UserDtoWithoutPassword.class);
     }
 
 

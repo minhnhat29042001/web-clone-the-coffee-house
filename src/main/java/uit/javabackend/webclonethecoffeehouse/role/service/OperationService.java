@@ -2,6 +2,7 @@ package uit.javabackend.webclonethecoffeehouse.role.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
@@ -30,7 +31,7 @@ public interface OperationService extends GenericService<Operation, OperationDTO
     Object saveOperations(List<OperationDTO> operationDTOS,UUID roleId);
 }
 
-@org.springframework.stereotype.Service
+@Service
 @Transactional
 class OperationServiceImpl implements OperationService {
     private final OperationRepository operationRepository;
@@ -72,7 +73,11 @@ class OperationServiceImpl implements OperationService {
 
     @Override
     public OperationDTO update(OperationDTO operationDTO) {
-        Operation operation = mapper.map(operationDTO, Operation.class);
+        Operation operation = operationRepository.findById(operationDTO.getId())
+                .orElseThrow(() -> new TCHBusinessException("Operation not found"));
+        operation.setName(operationDTO.getName());
+        operation.setCode(operationDTO.getCode());
+        operation.setDescription(operationDTO.getDescription());
         return mapper.map(operation, OperationDTO.class);
     }
 

@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupWithUsersDTO;
+import uit.javabackend.webclonethecoffeehouse.role.model.Role;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepository;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
@@ -86,8 +88,12 @@ class UserGroupServiceImpl implements UserGroupService {
     }
 
     public UserGroupDTO update(UserGroupDTO userGroupDTO) {
-        UserGroup userGroup = tchMapper.map(userGroupDTO, UserGroup.class);
-        return tchMapper.map(repository.save(userGroup), UserGroupDTO.class);
+        UserGroup userGroup = repository.findById(userGroupDTO.getId())
+                .orElseThrow(() -> new TCHBusinessException("Role not found"));
+        userGroup.setName(userGroupDTO.getName());
+        userGroup.setCode(userGroupDTO.getCode());
+        userGroup.setDescription(userGroupDTO.getDescription());
+        return tchMapper.map(userGroup, UserGroupDTO.class);
     }
 
     @Override

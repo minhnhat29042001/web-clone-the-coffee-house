@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
+import uit.javabackend.webclonethecoffeehouse.user.dto.UserDtoWithoutPassword;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,7 @@ public class UserRestResource {
 
     @TCHOperation(name = "UpdateUser")
     @PutMapping("/UpdateUser")
-    public Object update(@RequestBody UserDTO user) {
+    public Object update(@RequestBody UserDtoWithoutPassword user) {
         return ResponseUtil.get(userService.update(user), HttpStatus.OK);
     }
 

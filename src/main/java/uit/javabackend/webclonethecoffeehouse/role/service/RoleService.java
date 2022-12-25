@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.role.dto.OperationDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithOperationsDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithUserGroupDTO;
@@ -160,8 +161,12 @@ class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDTO update(RoleDTO roleDTO) {
-        Role role = mapper.map(roleDTO, Role.class);
-        return mapper.map(repository.save(role), RoleDTO.class);
+        Role role = repository.findById(roleDTO.getId())
+                .orElseThrow(() -> new TCHBusinessException("Role not found"));
+        role.setName(roleDTO.getName());
+        role.setCode(roleDTO.getCode());
+        role.setDescription(roleDTO.getDescription());
+        return mapper.map(role, RoleDTO.class);
     }
 
     @Override
