@@ -3,6 +3,8 @@ package uit.javabackend.webclonethecoffeehouse.product.dto;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import uit.javabackend.webclonethecoffeehouse.product.validation.annotation.UniqueProductName;
+
+import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.UUID;
@@ -18,7 +20,6 @@ public class ProductDTO {
 
         @Size(min = 5 , max = 100,message = "product.name.size")
         @NotBlank
-        @UniqueProductName(message = "product.name.existed")
         private String name;
 
 
@@ -28,5 +29,6 @@ public class ProductDTO {
         private Integer price;
 
         @NotBlank(message = "product.description.blank")
+        @Lob
         private String description;
 }
