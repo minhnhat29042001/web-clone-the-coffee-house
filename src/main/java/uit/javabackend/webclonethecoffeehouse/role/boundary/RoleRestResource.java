@@ -40,6 +40,18 @@ public class RoleRestResource {
         );
     }
 
+    @TCHOperation(name = "GetAllRoles")
+    @GetMapping("/GetAllRolesWithOperations")
+    public Object findAllWithOperations() {
+        return ResponseUtil.get(service.findAllWithOperations(), HttpStatus.OK);
+    }
+
+    @TCHOperation(name = "GetAllRoles")
+    @GetMapping("/GetAllRolesWithUsergroups")
+    public Object findAllWithUsergroups() {
+        return ResponseUtil.get(service.findAllWitUsergroups(), HttpStatus.OK);
+    }
+
     @TCHOperation(name = "GetOperationsWithRoleId")
     @GetMapping("{role-id}/GetOperationsWithRoleId")
     public ResponseEntity<?> getOperationsWithRole(
@@ -52,7 +64,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "GetUserGroupsWithRoleId")
     @GetMapping("{role-id}/GetUserGroupsWithRoleId")
-    public ResponseEntity<?> getUserGroupsWithRole(
+    public Object getUserGroupsWithRole(
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
                 service.getUserGroupsWithRoleId(roleId)
@@ -68,7 +80,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "AddOperationsToRole")
     @PostMapping("{role-id}/AddOperations")
-    public ResponseEntity<?> addOperations(
+    public Object addOperations(
             @RequestBody List<UUID> ids,
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
@@ -79,7 +91,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "RemoveOperationsFromRole")
     @DeleteMapping("{role-id}/RemoveOperations")
-    public ResponseEntity<?> removeOperations(
+    public Object removeOperations(
             @RequestBody List<UUID> ids,
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
@@ -90,7 +102,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "AddUserGroupIntoRole")
     @PostMapping("{role-id}/addUserGroup")
-    public ResponseEntity<?> addUserGroup(
+    public Object addUserGroup(
             @RequestBody List<UUID> ids,
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
@@ -114,7 +126,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "RemoveUserGroupFromRole")
     @DeleteMapping("{role-id}/removeUserGroup")
-    public ResponseEntity<?> removeUserGroup(
+    public Object removeUserGroup(
             @RequestBody List<UUID> ids,
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
