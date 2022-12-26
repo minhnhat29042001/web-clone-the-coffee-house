@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
-import uit.javabackend.webclonethecoffeehouse.role.dto.OperationDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithOperationsDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithUserGroupDTO;
@@ -16,7 +15,6 @@ import uit.javabackend.webclonethecoffeehouse.role.model.Role;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.role.repository.RoleRepository;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +39,10 @@ public interface RoleService extends GenericService<Role, RoleDTO, UUID> {
     List<RoleWithUserGroupDTO> getUserGroupsWithRoleId(UUID roleId);
 
     RoleDTO update(RoleDTO roleDTO);
+
+    List<RoleWithOperationsDTO> findAllWithOperations();
+
+    List<RoleWithUserGroupDTO> findAllWitUsergroups();
 }
 
 @Service
@@ -167,6 +169,32 @@ class RoleServiceImpl implements RoleService {
         role.setCode(roleDTO.getCode());
         role.setDescription(roleDTO.getDescription());
         return mapper.map(role, RoleDTO.class);
+    }
+
+    @Override
+    public List<RoleWithOperationsDTO> findAllWithOperations() {
+        List<Role> roles = repository.findAll();
+        List<RoleWithOperationsDTO> roleWithOperationsDTOs = new ArrayList<>();
+        roles.forEach(
+                role -> {
+                    RoleWithOperationsDTO roleWithOperationsDTO = mapper.map(role, RoleWithOperationsDTO.class);
+                    roleWithOperationsDTOs.add(roleWithOperationsDTO);
+                }
+        );
+        return roleWithOperationsDTOs;
+    }
+
+    @Override
+    public List<RoleWithUserGroupDTO> findAllWitUsergroups() {
+        List<Role> roles = repository.findAll();
+        List<RoleWithUserGroupDTO> roleWithUserGroupDTOs = new ArrayList<>();
+        roles.forEach(
+                role -> {
+                    RoleWithUserGroupDTO roleWithUserGroupDTO = mapper.map(role, RoleWithUserGroupDTO.class);
+                    roleWithUserGroupDTOs.add(roleWithUserGroupDTO);
+                }
+        );
+        return roleWithUserGroupDTOs;
     }
 
     @Override
