@@ -15,6 +15,7 @@ import uit.javabackend.webclonethecoffeehouse.business.repository.DiscountReposi
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.security.oauth.user.UserPrinciple;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.service.UserService;
@@ -77,9 +78,12 @@ class DiscountServiceImp implements DiscountService {
 
     @Override
     public DiscountDTO save(DiscountDTO discountDTO) {
+        Optional<Discount> findDiscount = repository.findByCode(discountDTO.getCode());
+        if(findDiscount.isPresent()){
+            throw new TCHBusinessException("discount code is existed");
+        }
         Discount discount = mapper.map(discountDTO, Discount.class);
-        Discount savedDiscount = repository.save(discount);
-        return mapper.map(savedDiscount, DiscountDTO.class);
+        return mapper.map(repository.save(discount), DiscountDTO.class);
     }
 
     @Override

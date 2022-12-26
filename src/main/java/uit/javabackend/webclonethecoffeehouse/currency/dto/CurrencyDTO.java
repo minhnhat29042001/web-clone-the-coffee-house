@@ -16,9 +16,9 @@ import java.util.UUID;
 public class CurrencyDTO {
     private UUID id;
 
-    @Size(min = 3,max = 100,message = "currency.name.size")
-    @NotBlank(message = "currency.name.blank")
-    @UniqueCurrencyName(message = "currency.name.existed")
+    @Size(min = 3,max = 100,message = "{currency.name.size}")
+    @NotBlank(message = "{currency.name.blank}")
+    @UniqueCurrencyName(message = "{currency.name.existed}")
     private String name;
 
 

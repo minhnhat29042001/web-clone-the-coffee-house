@@ -26,7 +26,6 @@ public class DiscountDTO implements Serializable {
     private UUID id;
 
     @Length(min = 5, max = 50, message = "Discount code must have length between {min} and {max}")
-    @UniqueCode
     private String code;
 
     @Length(min = 5, max = 50, message = "Discount description must have length between {min} and {max}")

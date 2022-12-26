@@ -23,7 +23,7 @@ import java.util.Set;
 @Table(name=CurrencyEntity.Currency.TABLE_NAME)
 public class Currency extends BaseEntity {
     @Column(name = CurrencyEntity.Currency.NAME, unique = true,length = 100)
-    @Length(min =3,max=100,message = "Currency name must have length between {min} and {max}")
+    @Length(min =3,max=100,message = "{currency.name.size}")
     private String name;
 
     @OneToMany(mappedBy = CurrencyEntity.CurrencyMappedProduct.PRODUCT_MAPPED_CURRENCY,cascade = CascadeType.ALL)
