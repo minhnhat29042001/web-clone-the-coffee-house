@@ -51,6 +51,9 @@ public class User extends BaseEntity {
     @Column(name = UserEntity.User.PHONE)
     private String phone;
 
+    @Column(name = UserEntity.User.ADDRESS)
+    private String address;
+
     @Column(name = UserEntity.User.BIRTH)
     private String birth;
 

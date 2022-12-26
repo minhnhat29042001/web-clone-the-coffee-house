@@ -13,6 +13,7 @@ public class UserEntity {
         public static final String PASSWORD = "TCH_PASSWORD";
         public static final String EMAIL = "TCH_EMAIL";
         public static final String PHONE = "TCH_PHONE";
+        public static final String ADDRESS = "TCH_ADDRESS";
         public static final String GENDER = "TCH_GENDER";
         public static final String AVATAR = "TCH_AVATAR";
         public static final String BIRTH = "TCH_BIRTH";

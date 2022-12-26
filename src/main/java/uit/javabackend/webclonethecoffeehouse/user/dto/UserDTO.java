@@ -31,6 +31,8 @@ public class UserDTO {
     private String avatar;
     @NotBlank(message = "{user.phone.blank}")
     private String phone;
+    private String address;
+
     @CorrectGender(message = "{user.gender.incorrect}")
     private String gender;
 }
