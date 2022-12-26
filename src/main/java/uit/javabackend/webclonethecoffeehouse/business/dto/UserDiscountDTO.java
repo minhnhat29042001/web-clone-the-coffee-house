@@ -18,7 +18,6 @@ public class UserDiscountDTO implements Serializable {
     private UUID id;
 
     @Length(min = 5, max = 50, message = "description between {min} and {max}")
-    @UniqueUserDiscountDescription
     private String description;
 
     @Range(min = 1, message = "usedcount at least {min}")
