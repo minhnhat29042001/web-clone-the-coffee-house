@@ -20,6 +20,7 @@ import uit.javabackend.webclonethecoffeehouse.order.dto.OrderDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderWithVnpayPaymentDTO;
+import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
@@ -242,6 +243,7 @@ class OrderServiceImpl implements OrderService {
 
         return curUser.getOrders()
                 .stream()
+                .filter(order -> order.getStatus().equals(OrderStatus.PROCESSED))
                 .map(model -> mapper.map(model, OrderWithProductsDTO.class))
                 .collect(Collectors.toList());
 

@@ -30,28 +30,27 @@ public class DiscountDTO implements Serializable {
     private String code;
 
     @Length(min = 5, max = 50, message = "Discount description must have length between {min} and {max}")
-    @UniqueDescription
     private String description;
 
     private String imageUrl;
 
+    @Range(min = 1, message = "so luong nguoi dung it nhat la {min}")
     private Integer  numbersOfUsers;
 
-
+    @Range(min = 1, message = "so luong su dung cho moi nguoi dung it nhat la {min}")
     private Integer limitAmountOnUser;
 
-
     private LocalDateTime effectiveDay;
-
 
     private LocalDateTime expirationDay;
 
     @Enumerated(value = EnumType.STRING)
     private Discount.AmountType amountType;
 
+    @Range(min = 1000, message = "so tien giam cho nguoi dung it nhat la {min}")
     private Integer discountAmount;
+
+    @Range(min = 1000, message = "so tien giam cho nguoi dung it nhat la {min}")
     private Integer minimumPriceOnOrder;
-
-
 
 }

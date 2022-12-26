@@ -90,7 +90,7 @@ class DiscountServiceImp implements DiscountService {
 
     @Override
     public DiscountDTO update(DiscountDTO discountDTO) {
-        Discount curDiscount = repository.findByCode(discountDTO.getCode())
+        Discount curDiscount = repository.findById(discountDTO.getId())
                 .orElseThrow(() -> discountIsNotExisted);
 
         curDiscount.setCode(discountDTO.getCode());
