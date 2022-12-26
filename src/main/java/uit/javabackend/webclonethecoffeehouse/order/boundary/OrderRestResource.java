@@ -55,7 +55,7 @@ public class OrderRestResource {
     public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId) {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
-
+//
 //    @TCHOperation(name = "SaveOrder")
 //    @Operation(summary = "su dung thang nay de tao don hang ")
 //    @PostMapping(path = "/save-order")
@@ -70,8 +70,8 @@ public class OrderRestResource {
 //    }
 
 
-    @TCHOperation(name = "tao don hang sau khi user xac nhan")
-    @Operation(summary = "")
+    @TCHOperation(name = "SaveOrder")
+    @Operation(summary = "tao don hang sau khi user xac nhan")
     @PostMapping("/create-order")
     public Object saveOrder(@RequestBody @Valid OrderWithProductsDTO orderDto, HttpServletRequest req) throws UnsupportedEncodingException {
         return ResponseUtil.get(orderService.createOrder(orderDto,req), HttpStatus.OK);
