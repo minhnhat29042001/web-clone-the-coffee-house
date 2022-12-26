@@ -21,7 +21,7 @@ import java.util.List;
 @Table(name = ProductEntity.Product.TABLE_NAME)
 public class Product extends BaseEntity {
 
-    @Column(name = ProductEntity.Product.NAME, unique = true)
+    @Column(name = ProductEntity.Product.NAME)
     @Length(min = 5, max = 100, message = "Product name must have length between {min} and {max}")
     private String name;
 
