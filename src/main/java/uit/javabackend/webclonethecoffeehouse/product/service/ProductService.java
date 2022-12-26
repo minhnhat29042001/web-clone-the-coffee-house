@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.file.FileService;
@@ -18,6 +19,7 @@ import uit.javabackend.webclonethecoffeehouse.product.repository.ProductReposito
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -78,9 +80,12 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        Product product =mapper.map(productDTO,Product.class);
-        Product savedProduct= repository.save(product);
-        return mapper.map(savedProduct,ProductDTO.class);
+        Optional<Product> findproduct = repository.findByName(productDTO.getName());
+        if(findproduct.isPresent()){
+            throw new TCHBusinessException("product name is existed");
+        }
+        Product product = mapper.map(productDTO,Product.class);
+        return mapper.map(repository.save(product),ProductDTO.class);
     }
 
     @Override

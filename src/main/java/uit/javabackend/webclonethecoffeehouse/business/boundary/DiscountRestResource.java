@@ -45,7 +45,7 @@ public class DiscountRestResource {
     @TCHOperation(name ="AddDiscount")
     @PostMapping(path = "/add-discount")
     public Object save(@RequestBody @Valid DiscountDTO discountDTO) {
-        return ResponseUtil.get(services.save(discountDTO, Discount.class, DiscountDTO.class), HttpStatus.CREATED);
+        return ResponseUtil.get(services.save(discountDTO), HttpStatus.CREATED);
     }
 
     @TCHOperation(name = "UpdateDiscount")
