@@ -88,6 +88,7 @@ class UserServiceImpl implements UserService {
         user.setBirth(userDTO.getBirth());
         user.setAvatar(userDTO.getAvatar());
         user.setPhone(userDTO.getPhone());
+        user.setAddress(userDTO.getAddress());
         user.setGender(User.Gender.valueOf(userDTO.getGender()));
         return tchMapper.map(user, UserDtoWithoutPassword.class);
     }

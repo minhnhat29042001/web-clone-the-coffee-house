@@ -26,6 +26,8 @@ public class UserDtoWithoutPassword {
     private String birth;
     private String avatar;
     private String phone;
+    private String address;
+
     @CorrectGender(message = "{user.gender.incorrect}")
     private String gender;
 }
