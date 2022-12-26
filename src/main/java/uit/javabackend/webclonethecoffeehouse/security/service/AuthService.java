@@ -169,6 +169,8 @@ class AuthServiceImpl implements AuthService {
                 .orElseThrow(()-> new TCHBusinessException("User not found: " + username));
         if (passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
+        } else{
+            throw new TCHBusinessException("Wrong current password: ");
         }
         return mapper.map(user, UserDTOWithToken.class);
     }
