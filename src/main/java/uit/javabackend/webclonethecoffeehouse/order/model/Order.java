@@ -23,13 +23,19 @@ import java.util.List;
 @Table(name = OrderEntity.Order.TABLE_NAME )
 public class Order extends BaseEntity {
 
+
+
     // ten nguoi nhan hang
     @Column(name = OrderEntity.Order.CUSTOMER_NAME)
     @Length(min = 5  , max = 100 ,message = " name must have length between {min} and {max}")
     private String customerName;
 
+
     @Column(name = OrderEntity.Order.ADDRESS)
     private String address;
+
+    @Column(name = OrderEntity.Order.PHONE_NUMBER)
+    private String phoneNumber;
 
     @Column(name = OrderEntity.Order.NOTE)
     private String note;
@@ -52,6 +58,7 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = OrderEntity.Order.DISCOUNT_ID)
     private Discount discount;
+
 
 
 
