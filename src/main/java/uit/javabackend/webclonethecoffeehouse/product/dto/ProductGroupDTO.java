@@ -15,8 +15,8 @@ import java.util.UUID;
 public class ProductGroupDTO {
     private UUID id;
 
-    @Size(min = 3,max = 100,message = "collection.name.size")
-    @NotBlank(message = "collection.name.blank")
-    @UniqueProductGroupName(message = "collection.name.existed")
+    @Size(min = 3,max = 100,message = "{productGroup.name.size}")
+    @NotBlank(message = "{productGroup.name.blank}")
+    @UniqueProductGroupName(message = "{productGroup.name.existed}")
     private String name;
 }

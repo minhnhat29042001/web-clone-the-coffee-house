@@ -10,12 +10,12 @@ import java.util.UUID;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, UUID> {
-    Role findByCode(String code);
 
     void deleteByCode(String code);
 
     Optional<Role> findByName(String name);
 
+    Optional<Role>  findByCode(String code);
     @Query("select (count(r) > 0) from Role r where r.id = ?1")
     boolean existsById(UUID id);
 }

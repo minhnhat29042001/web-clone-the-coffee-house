@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithOperationsDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithUserGroupDTO;
@@ -17,10 +18,11 @@ import uit.javabackend.webclonethecoffeehouse.role.repository.RoleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RoleService extends GenericService<Role, RoleDTO, UUID> {
-    Role update(Role role, String code);
+    //Role update(Role role, String code);
 
     void deleteByCode(String code);
 
@@ -61,13 +63,13 @@ class RoleServiceImpl implements RoleService {
         this.userGroupService = userGroupService;
     }
 
-    @Override
-    public Role update(Role role, String code) {
-        Role curRole = repository.findByCode(code);
-        curRole.setName(role.getName());
-        curRole.setDescription(role.getDescription());
-        return repository.save(curRole);
-    }
+//    @Override
+//    public Role update(Role role, String code) {
+//        Role curRole = repository.findByCode(code);
+//        curRole.setName(role.getName());
+//        curRole.setDescription(role.getDescription());
+//        return repository.save(curRole);
+//    }
 
     @Override
     public void deleteByCode(String code) {
@@ -75,10 +77,13 @@ class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDTO save(RoleDTO dto) {
-        Role model = mapper.map(dto, Role.class);
-        Role savedModel = repository.save(model);
-        return mapper.map(savedModel, RoleDTO.class);
+    public RoleDTO save(RoleDTO roleDTO) {
+        Optional<Role> findRole = repository.findByCode(roleDTO.getCode());
+        if(findRole.isPresent()){
+            throw new TCHBusinessException("role code is existed");
+        }
+        Role model = mapper.map(roleDTO, Role.class);
+        return mapper.map(repository.save(model), RoleDTO.class);
     }
 
     @Override
