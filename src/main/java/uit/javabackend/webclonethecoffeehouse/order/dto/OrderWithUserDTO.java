@@ -25,6 +25,9 @@ public class OrderWithUserDTO {
         @NotBlank
         private String address;
 
+        @NotBlank
+        private String phoneNumber;
+
         private String note;
 
         private String codeCoupon;
