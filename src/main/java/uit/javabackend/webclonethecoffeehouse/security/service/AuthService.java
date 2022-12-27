@@ -1,7 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.security.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +30,9 @@ public interface AuthService {
     ValidateTokenDTO validateToken(String token);
 
     String forgotPassword(String email, String feHomePage, String host);
+
     boolean resetPassword(String code);
+
     UserDTOWithToken changePassword(String username, String newPassword, String oldPassword);
 }
 
@@ -100,24 +101,24 @@ class AuthServiceImpl implements AuthService {
 
     @Override
     public String forgotPassword(String email, String feHomePage, String host) {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
         String code = jwtUtils.generateJwt(email);
         try {
-            String url = host + "/auth/resetPassword?code=" + code + "&redirectUri=" +feHomePage;
+            String url = host + "/auth/resetPassword?code=" + code + "&redirectUri=" + feHomePage;
 
-            MimeMessage mailMessage =  javaMailSender.createMimeMessage();
-            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
+            MimeMessage mailMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage, true, "utf-8");
             // Setting up necessary details
             mailMessage.setContent(
                     "<p>Dear " + user.getName() + ",</p>" +
-                    "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
-                    "<a href=\"" + url + "\">" +
-                        "<button style=\"background-color: #49CC90; border-color:#49CC90; color: white;\" >Click me to change password</button>" +
-                    "</a>" +
-                    "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
+                            "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
+                            "<a href=\"" + url + "\">" +
+                            "<button style=\"background-color: #49CC90; border-color:#49CC90; color: white;\" >Click me to change password</button>" +
+                            "</a>" +
+                            "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
 
-                    "<p>Thank you !</p>"
-                    ,"text/html"
+                            "<p>Thank you !</p>"
+                    , "text/html"
             );
             mailHelper.setTo(email);
             mailHelper.setSubject("Reset the clone of the coffee house account password");
@@ -135,19 +136,19 @@ class AuthServiceImpl implements AuthService {
     @Override
     public boolean resetPassword(String code) {
         String email = jwtUtils.getUsername(code);
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
         String newPassword = PasswordGenerateUtils.generateCommonLangPassword();
         try {
-            MimeMessage mailMessage =  javaMailSender.createMimeMessage();
-            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage ,true, "utf-8");
+            MimeMessage mailMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage, true, "utf-8");
             // Setting up necessary details
             mailMessage.setContent(
                     "<p>Dear " + user.getName() + ",</p>" +
                             "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
                             "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
-                            "<p>Your new password is: " +newPassword+ "</p>" +
+                            "<p>Your new password is: " + newPassword + "</p>" +
                             "<p>Thank you !</p>"
-                    ,"text/html"
+                    , "text/html"
             );
             mailHelper.setTo(user.getEmail());
             mailHelper.setSubject("Reset the clone of the coffee house account password");
@@ -166,10 +167,10 @@ class AuthServiceImpl implements AuthService {
     @Override
     public UserDTOWithToken changePassword(String username, String newPassword, String oldPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(()-> new TCHBusinessException("User not found: " + username));
+                .orElseThrow(() -> new TCHBusinessException("User not found: " + username));
         if (passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
-        }
+        } else throw new TCHBusinessException("Old password not correct");
         return mapper.map(user, UserDTOWithToken.class);
     }
 
