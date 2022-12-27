@@ -1,6 +1,8 @@
 package uit.javabackend.webclonethecoffeehouse.order.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
@@ -68,7 +70,9 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
 @Service
 @Transactional
 @PropertySource("classpath:validation/ValidationMessages.properties")
+@Slf4j
 class OrderServiceImpl implements OrderService {
+
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ProductService productService;
@@ -162,15 +166,17 @@ class OrderServiceImpl implements OrderService {
                         throw new TCHBusinessException(String.format("moi user chi duoc su dung toi da %s %s", discount.getLimitAmountOnUser(),orderDTO.getCodeCoupon()));
                     } else {
                         getUserDiscount.setUsedCount(getUserDiscount.getUsedCount() + 1);
+                        userDiscountService.save(getUserDiscount);
                     }
 
                 }else{
-                    UserDiscountDTO userDiscountDTO = UserDiscountDTO.builder()
-                            .description("userdiscount")
-                            .usedCount(1)
-                            .userId(user.getId())
-                            .discountId(discount.getId())
-                            .build();
+                    log.info( "userdiscount userid:" + user.getId());
+                    log.info("userdiscount discountId:" + discount.getId());
+                    UserDiscountDTO userDiscountDTO = new UserDiscountDTO();
+                    userDiscountDTO.setDescription("userdiscounts");
+                    userDiscountDTO.setUsedCount(1);
+                    userDiscountDTO.setUserId(user.getId());
+                    userDiscountDTO.setDiscountId(discount.getId());
                     userDiscountService.save(userDiscountDTO);
                 }
 
