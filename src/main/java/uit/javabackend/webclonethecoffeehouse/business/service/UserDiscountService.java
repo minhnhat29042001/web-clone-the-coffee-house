@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.business.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public interface UserDiscountService extends GenericService<UserDiscount, UserDi
 
 @Service
 @Transactional
+@Slf4j
 class UserDiscountServiceImp implements UserDiscountService {
 
     private final UserDiscountRepository repository;
@@ -69,6 +71,7 @@ class UserDiscountServiceImp implements UserDiscountService {
     public UserDiscountDTO save(UserDiscountDTO userDiscountDTO) {
         UserDiscount userDiscount = mapper.map(userDiscountDTO,UserDiscount.class);
         UserDiscount saveduserDiscount = repository.save(userDiscount);
+        log.info(String.valueOf(saveduserDiscount.getUser().getId()));
         return mapper.map(saveduserDiscount,UserDiscountDTO.class);
     }
 
