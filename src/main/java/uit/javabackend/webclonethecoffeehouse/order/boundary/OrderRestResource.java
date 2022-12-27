@@ -51,7 +51,7 @@ public class OrderRestResource {
 
     @TCHOperation(name = "GetAllOrderByUserId")
     @Operation(summary = "get all order by User id")
-    @PostMapping("{user-id}/get-all")
+    @GetMapping("{user-id}/get-all")
     public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId) {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
