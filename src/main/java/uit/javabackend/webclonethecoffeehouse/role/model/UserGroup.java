@@ -38,7 +38,7 @@ public class UserGroup extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = RoleEntity.UserGroupMappedUser.JOIN_TABLE_USER_ID))
     private Set<User> users = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = RoleEntity.RoleMappedUserGroup.USER_GROUP_MAPPED_ROLE)
+    @ManyToMany(mappedBy = RoleEntity.RoleMappedUserGroup.USER_GROUP_MAPPED_ROLE,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Role> roles = new LinkedHashSet<>();
 
     public void addUser(User user) {
