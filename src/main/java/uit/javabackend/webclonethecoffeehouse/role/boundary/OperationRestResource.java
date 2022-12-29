@@ -33,7 +33,7 @@ public class OperationRestResource {
     @PostMapping("/SaveOperation")
     public Object save(@RequestBody @Valid OperationDTO dto) {
         return ResponseUtil.get(
-                operationService.save(dto, Operation.class, OperationDTO.class)
+                operationService.save(dto)
                 , HttpStatus.OK
         );
     }

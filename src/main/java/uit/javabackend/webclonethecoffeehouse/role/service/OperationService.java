@@ -29,6 +29,8 @@ public interface OperationService extends GenericService<Operation, OperationDTO
     OperationDTO update(OperationDTO operationDTO);
 
     Object saveOperations(List<OperationDTO> operationDTOS,UUID roleId);
+
+    OperationDTO save(OperationDTO operationDTO);
 }
 
 @Service
@@ -93,6 +95,12 @@ class OperationServiceImpl implements OperationService {
                 .stream()
                 .map(model -> mapper.map(model, OperationDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OperationDTO save(OperationDTO operationDTO) {
+        Operation operation = mapper.map(operationDTO,Operation.class);
+        return mapper.map(operationRepository.save(operation),OperationDTO.class) ;
     }
 
 }

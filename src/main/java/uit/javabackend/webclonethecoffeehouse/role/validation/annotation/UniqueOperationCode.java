@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.role.validation.annotation;
 
+import uit.javabackend.webclonethecoffeehouse.role.validation.validator.UniqueOperationCodeValidator;
 import uit.javabackend.webclonethecoffeehouse.role.validation.validator.UniqueOperationNameValidator;
 
 import javax.validation.Constraint;
@@ -9,7 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueOperationNameValidator.class)
+@Constraint(validatedBy = UniqueOperationCodeValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface UniqueOperationCode {
