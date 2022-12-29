@@ -60,11 +60,11 @@ public class ProductRestResource {
         return ResponseUtil.get(productService.save(productDTO), HttpStatus.CREATED);
     }
 
-    @TCHOperation(name = "AddProduct")
-    @PostMapping(path = "/add-products")
-    public Object saveList(@RequestBody @Valid List<ProductDTO> productDTOs) {
-        return ResponseUtil.get(productService.saveProducts(productDTOs), HttpStatus.CREATED);
-    }
+//    @TCHOperation(name = "AddProduct")
+//    @PostMapping(path = "/add-products")
+//    public Object saveList(@RequestBody @Valid List<ProductDTO> productDTOs) {
+//        return ResponseUtil.get(productService.saveProducts(productDTOs), HttpStatus.CREATED);
+//    }
 
     @TCHOperation(name = "UpdateProduct")
     @PostMapping(path = "/AddProductImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
