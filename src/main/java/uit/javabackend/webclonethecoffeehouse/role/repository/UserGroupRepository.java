@@ -12,8 +12,8 @@ import java.util.UUID;
 @Repository
 public interface UserGroupRepository extends JpaRepository<UserGroup, UUID> {
 
-    @Query("select ug from UserGroup ug left join fetch ug.users")
-    List<UserGroup> findAllWithUsers();
+//    @Query("select ug from UserGroup ug left join fetch ug.users")
+//    List<UserGroup> findAllWithUsers();
 
     @Query("select ug from UserGroup ug left join Role r where r.id = ?1")
     List<UserGroup> findByRoleId(UUID id);

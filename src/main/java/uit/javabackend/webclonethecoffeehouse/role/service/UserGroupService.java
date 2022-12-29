@@ -17,9 +17,11 @@ import uit.javabackend.webclonethecoffeehouse.user.model.User;
 import uit.javabackend.webclonethecoffeehouse.user.repository.UserRepository;
 
 import javax.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public interface UserGroupService extends GenericService<UserGroup, UserGroupDTO, UUID> {
     UserGroupWithUsersDTO addUsers(UUID userGroupId, List<UUID> ids);
@@ -81,10 +83,14 @@ class UserGroupServiceImpl implements UserGroupService {
 
     @Override
     public List<UserGroupWithUsersDTO> findAllDtoIncludeUsers() {
-        return repository.findAllWithUsers()
+
+        List<UserGroup> userGroupList = repository.findAll();
+        List<UserGroupWithUsersDTO> userGroupWithUsersDTOS = userGroupList
                 .stream()
-                .map(model -> tchMapper.map(model, UserGroupWithUsersDTO.class))
-                .toList();
+                .map(model->tchMapper.map(model,UserGroupWithUsersDTO.class))
+                .collect(Collectors.toList());
+
+        return userGroupWithUsersDTOS;
     }
 
     public UserGroupDTO update(UserGroupDTO userGroupDTO) {
