@@ -46,7 +46,7 @@ public class DiscountDTO implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Discount.AmountType amountType;
 
-    @Range(min = 1000, message = "so tien giam cho nguoi dung it nhat la {min}")
+    @Range(min = 1, message = "so tien giam cho nguoi dung it nhat la {min}")
     private Integer discountAmount;
 
     @Range(min = 1000, message = "so tien giam cho nguoi dung it nhat la {min}")
