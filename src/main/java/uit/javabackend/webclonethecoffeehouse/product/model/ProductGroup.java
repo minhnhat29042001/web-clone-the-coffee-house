@@ -25,7 +25,7 @@ public class ProductGroup extends BaseEntity {
         @Length(min = 3,max = 100,message = "ProductGroup name must have lenght between {min} and {max}")
         private String name;
 
-    @OneToMany(mappedBy = ProductEntity.ProductMappedCollection.PRODUCTGROUP_MAPPED_PRODUCT, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = ProductEntity.ProductMappedCollection.PRODUCTGROUP_MAPPED_PRODUCT,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Product> products = new LinkedHashSet<>();
 
         public void removeProduct(Product product){

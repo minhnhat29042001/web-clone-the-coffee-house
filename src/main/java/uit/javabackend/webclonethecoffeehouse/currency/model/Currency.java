@@ -26,7 +26,7 @@ public class Currency extends BaseEntity {
     @Length(min =3,max=100,message = "{currency.name.size}")
     private String name;
 
-    @OneToMany(mappedBy = CurrencyEntity.CurrencyMappedProduct.PRODUCT_MAPPED_CURRENCY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = CurrencyEntity.CurrencyMappedProduct.PRODUCT_MAPPED_CURRENCY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Product> products = new LinkedHashSet<>();
 
     public void removeProduct(Product product){
