@@ -35,7 +35,7 @@ public class Operation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @ManyToMany(mappedBy = RoleEntity.RoleMappedOperation.OPERATION_MAPPED_ROLE)
+    @ManyToMany(mappedBy = RoleEntity.RoleMappedOperation.OPERATION_MAPPED_ROLE,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Role> roles = new LinkedHashSet<>();
 
     public enum Type {
