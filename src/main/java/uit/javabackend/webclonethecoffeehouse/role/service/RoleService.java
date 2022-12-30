@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleWithOperationsDTO;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public interface RoleService extends GenericService<Role, RoleDTO, UUID> {
     //Role update(Role role, String code);
@@ -45,6 +47,8 @@ public interface RoleService extends GenericService<Role, RoleDTO, UUID> {
     List<RoleWithOperationsDTO> findAllWithOperations();
 
     List<RoleWithUserGroupDTO> findAllWitUsergroups();
+
+    List<RoleDTO> searchRole(String query);
 }
 
 @Service
@@ -200,6 +204,16 @@ class RoleServiceImpl implements RoleService {
                 }
         );
         return roleWithUserGroupDTOs;
+    }
+
+    @Override
+    public List<RoleDTO> searchRole(String query) {
+        List<Role> roles = repository.searchRoles(query);
+        List<RoleDTO> roleDTOS = roles
+                .stream()
+                .map(product -> mapper.map(product,RoleDTO.class))
+                .collect(Collectors.toList());
+        return roleDTOS;
     }
 
     @Override

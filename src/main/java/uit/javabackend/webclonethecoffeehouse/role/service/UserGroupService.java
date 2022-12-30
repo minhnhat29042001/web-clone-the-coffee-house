@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
+import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.role.dto.RoleDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupWithUsersDTO;
@@ -39,6 +41,8 @@ public interface UserGroupService extends GenericService<UserGroup, UserGroupDTO
     UserGroupDTO findUserGroupByNameDTO(String name);
 
     UserGroup findUserGroupByName(String name);
+
+    List<UserGroupDTO> searchUserGroups(String query);
 }
 
 @Service
@@ -128,6 +132,16 @@ class UserGroupServiceImpl implements UserGroupService {
     public UserGroup findUserGroupByName(String name) {
         Optional<UserGroup> userGroup = repository.findByName(name);
         return userGroup.orElse(null);
+    }
+
+    @Override
+    public List<UserGroupDTO> searchUserGroups(String query) {
+        List<UserGroup> userGroups = repository.searchUserGroups(query);
+        List<UserGroupDTO> userGroupDTOS = userGroups
+                .stream()
+                .map(model -> tchMapper.map(model,UserGroupDTO.class))
+                .collect(Collectors.toList());
+        return userGroupDTOS;
     }
 
     @Override

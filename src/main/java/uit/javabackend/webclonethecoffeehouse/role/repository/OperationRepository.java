@@ -20,4 +20,7 @@ public interface OperationRepository extends JpaRepository<Operation, UUID> {
     List<Operation> findAllByNameAndUsername(String operationName, String username);
 
     Optional<Operation> findByCode(String code);
+
+    @Query("SELECT op FROM Operation op WHERE " + " op.name LIKE CONCAT ('%',:query,'%')")
+    List<Operation> searchOperations(String query);
 }

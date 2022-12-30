@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductGroupWithProductsDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
@@ -16,6 +17,7 @@ import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public interface ProductGroupService extends GenericService<ProductGroup, ProductGroupDTO, UUID> {
 //    @Override
@@ -29,6 +31,7 @@ public interface ProductGroupService extends GenericService<ProductGroup, Produc
     ProductGroupWithProductsDTO removeProduct(List<UUID> ids, UUID productGroupId);
     ProductGroupWithProductsDTO getProductGroupWithProductDTO (UUID productGroupId);
     List<ProductGroupWithProductsDTO> getAllProductGroupWithProductDTO ();
+    List<ProductGroupDTO> searchProductGroup(String query);
 }
 @Service
 @Transactional
@@ -119,6 +122,13 @@ class ProductGroupServiceImpl implements ProductGroupService {
                 }
         );
         return productGroupWithProductsDTOList;
+    }
+
+    @Override
+    public List<ProductGroupDTO> searchProductGroup(String query) {
+        List<ProductGroup> productGroups = repository.searchProductGroup(query);
+        List<ProductGroupDTO> productGroupDTOS = productGroups.stream().map(productGroup -> mapper.map(productGroup,ProductGroupDTO.class)).collect(Collectors.toList());
+        return productGroupDTOS;
     }
 
 

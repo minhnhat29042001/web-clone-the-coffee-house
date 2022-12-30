@@ -38,6 +38,12 @@ public class OperationRestResource {
         );
     }
 
+    @TCHOperation(name = "GetAllOperations")
+    @GetMapping("/common/Search")
+    public Object searchOperation(@RequestParam("query") String query) {
+        return ResponseUtil.get(operationService.searchOperation(query), HttpStatus.OK);
+    }
+
     @TCHOperation(name = "SaveOperation")
     @PostMapping("/SaveOperations/{role-id}")
     public Object saveOperations(@RequestBody List<OperationDTO> dtos, @PathVariable("role-id") UUID roleId) {

@@ -11,6 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.file.FileService;
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
+import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.role.model.UserGroup;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public interface UserService extends GenericService<User, UserDTO, UUID> {
 
@@ -42,6 +44,7 @@ public interface UserService extends GenericService<User, UserDTO, UUID> {
 
     UserDTOWithToken saveUserAvatar(String username, MultipartFile file, String baseUrl);
 
+    List<UserDTO> searchUsers(String query);
 }
 
 @Service
@@ -141,6 +144,16 @@ class UserServiceImpl implements UserService {
         String urlLoadFile = baseUrl+"/api/Files/"+file.getOriginalFilename();
         user.setAvatar(urlLoadFile);
         return tchMapper.map(user,UserDTOWithToken.class);
+    }
+
+    @Override
+    public List<UserDTO> searchUsers(String query) {
+        List<User> users = userRepository.searchUsers(query);
+        List<UserDTO> userDTOS = users
+                .stream()
+                .map(model -> tchMapper.map(model,UserDTO.class))
+                .collect(Collectors.toList());
+        return userDTOS;
     }
 
 }

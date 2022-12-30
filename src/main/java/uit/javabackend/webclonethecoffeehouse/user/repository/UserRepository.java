@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE " + "u.username LIKE CONCAT ('%',:query,'%')")
+    List<User> searchUsers(String query);
 }

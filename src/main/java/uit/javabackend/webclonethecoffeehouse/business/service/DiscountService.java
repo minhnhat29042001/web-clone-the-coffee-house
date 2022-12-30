@@ -15,6 +15,7 @@ import uit.javabackend.webclonethecoffeehouse.business.repository.DiscountReposi
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.security.oauth.user.UserPrinciple;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public interface DiscountService extends GenericService<Discount, DiscountDTO, UUID> {
@@ -47,6 +49,7 @@ public interface DiscountService extends GenericService<Discount, DiscountDTO, U
 
     Optional<Discount> findByCode(String name);
 
+    List<DiscountDTO> searchDiscount(String query);
 }
 
 @Service
@@ -196,6 +199,16 @@ class DiscountServiceImp implements DiscountService {
     @Override
     public Optional<Discount> findByCode(String name) {
         return repository.findByCode(name);
+    }
+
+    @Override
+    public List<DiscountDTO> searchDiscount(String query) {
+        List<Discount> discountList = repository.searchDiscounts(query);
+        List<DiscountDTO> discountDTOS = discountList
+                .stream()
+                .map(model -> mapper.map(model, DiscountDTO.class))
+                .collect(Collectors.toList());
+        return  discountDTOS;
     }
 
 
