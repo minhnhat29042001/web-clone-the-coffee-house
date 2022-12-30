@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.role.boundary;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,13 @@ public class UserGroupRestResource {
                 service.findUserGroupByNameDTO(name)
                 , HttpStatus.OK
         );
+    }
+
+    @TCHOperation(name = "GetAllUserGroups")
+    @Operation(summary = "search usergroup by name")
+    @GetMapping("/common/Search")
+    public Object searchUserGroup(@RequestParam("query") String query) {
+        return ResponseUtil.get(service.searchUserGroups(query), HttpStatus.OK);
     }
 
     @TCHOperation(name = "SaveUserGroup")

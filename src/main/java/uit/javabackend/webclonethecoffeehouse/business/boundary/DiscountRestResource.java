@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.business.boundary;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,13 @@ public class DiscountRestResource {
     public Object findAllDiscountWithUserDiscountDTO() {
         return ResponseUtil.get(services.getAllDiscountWithUserDiscountDTO(), HttpStatus.OK);
     }
+
+    @Operation(summary = "search discount by code")
+    @GetMapping("/common/Search")
+    public Object searchDiscount(@RequestParam("query") String query) {
+        return ResponseUtil.get(services.searchDiscount(query), HttpStatus.OK);
+    }
+
 
     @TCHOperation(name ="AddDiscount")
     @PostMapping(path = "/add-discount")

@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessException;
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
+import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.role.dto.OperationDTO;
 import uit.javabackend.webclonethecoffeehouse.role.model.Operation;
 import uit.javabackend.webclonethecoffeehouse.role.model.Role;
@@ -31,6 +33,8 @@ public interface OperationService extends GenericService<Operation, OperationDTO
     Object saveOperations(List<OperationDTO> operationDTOS,UUID roleId);
 
     OperationDTO save(OperationDTO operationDTO);
+
+    List<OperationDTO> searchOperation(String query);
 }
 
 @Service
@@ -101,6 +105,16 @@ class OperationServiceImpl implements OperationService {
     public OperationDTO save(OperationDTO operationDTO) {
         Operation operation = mapper.map(operationDTO,Operation.class);
         return mapper.map(operationRepository.save(operation),OperationDTO.class) ;
+    }
+
+    @Override
+    public List<OperationDTO> searchOperation(String query) {
+        List<Operation> operations = operationRepository.searchOperations(query);
+        List<OperationDTO> operationDTOS = operations
+                .stream()
+                .map(model -> mapper.map(model,OperationDTO.class))
+                .collect(Collectors.toList());
+        return operationDTOS;
     }
 
 }

@@ -26,6 +26,7 @@ import uit.javabackend.webclonethecoffeehouse.order.enums.OrderStatus;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
 import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.repository.OrderRepository;
+import uit.javabackend.webclonethecoffeehouse.product.dto.ProductDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.service.ProductService;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
@@ -64,6 +65,7 @@ public interface OrderService extends GenericService<Order, OrderDTO, UUID> {
     List<OrderWithProductsDTO> findAllOrderByUserId(UUID userId); // replace with OderWithUserDto
 
 
+    List<OrderDTO> searchOrder(String query);
 }
 
 
@@ -253,6 +255,15 @@ class OrderServiceImpl implements OrderService {
                 .map(model -> mapper.map(model, OrderWithProductsDTO.class))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<OrderDTO> searchOrder(String query) {
+        List<Order> orders = orderRepository.searchOrders(query);
+        List<OrderDTO> orderDTOS = orders
+                .stream()
+                .map(model -> mapper.map(model,OrderDTO.class)).collect(Collectors.toList());
+        return orderDTOS;
     }
 
 }

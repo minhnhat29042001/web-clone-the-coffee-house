@@ -21,4 +21,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroup, UUID> {
     void deleteByName(String name);
 
     Optional<UserGroup> findByName(String name);
+
+    @Query("SELECT ug FROM UserGroup ug WHERE " + "ug.name LIKE CONCAT ('%',:query,'%')")
+    List<UserGroup> searchUserGroups(String query);
 }

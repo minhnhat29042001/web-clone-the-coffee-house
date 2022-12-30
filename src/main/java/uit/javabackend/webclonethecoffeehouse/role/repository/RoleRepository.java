@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uit.javabackend.webclonethecoffeehouse.role.model.Role;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,4 +19,7 @@ public interface RoleRepository extends JpaRepository<Role, UUID> {
     Optional<Role>  findByCode(String code);
     @Query("select (count(r) > 0) from Role r where r.id = ?1")
     boolean existsById(UUID id);
+
+    @Query("SELECT r FROM Role r WHERE " + "r.name LIKE CONCAT ('%',:query,'%')")
+    List<Role> searchRoles(String query);
 }

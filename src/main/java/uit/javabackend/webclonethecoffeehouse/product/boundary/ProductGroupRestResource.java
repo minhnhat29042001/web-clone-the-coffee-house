@@ -1,6 +1,7 @@
 package uit.javabackend.webclonethecoffeehouse.product.boundary;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,12 @@ public class ProductGroupRestResource {
     @GetMapping("common/GetAllProductGroupsWithProduct")
     public Object findAllProductGroupWithProductDTO() {
         return ResponseUtil.get(productGroupService.getAllProductGroupWithProductDTO(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "search product group by name")
+    @GetMapping("/common/Search")
+    public Object SearchProductGroup(@RequestParam("query") String query) {
+        return ResponseUtil.get(productGroupService.searchProductGroup(query), HttpStatus.OK);
     }
 
     @TCHOperation(name = "AddProductGroup")

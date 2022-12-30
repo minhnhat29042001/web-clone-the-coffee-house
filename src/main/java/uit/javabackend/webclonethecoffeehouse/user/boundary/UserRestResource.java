@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.user.boundary;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,12 @@ public class UserRestResource {
                 userService.getUserByUsername(username)
                 , HttpStatus.OK
         );
+    }
+
+    @Operation(summary = "search user by username")
+    @GetMapping("/common/Search")
+    public Object searchUser(@RequestParam("query") String query) {
+        return ResponseUtil.get(userService.searchUsers(query), HttpStatus.OK);
     }
 
     @TCHOperation(name = "GetAllUserGroupByUsername")

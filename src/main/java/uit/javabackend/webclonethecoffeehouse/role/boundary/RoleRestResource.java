@@ -1,5 +1,6 @@
 package uit.javabackend.webclonethecoffeehouse.role.boundary;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,13 @@ public class RoleRestResource {
                 service.findAllDto(Pageable.ofSize(size).withPage(index), RoleDTO.class)
                 , HttpStatus.OK
         );
+    }
+
+    @TCHOperation(name = "GetAllRoles")
+    @Operation(summary = "search role by name")
+    @GetMapping("/common/Search")
+    public Object searchRole(@RequestParam("query") String query) {
+        return ResponseUtil.get(service.searchRole(query), HttpStatus.OK);
     }
 
     @TCHOperation(name = "GetAllRoles")

@@ -55,6 +55,12 @@ public class OrderRestResource {
     public Object findAllOrderByUserId(@PathVariable("user-id") UUID userId) {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
+
+    @Operation(summary = "search order by customer name")
+    @GetMapping("/common/Search")
+    public Object searchOrder(@RequestParam("query") String query) {
+        return ResponseUtil.get(orderService.searchOrder(query), HttpStatus.OK);
+    }
 //
 //    @TCHOperation(name = "SaveOrder")
 //    @Operation(summary = "su dung thang nay de tao don hang ")
