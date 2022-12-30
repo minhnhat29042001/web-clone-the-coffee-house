@@ -14,6 +14,7 @@ import uit.javabackend.webclonethecoffeehouse.product.dto.ProductWithCurrencyDTO
 import uit.javabackend.webclonethecoffeehouse.product.dto.ProductWithProductGroupDTO;
 import uit.javabackend.webclonethecoffeehouse.product.model.Product;
 import uit.javabackend.webclonethecoffeehouse.product.repository.ProductRepository;
+import uit.javabackend.webclonethecoffeehouse.role.dto.UserGroupWithUsersDTO;
 
 
 import javax.validation.ValidationException;
@@ -36,6 +37,7 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
     List<ProductWithProductGroupDTO> getAllProductWithProductGroupDTO();
     ProductDTO saveProductImg(String productName,MultipartFile file,String baseUrl);
     List<ProductDTO> saveProducts(List<ProductDTO> productDTOS);
+    List<ProductDTO> searchProducts(String query);
 }
 
 @Service
@@ -147,6 +149,13 @@ public interface ProductService  extends GenericService<Product, ProductDTO, UUI
         List<Product> products = productDTOS.stream().map(model -> mapper.map(model,Product.class))
                 .collect(Collectors.toList());
        return repository.saveAll(products).stream().map(model -> mapper.map(model,ProductDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> searchProducts(String query) {
+        List<Product> productList = repository.searchProducts(query);
+        List<ProductDTO> productDTOList = productList.stream().map(product -> mapper.map(product,ProductDTO.class)).collect(Collectors.toList());
+        return productDTOList;
     }
 
     @Override
