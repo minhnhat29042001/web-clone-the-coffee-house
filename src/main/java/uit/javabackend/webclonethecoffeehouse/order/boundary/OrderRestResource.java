@@ -56,6 +56,7 @@ public class OrderRestResource {
         return ResponseUtil.get(orderService.findAllOrderByUserId(userId), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "GetAllOrder")
     @Operation(summary = "search order by customer name")
     @GetMapping("/common/Search")
     public Object searchOrder(@RequestParam("query") String query) {

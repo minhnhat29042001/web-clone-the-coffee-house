@@ -13,7 +13,7 @@ public interface OperationRepository extends JpaRepository<Operation, UUID> {
 
     void deleteByCode(String code);
 
-    @Query("select o from Operation o left join Role r where r.id = ?1")
+    @Query("select o from Operation o left join o.roles r where r.id = ?1")
     List<Operation> findByRoleId(UUID roleId);
 
     @Query("select o from Operation o left join o.roles r left join r.userGroups g left join g.users u where u.username = ?2 and o.name = ?1")
