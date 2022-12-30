@@ -51,6 +51,11 @@ public class ProductRestResource {
         return ResponseUtil.get(productService.getAllProductWithProductGroupDTO(), HttpStatus.OK);
     }
 
+    @GetMapping("/common/SearchProduct")
+    public Object SearchProduct(@RequestParam("query") String query) {
+        return ResponseUtil.get(productService.searchProducts(query), HttpStatus.OK);
+    }
+
     /*
         Khi thêm lần đầu thì Fe có thể để chỗ imgUrl là null hoặc rỗng vì Api này trả về ProductDTO nó chứa cả (imgUrl) sau đó có thể gọi Api AddProductImg để lưu link ảnh cho product
      */
