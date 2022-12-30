@@ -62,7 +62,7 @@ public class RoleRestResource {
 
     @TCHOperation(name = "GetOperationsWithRoleId")
     @GetMapping("{role-id}/GetOperationsWithRoleId")
-    public ResponseEntity<?> getOperationsWithRole(
+    public Object getOperationsWithRole(
             @PathVariable("role-id") UUID roleId) {
         return ResponseUtil.get(
                 service.getOperationsWithRoleId(roleId)
