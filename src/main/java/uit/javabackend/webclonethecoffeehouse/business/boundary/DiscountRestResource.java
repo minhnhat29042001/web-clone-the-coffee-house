@@ -81,6 +81,7 @@ public class DiscountRestResource {
         return ResponseUtil.get(services.removeUserDiscount(ids, discountId), HttpStatus.OK);
     }
 
+    @TCHOperation(name = "GetAllDiscountWithUserDiscount")
     @PostMapping ("/check-coupon")
     public ResponseEntity<?> checkCoupon(@RequestBody DiscountCheckDTO discountCheckDTO) {
         return ResponseUtil.get(services.checkCoupon(discountCheckDTO.getCode(),discountCheckDTO.getTotalPriceOfOrder()), HttpStatus.OK);
