@@ -11,6 +11,7 @@ import uit.javabackend.webclonethecoffeehouse.common.exception.TCHBusinessExcept
 import uit.javabackend.webclonethecoffeehouse.common.service.GenericService;
 import uit.javabackend.webclonethecoffeehouse.common.util.TCHMapper;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
+import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductAllAssociateDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithOrderDTO;
 import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
 import uit.javabackend.webclonethecoffeehouse.order.model.Order;
@@ -50,6 +51,10 @@ public interface OrderProductService extends GenericService<OrderProduct, OrderP
     OrderProductDTO findOrderProductById(UUID orderProductId);
 
     List<OrderProductWithProductDTO> saveOrderProductToOrderId(List<OrderProductWithProductDTO> orderProductWithProductDTOS, UUID orderId);
+
+    List<OrderProductAllAssociateDTO> getAllOrderProductIncludeAssocaiateDTO();
+
+    OrderProductAllAssociateDTO getOrderProductIncludeAssocaiateDTO(UUID orderProductID);
 
     //
 
@@ -219,6 +224,27 @@ class OrderProductServiceImp implements OrderProductService {
                 .map(model -> mapper.map(model, OrderProductWithProductDTO.class))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<OrderProductAllAssociateDTO> getAllOrderProductIncludeAssocaiateDTO() {
+        List<OrderProduct> orderProductList = repository.findAll();
+        List<OrderProductAllAssociateDTO> orderProductIncludeAssociations = new ArrayList<>();
+        orderProductList.forEach(
+                orderProduct -> {
+                    OrderProductAllAssociateDTO orderProductIncludeAssociation = mapper.map(orderProduct, OrderProductAllAssociateDTO.class);
+                    orderProductIncludeAssociations.add(orderProductIncludeAssociation);
+                }
+        );
+        return orderProductIncludeAssociations;
+    }
+
+    @Override
+    public OrderProductAllAssociateDTO getOrderProductIncludeAssocaiateDTO(UUID orderProductID) {
+        OrderProduct product = repository.findById(orderProductID).orElseThrow(()->
+                orderProductIsNotExisted
+        );
+        return mapper.map(product, OrderProductAllAssociateDTO.class);
     }
 
 

@@ -4,13 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import uit.javabackend.webclonethecoffeehouse.common.util.ResponseUtil;
-import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductDTO;
-import uit.javabackend.webclonethecoffeehouse.order.dto.OrderProductWithProductDTO;
-import uit.javabackend.webclonethecoffeehouse.order.model.OrderProduct;
 import uit.javabackend.webclonethecoffeehouse.order.service.OrderProductService;
 import uit.javabackend.webclonethecoffeehouse.security.authorization.TCHOperation;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -49,6 +45,16 @@ public class OrderProductRestResource {
     @GetMapping("/GetAllOrderProductsWithProduct")
     public Object findAllProductWithProductGroupDTO(){
         return ResponseUtil.get(service.getAllOrderProductWithProductDTO(),HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all-include-order-product")
+    public Object findAllOrderProductIncludeAssociateDTO(){
+        return ResponseUtil.get(service.getAllOrderProductIncludeAssocaiateDTO(),HttpStatus.OK);
+    }
+
+    @GetMapping("/{orderproduct-id}/get-include-order-product")
+    public Object findOrderProductIncludeAssociateDTO(@PathVariable ("orderproduct-id") UUID orderProductID){
+        return ResponseUtil.get(service.getOrderProductIncludeAssocaiateDTO(orderProductID),HttpStatus.OK);
     }
 
 //    @TCHOperation(name = "SaveOrderProductToOrderId")
