@@ -112,8 +112,8 @@ class AuthServiceImpl implements AuthService {
             mailMessage.setContent(
                     "<p>Dear " + user.getName() + ",</p>" +
                             "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
-                            "<a href=\"" + url + "\">" +
-                            "<button style=\"background-color: #49CC90; border-color:#49CC90; color: white;\" >Click me to change password</button>" +
+                            "<a href=\"" + url + "\" style=\"background-color: #49CC90; border-color:#49CC90; color: white;\">" +
+                            "Click me to change password" +
                             "</a>" +
                             "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
 
