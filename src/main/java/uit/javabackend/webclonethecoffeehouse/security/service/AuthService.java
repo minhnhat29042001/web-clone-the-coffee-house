@@ -112,7 +112,7 @@ class AuthServiceImpl implements AuthService {
             mailMessage.setContent(
                     "<p>Dear "+ user.getName() + ",</p>" + "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
                             "<button onclick=\"confirm()\">" + "Confirm" + "</button>" +
-                            "<script>" + "function confirm() { window.open("+ url +"); }" +
+                            "<script>" + "function confirm() { window.open(\""+ url +"\"); }" + "</script>" +
                             "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
                             "<p>Thank you !</p>"
                     , "text/html"
