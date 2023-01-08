@@ -110,13 +110,10 @@ class AuthServiceImpl implements AuthService {
             MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage, true, "utf-8");
             // Setting up necessary details
             mailMessage.setContent(
-                    "<p>Dear " + user.getName() + ",</p>" +
-                            "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
-                            "<a href=\"" + url + "\" style=\"background-color: #49CC90; border-color:#49CC90; color: white;\">" +
-                            "Click me to change password" +
-                            "</a>" +
+                    "<p>Dear "+ user.getName() + ",</p>" + "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
+                            "<button onclick=\"confirm()\">" + "Confirm" + "</button>" +
+                            "<script>" + "function confirm() { window.open("+ url +"); }" +
                             "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
-
                             "<p>Thank you !</p>"
                     , "text/html"
             );
