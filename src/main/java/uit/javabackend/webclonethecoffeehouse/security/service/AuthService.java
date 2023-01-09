@@ -14,6 +14,7 @@ import uit.javabackend.webclonethecoffeehouse.role.repository.UserGroupRepositor
 import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.dto.ValidateTokenDTO;
 import uit.javabackend.webclonethecoffeehouse.security.jwt.JwtUtils;
+import uit.javabackend.webclonethecoffeehouse.security.model.EmailAndJWT;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
@@ -44,17 +45,19 @@ class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TCHMapper mapper;
     private final JwtUtils jwtUtils;
+    private  final EmailAndJWTService emailAndJWTService;
 
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
     private String sender;
 
-    AuthServiceImpl(UserRepository userRepository, UserGroupRepository userGroupRepository, PasswordEncoder passwordEncoder, TCHMapper mapper, JwtUtils jwtUtils, JavaMailSender javaMailSender) {
+    AuthServiceImpl(UserRepository userRepository, UserGroupRepository userGroupRepository, PasswordEncoder passwordEncoder, TCHMapper mapper, JwtUtils jwtUtils, EmailAndJWTService emailAndJWTService, JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.userGroupRepository = userGroupRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.jwtUtils = jwtUtils;
+        this.emailAndJWTService = emailAndJWTService;
         this.javaMailSender = javaMailSender;
     }
 
@@ -103,6 +106,9 @@ class AuthServiceImpl implements AuthService {
     public String forgotPassword(String email, String feHomePage, String host) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
         String code = jwtUtils.generateJwt(email);
+        EmailAndJWT emailAndJWT = new EmailAndJWT(email,code);
+        emailAndJWTService.addEmailAndJWT(emailAndJWT);
+
         try {
             String url = host + "/auth/resetPassword?code=" + code + "&redirectUri=" + feHomePage;
 
@@ -133,33 +139,41 @@ class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean resetPassword(String code) {
+
         String email = jwtUtils.getUsername(code);
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
-        String newPassword = PasswordGenerateUtils.generateCommonLangPassword();
-        try {
-            MimeMessage mailMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage, true, "utf-8");
-            // Setting up necessary details
-            mailMessage.setContent(
-                    "<p>Dear " + user.getName() + ",</p>" +
-                            "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
-                            "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
-                            "<p>Your new password is: " + newPassword + "</p>" +
-                            "<p>Thank you !</p>"
-                    , "text/html"
-            );
-            mailHelper.setTo(user.getEmail());
-            mailHelper.setSubject("Reset the clone of the coffee house account password");
+        boolean checkExistEmailAndJWT = emailAndJWTService.checkExistEmailAndJWT(email,code);
+        if(checkExistEmailAndJWT){
+            emailAndJWTService.deleteEmailAndJWT(email);
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
+            String newPassword = PasswordGenerateUtils.generateCommonLangPassword();
+            try {
+                MimeMessage mailMessage = javaMailSender.createMimeMessage();
+                MimeMessageHelper mailHelper = new MimeMessageHelper(mailMessage, true, "utf-8");
+                // Setting up necessary details
+                mailMessage.setContent(
+                        "<p>Dear " + user.getName() + ",</p>" +
+                                "<p> This email is automatically sent to reset the clone coffee house web password.</p>" +
+                                "<p>Do <span style=\"color: red\">not</span> share this email to anyone</p>" +
+                                "<p>Your new password is: " + newPassword + "</p>" +
+                                "<p>Thank you !</p>"
+                        , "text/html"
+                );
+                mailHelper.setTo(user.getEmail());
+                mailHelper.setSubject("Reset the clone of the coffee house account password");
 
-            javaMailSender.send(mailMessage);
-            user.setPassword(passwordEncoder.encode(newPassword));
-            return true;
-        }
+                javaMailSender.send(mailMessage);
+                user.setPassword(passwordEncoder.encode(newPassword));
+                return true;
+            }
 
-        // Catch block to handle the exceptions
-        catch (Exception e) {
+            // Catch block to handle the exceptions
+            catch (Exception e) {
+                return false;
+            }
+        }else{
             return false;
         }
+
     }
 
     @Override
