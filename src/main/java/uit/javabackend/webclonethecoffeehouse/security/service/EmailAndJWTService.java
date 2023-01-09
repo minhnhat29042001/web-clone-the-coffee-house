@@ -9,7 +9,7 @@ import uit.javabackend.webclonethecoffeehouse.security.repository.EmailAndJWTRep
 import java.util.Optional;
 
 public interface EmailAndJWTService {
-    boolean checkExistEmailAndJWT(String email, String JWT);
+    boolean checkExistEmailAndJWT(EmailAndJWT emailAndJWT);
     EmailAndJWT addEmailAndJWT (EmailAndJWT emailAndJWT);
     void deleteEmailAndJWT (String email);
 }
@@ -22,8 +22,8 @@ class EmailAndJWTImpl implements  EmailAndJWTService{
     }
 
     @Override
-    public boolean checkExistEmailAndJWT(String email, String JWT) {
-        Optional<EmailAndJWT> checkExistEmailAndJWT = repository.getEntityByEmailAndJwt(email,JWT);
+    public boolean checkExistEmailAndJWT(EmailAndJWT emailAndJWT) {
+        Optional<EmailAndJWT> checkExistEmailAndJWT = repository.getEntityByEmailAndJwt(emailAndJWT.getEmail(), emailAndJWT.getJwt());
         return checkExistEmailAndJWT.isPresent()?true:false;
     }
 

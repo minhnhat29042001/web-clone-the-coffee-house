@@ -22,11 +22,10 @@ import javax.persistence.Table;
 @Table(name = "EmailAndJWT")
 public class EmailAndJWT extends BaseEntity {
 
-    @Column(name = "email")
-
+    @Column(name = "email", unique = false)
     private String email;
 
-    @Column(name = "jwt")
+    @Column(name = "jwt", unique = false)
     private String jwt;
 
 }

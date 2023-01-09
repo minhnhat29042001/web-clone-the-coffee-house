@@ -15,6 +15,7 @@ import uit.javabackend.webclonethecoffeehouse.security.dto.LoginDTO;
 import uit.javabackend.webclonethecoffeehouse.security.dto.ValidateTokenDTO;
 import uit.javabackend.webclonethecoffeehouse.security.jwt.JwtUtils;
 import uit.javabackend.webclonethecoffeehouse.security.model.EmailAndJWT;
+import uit.javabackend.webclonethecoffeehouse.security.repository.EmailAndJWTRepository;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTO;
 import uit.javabackend.webclonethecoffeehouse.user.dto.UserDTOWithToken;
 import uit.javabackend.webclonethecoffeehouse.user.model.User;
@@ -46,18 +47,20 @@ class AuthServiceImpl implements AuthService {
     private final TCHMapper mapper;
     private final JwtUtils jwtUtils;
     private  final EmailAndJWTService emailAndJWTService;
+    private final EmailAndJWTRepository emailAndJWTRepository;
 
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
     private String sender;
 
-    AuthServiceImpl(UserRepository userRepository, UserGroupRepository userGroupRepository, PasswordEncoder passwordEncoder, TCHMapper mapper, JwtUtils jwtUtils, EmailAndJWTService emailAndJWTService, JavaMailSender javaMailSender) {
+    AuthServiceImpl(UserRepository userRepository, UserGroupRepository userGroupRepository, PasswordEncoder passwordEncoder, TCHMapper mapper, JwtUtils jwtUtils, EmailAndJWTService emailAndJWTService, EmailAndJWTRepository emailAndJWTRepository, JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.userGroupRepository = userGroupRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
         this.jwtUtils = jwtUtils;
         this.emailAndJWTService = emailAndJWTService;
+        this.emailAndJWTRepository = emailAndJWTRepository;
         this.javaMailSender = javaMailSender;
     }
 
@@ -107,7 +110,14 @@ class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
         String code = jwtUtils.generateJwt(email);
         EmailAndJWT emailAndJWT = new EmailAndJWT(email,code);
-        emailAndJWTService.addEmailAndJWT(emailAndJWT);
+        boolean checkExistEmailAndJWT = emailAndJWTService.checkExistEmailAndJWT(emailAndJWT);
+        if(checkExistEmailAndJWT){
+            EmailAndJWT emailAndJWT1 = emailAndJWTRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("EmailAndJWT not found"));
+            emailAndJWT1.setJwt(code);
+        }else{
+            emailAndJWTService.addEmailAndJWT(emailAndJWT);
+        }
+
 
         try {
             String url = host + "/auth/resetPassword?code=" + code + "&redirectUri=" + feHomePage;
@@ -143,7 +153,8 @@ class AuthServiceImpl implements AuthService {
     public boolean resetPassword(String code) {
 
         String email = jwtUtils.getUsername(code);
-        boolean checkExistEmailAndJWT = emailAndJWTService.checkExistEmailAndJWT(email,code);
+        EmailAndJWT emailAndJWT = new EmailAndJWT(email,code);
+        boolean checkExistEmailAndJWT = emailAndJWTService.checkExistEmailAndJWT(emailAndJWT);
         if(checkExistEmailAndJWT){
             emailAndJWTService.deleteEmailAndJWT(email);
             User user = userRepository.findByEmail(email).orElseThrow(() -> new TCHBusinessException("User not found"));
