@@ -18,5 +18,5 @@ public interface EmailAndJWTRepository extends JpaRepository<EmailAndJWT, UUID> 
     void deleteByEmail(String email);
 
 
-
+    Optional<EmailAndJWT> findByEmail(String email);
 }
