@@ -114,6 +114,7 @@ class AuthServiceImpl implements AuthService {
         if(checkExistEmailAndJWT){
             EmailAndJWT emailAndJWT1 = emailAndJWTRepository.findByEmail(email).orElseThrow(()-> new TCHBusinessException("EmailAndJWT not found"));
             emailAndJWT1.setJwt(code);
+            emailAndJWTRepository.save(emailAndJWT);
         }else{
             emailAndJWTService.addEmailAndJWT(emailAndJWT);
         }
