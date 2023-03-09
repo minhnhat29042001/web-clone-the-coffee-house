@@ -9,6 +9,7 @@ spring:
           google:
             clientId: 307631907025-nrsq4dog0i2bg8ll8n9akuposk8deplb.apps.googleusercontent.com
             clientSecret: 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
+            redirectUriTemplate: "https://the-coffee-house-clone.netlify.app/login/oauth2/code/google"
             scope:
               - email
               - profile
